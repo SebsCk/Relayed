@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://j8p0f7pfpp0k"]
+
+[ext_resource type="Script" uid="uid://c0nnr31v37do" path="res://ui/building.gd" id="1_5j34s"]
+[ext_resource type="Texture2D" uid="uid://m17aqoobxnmv" path="res://Isometric Suburban Pack/Buildings/house 01a.png" id="2_uvy8r"]
+
+[node name="Building" type="Node2D" unique_id=1249641597]
+script = ExtResource("1_5j34s")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=187053034]
+texture = ExtResource("2_uvy8r")

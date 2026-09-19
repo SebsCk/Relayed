@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://crg517q64aqen"]
+
+[ext_resource type="Script" uid="uid://c76bs7awjaw7t" path="res://ui/main_menu.gd" id="1_06t4h"]
+
+[node name="Main Menu" type="Node2D" unique_id=966193683]
+script = ExtResource("1_06t4h")
+
+[node name="Control" type="Control" parent="." unique_id=1593323267]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 1157.0
+offset_bottom = 652.0
+
+[node name="Start" type="Button" parent="Control" unique_id=24850411]
+layout_mode = 0
+offset_left = 527.0
+offset_top = 139.0
+offset_right = 673.0
+offset_bottom = 237.0
+text = "Start"
+
+[node name="Settings" type="Button" parent="Control" unique_id=1873782491]
+layout_mode = 0
+offset_left = 509.0
+offset_top = 267.0
+offset_right = 694.0
+offset_bottom = 352.0
+text = "Settings"
+
+[node name="Quit" type="Button" parent="Control" unique_id=1877317948]
+layout_mode = 0
+offset_left = 519.0
+offset_top = 408.0
+offset_right = 674.0
+offset_bottom = 482.0
+text = "Quit"
+
+[connection signal="pressed" from="Control/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Control/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Control/Quit" to="." method="_on_quit_pressed"]

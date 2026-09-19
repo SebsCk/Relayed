@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://di33qjcnotclk"]
+
+[ext_resource type="Script" uid="uid://cx38i2ebjy1w4" path="res://ui/cell_tower.gd" id="1_b53nn"]
+
+[node name="cell_tower" type="Node2D" unique_id=2077395227]
+script = ExtResource("1_b53nn")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1728894420]

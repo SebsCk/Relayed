@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://meqpeed67h37"]
+
+[ext_resource type="Script" uid="uid://ngu2ispaxjok" path="res://ui/canvas_layer.gd" id="1_wrpmh"]
+
+[node name="BuildingInfoPanel" type="CanvasLayer" unique_id=1376309214]
+script = ExtResource("1_wrpmh")
+
+[node name="Panel" type="Panel" parent="." unique_id=1629481765]
+offset_left = 908.0
+offset_top = 86.0
+offset_right = 1106.0
+offset_bottom = 553.0
+
+[node name="Name" type="Label" parent="Panel" unique_id=623178781]
+layout_mode = 1
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 65.0
+offset_bottom = 41.0
+text = "Name"
+
+[node name="Bandwidth" type="Label" parent="Panel" unique_id=62251796]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 47.0
+offset_right = 103.0
+offset_bottom = 70.0
+text = "Bandwidth"
+
+[node name="District" type="Label" parent="Panel" unique_id=240788689]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 85.0
+offset_right = 78.0
+offset_bottom = 108.0
+text = "District"
+
+[node name="Network" type="Label" parent="Panel" unique_id=1269383832]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 116.0
+offset_right = 178.0
+offset_bottom = 139.0
+text = "Network Preference"
+
+[node name="CloseButton" type="Button" parent="Panel" unique_id=1853430646]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 412.0
+offset_right = 144.0
+offset_bottom = 445.0
+text = "Close"
