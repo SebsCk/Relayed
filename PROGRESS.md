@@ -1,5 +1,50 @@
 # Progress
 
+## 2026-09-20 (playtest round 2: found the real source of "still a mess")
+
+User reported the map was "still a mess" after the previous density fix,
+plus two new specifics: buildings should render above the tile map, the
+map should always be plain green land, and towers should always draw in
+front of buildings.
+
+- **Root cause was not my downtown paint.** After reverting this session's
+  downtown tiles entirely back to grass (confirmed via a full cell scan:
+  zero non-grass/concrete/puddle cells left on `Ground`), a screenshot at
+  the default camera position *still* showed a fire station and other
+  scattered buildings. Dug further and found 13 building tiles painted
+  directly onto the **`Buildings` node** — a *separate* `TileMapLayer`
+  from `Ground` that otherwise just holds the `Building`/`Building2`
+  scene-instance children — scattered around cells (0,-5) through (14,12)
+  with no coherent layout (one of each building type 45-55, essentially a
+  leftover test placement). Confirmed via `git show 9a57741:scenes/
+  relayed.tscn` that this tile data has been there since the **very first
+  commit**, predating this session entirely. I'd only ever inspected
+  `Ground`'s tile data, never `Buildings`'s, so I never noticed it, and
+  every "downtown" screenshot this session actually had this pre-existing
+  clutter mixed in with what I assumed was purely my own paint.
+- Cleared those 13 leftover cells (`TileMapLayer.erase_cell`, not
+  `set_cell` — nothing to paint over them with, they should just be gone).
+  The `Building`/`Building2` scene-instance children of that same node are
+  untouched. Re-verified with a screenshot: map is now plain grass (green)
+  plus the original pre-existing concrete/puddle patch (left alone — it
+  also predates this session and wasn't part of the complaint, though it's
+  arguably in tension with "map should always be land green"; flagged for
+  the user to decide rather than removed unasked).
+- This session's own downtown experiment (roads + 12 building types,
+  painted then reverted across two rounds today) is fully gone from
+  `Ground` — confirmed via a complete `get_used_cells()` scan, not just a
+  source-id count.
+- **Tower-above-buildings z-order**: real, separate bug. `prepare_placed_
+  tower()` and `prepare_placed_building()` both set `z_index = 1`, so
+  their relative draw order fell back to Y-sort, which could put a tower
+  visually behind/clipped-into a nearby building depending on exact
+  positions — this is what the user saw as "glitched/misput." Fixed by
+  giving towers `z_index = 2`, strictly above buildings, independent of
+  Y-sort. Verified with a screenshot placing a tower next to a building.
+- Take-away for any future tile-based city decoration: check **every**
+  `TileMapLayer` node in the scene for existing tile data before assuming
+  a "clean" baseline, not just the one you intend to paint on.
+
 ## 2026-09-20 (playtest fixes: coverage mismatch + cluttered downtown)
 
 Two more issues from the same playtest pass, both traced back to

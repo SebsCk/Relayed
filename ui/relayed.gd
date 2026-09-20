@@ -220,7 +220,10 @@ func prepare_placed_building(building: Building) -> void:
 		sprite.position = Vector2(0, -sprite.texture.get_height() / 2.0)
 
 func prepare_placed_tower(tower: CellTower) -> void:
-	tower.z_index = 1
+	# Strictly above buildings (z_index 1) rather than tied with them, so
+	# relative draw order never depends on Y-sort — towers should never
+	# appear clipped behind a nearby building.
+	tower.z_index = 2
 	var sprite := tower.get_node("Sprite2D") as Sprite2D
 	if sprite.texture:
 		sprite.position = Vector2(0, -sprite.texture.get_height() / 2.0)
