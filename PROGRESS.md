@@ -1,5 +1,32 @@
 # Progress
 
+## 2026-09-20 (playtest round 3: demand buildings spawning on the puddle patch)
+
+User report: "Riverside Apartments" (round 3 demand building) visually
+obstructed the pavement.
+
+- Checked its spawn cell directly: `Vector2(620, -120)` maps to cell
+  (4,-5), which has ground source 5 — a puddle tile, part of the
+  pre-existing concrete/puddle patch flagged (but left alone) in the
+  previous entry. The building was spawning *inside* that patch.
+- Checked "Corner House" (round 2 demand building) too, since it's spawned
+  by the same `spawn_building()` path with no buildability check — same
+  problem, also on a puddle tile at its cell (9,2). The user only reported
+  Riverside Apartments, but Corner House had the identical bug, so fixed
+  both rather than leaving a known twin issue for the next playtest report.
+- Moved both spawn positions in `apply_round_demands()`
+  (`ui/relayed.gd`) to cells confirmed as plain grass, clear of the patch
+  and of each other and the three original buildings: Corner House to
+  `Vector2(1450, -280)` (cell (11,-10)), Riverside Apartments to
+  `Vector2(700, -380)` (cell (5,-12)). Same district/network/bandwidth/
+  round-trigger logic, only the spawn position changed. Verified by
+  checking `get_cell_source_id()` at both new cells (source 1, grass) and
+  with a screenshot showing both sitting on clean grass.
+- `spawn_building()` still doesn't check `is_buildable_cell()` before
+  placing (unlike player placement) — worth adding if more demand
+  buildings get added later, so a bad spawn position fails loudly instead
+  of silently placing on the wrong terrain.
+
 ## 2026-09-20 (playtest round 2: found the real source of "still a mess")
 
 User reported the map was "still a mess" after the previous density fix,

@@ -277,9 +277,9 @@ func apply_round_demands() -> void:
 	# The first map starts with three structures.  Each later round adds a new
 	# demand point, so the player must extend the network instead of reusing one solve.
 	if current_round == 2 and round_demand_count == 0:
-		spawn_building("Corner House", 75, "D", "5G", Vector2(1250, 85), HOUSE_TEXTURE)
+		spawn_building("Corner House", 75, "D", "5G", Vector2(1450, -280), HOUSE_TEXTURE)
 	if current_round == 3 and round_demand_count == 1:
-		spawn_building("Riverside Apartments", 90, "E", "Ethernet", Vector2(620, -120), APARTMENT_TEXTURE)
+		spawn_building("Riverside Apartments", 90, "E", "Ethernet", Vector2(700, -380), APARTMENT_TEXTURE)
 	set_status("Round %d: connect every active building with its preferred network." % current_round)
 	update_hud()
 
