@@ -1,5 +1,32 @@
 # Progress
 
+## 2026-09-20 (playtest fixes: coverage mismatch + cluttered downtown)
+
+Two more issues from the same playtest pass, both traced back to
+yesterday's downtown-painting work:
+
+- **"Tower circle range has less radius than its range indicator."** Real
+  bug: `_is_routable_cell()` treated decorative downtown buildings as
+  routing obstacles, so a gameplay building sitting well inside a tower's
+  drawn coverage circle could still fail to connect if the only path there
+  happened to run through a downtown block. Confirmed with a scripted
+  repro (place a 5G + an Ethernet tower near the starting buildings):
+  coverage was 2/3 before the fix, 3/3 after. Fix: decorative tiles (roads
+  *and* buildings) no longer block routing at all — they're backdrop only.
+  Only real occupied cells (towers, player/demand buildings) block a wire
+  path now, so coverage always matches the drawn circle again.
+- **"Buildings are a mess."** The downtown block was painted in a
+  checkerboard (a building on every other cell), which is far too dense for
+  sprites that are 2-3x taller than their single 64px-tall cell footprint —
+  looked fine pulled back in my verification screenshots, but crowded and
+  overlapping at actual gameplay zoom (confirmed by the user's screenshot).
+  Fix: cleared the old block back to grass and repainted with real spacing
+  (a building every 3rd cell on each axis instead of every other), moved
+  slightly further from the starting buildings, using the same
+  GEN_EDIT_STATE_INSTANCE + uid-restoration technique as before. Re-verified
+  with a screenshot at the actual default camera position or the previous
+  crowding is gone.
+
 ## 2026-09-20 (playtest fix: phantom click on scene change)
 
 User playtest report: pressing "New Game" on the Choose Game screen

@@ -388,12 +388,11 @@ func refresh_network() -> void:
 		set_status("%d wire(s) cross another tower's path — relocating a tower can clear this." % crossing_count)
 	update_hud(congested_count)
 
-# Decorative downtown buildings block wire routing like any obstacle; roads
-# stay routable (wires can run alongside streets). Player-placed towers,
-# buildings, and the original demand buildings all occupy cells and block
-# routing through them except at their own two path endpoints.
-const ROUTING_BLOCKED_GROUND_SOURCES := [45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
-
+# Decorative downtown tiles (roads and buildings alike) are backdrop only —
+# they don't block wire routing, so a tower's effective coverage always
+# matches its drawn radius. Only real gameplay obstacles (player-placed
+# towers/buildings, the original demand buildings) block routing, and only
+# at cells other than a path's own two endpoints.
 var astar_grid: AStarGrid2D
 
 func _routing_region() -> Rect2i:
@@ -430,8 +429,7 @@ func _rebuild_astar_grid() -> void:
 			astar_grid.set_point_solid(cell, not _is_routable_cell(cell))
 
 func _is_routable_cell(cell: Vector2i) -> bool:
-	var source_id: int = $Ground.get_cell_source_id(cell)
-	if source_id == -1 or ROUTING_BLOCKED_GROUND_SOURCES.has(source_id):
+	if $Ground.get_cell_source_id(cell) == -1:
 		return false
 	return not occupied_cells.has(cell)
 
