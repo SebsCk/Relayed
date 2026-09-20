@@ -1,5 +1,63 @@
 # Progress
 
+## 2026-09-21 (round-demand buildings cramped/overlapping)
+
+User report, with a screenshot: "all are cramped and overlapping with each
+other" — a "Network Complete" screenshot showing Corner House, Riverside
+Apartments, the two towers, and the original buildings all visually piled
+on top of one another near the north-east corner of the map.
+
+- **Root cause #1 — unscaled sprites.** `spawn_building()`/`place_building()`
+  never applied any scale to a building's `Sprite2D`; it rendered at the
+  source texture's native pixel size. The building art assets vary hugely in
+  native size — a plain house texture is 225×193px, the apartment complex
+  texture is 425×345px — while the scene's *original* three starting
+  buildings were each hand-scaled in the editor (~0.7-0.75×) to a consistent
+  visual footprint. Round-demand buildings (`spawn_building()`) and
+  player-placed buildings (`place_building()`) both skipped that scaling
+  entirely, so a building using the apartment texture rendered nearly twice
+  as wide as the largest hand-scaled original building. Fixed by normalizing
+  every building sprite to a fixed rendered width
+  (`BUILDING_SPRITE_TARGET_WIDTH = 170`, chosen to match the original
+  buildings' existing scale) in `prepare_placed_building()`
+  (`ui/relayed.gd`), rather than leaving scale at each texture's native
+  size.
+- **Root cause #2 — spawn positions never accounted for sprite footprint.**
+  Earlier sessions' fixes to Corner House/Riverside Apartments' spawn
+  positions (see the puddle-patch and hand-edited-road entries below) only
+  ever checked that the spawn *cell* was clear of terrain and other
+  buildings' *cells* — never each building's actual rendered pixel
+  footprint, which is far larger than one grid cell. In particular,
+  `Building2` (an original, hand-placed "Apartment" building using the same
+  425×345 apartment-complex texture, scaled *up* to ~1.18× in the editor)
+  has an effective on-screen footprint of roughly 500×400px — Corner House
+  and Riverside Apartments' previous spawn positions both landed inside that
+  box. Moved both to genuinely clear grass well outside every existing
+  building's footprint: Corner House to `Vector2(1700, 20)`, Riverside
+  Apartments to `Vector2(1900, -115)` — found by scanning ground-tile source
+  ids in a grid around the cluster (avoiding the user's hand-added road,
+  source 44) and confirmed visually with rendered screenshots, not just
+  grid-cell math (a plain grid-cell check is exactly what missed this the
+  first two times).
+- **Verified no solvability regression**: bandwidth/capacity/network-type
+  values were untouched — only position and sprite scale changed — but
+  moving buildings further apart could in principle put one out of every
+  tower's coverage radius (300). Scripted a full 3-round playthrough
+  (`test_full_playthrough.gd`, not committed): places 2×5G + 2×Ethernet
+  towers at positions chosen to reach every building, and confirmed
+  `round_complete` triggers correctly for all 3 rounds and `Network
+  Complete` is reached, with credits tracking correctly through each
+  round's completion bonus. Also re-ran the existing round-1-3 congestion
+  design's tower-count requirement (2 towers per network, due to capacity,
+  not range) and confirmed it's unchanged — my position change means the
+  2nd 5G tower now *must* be placed near Corner House specifically (they're
+  no longer in range of a single central tower), which is a minor puzzle
+  behavior change but not a correctness regression.
+- Verified with a headless project import (clean) and rendered screenshots
+  at multiple zoom levels, including one with towers placed to match the
+  user's reported scenario — all 5 buildings and both towers now render as
+  clearly distinct, non-overlapping objects.
+
 ## 2026-09-20 (baked runtime-built screens into real editor scene nodes)
 
 User noticed every `.tscn` I'd built this session (login, register,

@@ -12,6 +12,14 @@ const BUILDING_COST := 100
 const MAX_ROUNDS := 3
 const TOWER_CAPACITY := {"5G": 150, "Ethernet": 120}
 
+# Building sprite sources vary wildly in native pixel size (a plain house is
+# 225px wide, the apartment complex is 425px) — normalize every
+# spawn_building()/place_building() sprite to this rendered width so a
+# building's visual footprint reflects its actual grid-cell spacing instead
+# of its source art's resolution. Matches roughly the hand-tuned scale
+# (~0.7-0.75) already used on the scene's original starting buildings.
+const BUILDING_SPRITE_TARGET_WIDTH := 170.0
+
 # Backed by GameProgress.infrastructure_fund (persists across districts, per
 # the manuscript's Player Profile schema) rather than resetting to a flat
 # amount each district — in-district spending only reaches disk when
@@ -224,7 +232,9 @@ func prepare_placed_building(building: Building) -> void:
 	building.z_index = 1
 	var sprite := building.get_node("Sprite2D") as Sprite2D
 	if sprite.texture:
-		sprite.position = Vector2(0, -sprite.texture.get_height() / 2.0)
+		var scale_factor := BUILDING_SPRITE_TARGET_WIDTH / sprite.texture.get_width()
+		sprite.scale = Vector2(scale_factor, scale_factor)
+		sprite.position = Vector2(0, -sprite.texture.get_height() * scale_factor / 2.0)
 
 func prepare_placed_tower(tower: CellTower) -> void:
 	# Strictly above buildings (z_index 1) rather than tied with them, so
@@ -284,9 +294,9 @@ func apply_round_demands() -> void:
 	# The first map starts with three structures.  Each later round adds a new
 	# demand point, so the player must extend the network instead of reusing one solve.
 	if current_round == 2 and round_demand_count == 0:
-		spawn_building("Corner House", 75, "D", "5G", Vector2(1450, -280), HOUSE_TEXTURE)
+		spawn_building("Corner House", 75, "D", "5G", Vector2(1700, 20), HOUSE_TEXTURE)
 	if current_round == 3 and round_demand_count == 1:
-		spawn_building("Riverside Apartments", 90, "E", "Ethernet", Vector2(1280, -256), APARTMENT_TEXTURE)
+		spawn_building("Riverside Apartments", 90, "E", "Ethernet", Vector2(1900, -115), APARTMENT_TEXTURE)
 	set_status("Round %d: connect every active building with its preferred network." % current_round)
 	update_hud()
 

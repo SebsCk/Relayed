@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://db218nk5dasyc"]
 
-[ext_resource type="Script" path="res://ui/story_event.gd" id="1"]
-[ext_resource type="Texture2D" path="res://ui/icons/person.svg" id="2_a6nwx"]
+[ext_resource type="Script" uid="uid://1vrhi7klckhh" path="res://ui/story_event.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dht7uaixf3qj1" path="res://ui/icons/person.svg" id="2_a6nwx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lqgev"]
 content_margin_left = 20.0
