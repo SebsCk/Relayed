@@ -1,5 +1,29 @@
 # Progress
 
+## 2026-09-20 (round-demand spawn vs. hand-edited road)
+
+User manually added a road directly to `scenes/relayed.tscn`'s Ground
+layer in the Godot editor (a large diamond-shaped street boundary, ~98
+cells, source id 44) and asked to fix any building spawn now obstructing
+it.
+
+- Checked every round-demand spawn position (`apply_round_demands()` in
+  `ui/relayed.gd`) against the new road layout directly, rather than
+  guessing from a screenshot: "Riverside Apartments" (round 3, cell
+  (5,-12)) now landed squarely on the new road. "Corner House" and the
+  three original buildings were unaffected.
+- Moved Riverside Apartments to `Vector2(1280, -256)` (cell (9,-9)) —
+  clean grass, close to the existing building cluster, not colliding with
+  any other occupied cell. Re-verified all 5 buildings' ground source
+  after the fix: all on source 1 (grass), none on 44 (road).
+- Player-placed towers/buildings were never at risk here — `is_buildable_
+  cell()` already excludes road tiles (source 44) from placement, from
+  earlier work. This was specifically about the hardcoded round-demand
+  spawn positions, which don't go through that check (same class of bug
+  as the puddle-patch spawn fix earlier today).
+- Confirmed no incidental corruption from the user's manual edit itself
+  (checked via headless reimport + full scene regression — all clean).
+
 ## 2026-09-20 (quiz district + capstone manuscript alignment)
 
 User shared the team's actual capstone manuscript ("RELAYED: A

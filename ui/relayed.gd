@@ -286,7 +286,7 @@ func apply_round_demands() -> void:
 	if current_round == 2 and round_demand_count == 0:
 		spawn_building("Corner House", 75, "D", "5G", Vector2(1450, -280), HOUSE_TEXTURE)
 	if current_round == 3 and round_demand_count == 1:
-		spawn_building("Riverside Apartments", 90, "E", "Ethernet", Vector2(700, -380), APARTMENT_TEXTURE)
+		spawn_building("Riverside Apartments", 90, "E", "Ethernet", Vector2(1280, -256), APARTMENT_TEXTURE)
 	set_status("Round %d: connect every active building with its preferred network." % current_round)
 	update_hud()
 
