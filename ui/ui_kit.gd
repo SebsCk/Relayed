@@ -169,6 +169,73 @@ static func show_confirm_dialog(parent: Node, title: String, body: String, on_co
 	no_button.pressed.connect(func(): layer.queue_free())
 	row.add_child(no_button)
 
+# Shared in-game settings overlay for any gameplay screen whose progress
+# lives only in an unsaved script instance (the puzzle, the quiz, ...) —
+# an overlay rather than a navigation to scenes/settings.tscn so opening
+# settings never silently discards what the player is in the middle of.
+# `sign_out_warning` names what's at stake on this specific screen.
+static func show_in_game_settings(parent: Node, sign_out_warning: String) -> void:
+	var settings_layer := CanvasLayer.new()
+	settings_layer.layer = 20
+	parent.add_child(settings_layer)
+	settings_layer.add_child(full_rect_bg(Color(0, 0, 0, 0.6)))
+
+	var settings_panel := panel(Vector2(280, 0))
+	settings_layer.add_child(centered(settings_panel))
+	var box := vbox(10)
+	settings_panel.add_child(box)
+	box.add_child(title_label("Settings", 22))
+
+	box.add_child(body_label("Camera Speed", 12, Color(0.75, 0.75, 0.75)))
+	var speed_slider := HSlider.new()
+	speed_slider.custom_minimum_size = Vector2(220, 24)
+	speed_slider.min_value = 0.5
+	speed_slider.max_value = 2.0
+	speed_slider.step = 0.25
+	speed_slider.value = GameSettings.camera_speed_multiplier
+	speed_slider.value_changed.connect(func(v): GameSettings.camera_speed_multiplier = v)
+	box.add_child(speed_slider)
+
+	box.add_child(body_label("Audio", 12, Color(0.75, 0.75, 0.75)))
+	var audio_slider := HSlider.new()
+	audio_slider.custom_minimum_size = Vector2(220, 24)
+	audio_slider.min_value = 0.0
+	audio_slider.max_value = 1.0
+	audio_slider.step = 0.05
+	audio_slider.value = GameSettings.audio_volume
+	audio_slider.value_changed.connect(GameSettings.set_audio_volume)
+	box.add_child(audio_slider)
+
+	var notif_row := hbox(8)
+	box.add_child(notif_row)
+	var notif_label := body_label("Notifications", 13)
+	notif_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	notif_row.add_child(notif_label)
+	var notif_toggle := CheckButton.new()
+	notif_toggle.button_pressed = GameSettings.notifications_enabled
+	notif_toggle.toggled.connect(func(pressed): GameSettings.notifications_enabled = pressed)
+	notif_row.add_child(notif_toggle)
+
+	var close_button := styled_button("Close")
+	close_button.pressed.connect(func(): settings_layer.queue_free())
+	box.add_child(close_button)
+
+	var sign_out_button := styled_button("Sign Out", Color(0.3, 0.3, 0.32))
+	sign_out_button.pressed.connect(func():
+		show_confirm_dialog(parent, "SIGN OUT?", sign_out_warning, func():
+			settings_layer.queue_free()
+			AuthState.logout()
+			go_to_scene("res://scenes/login.tscn")
+		)
+	)
+	box.add_child(sign_out_button)
+
+	var quit_button := styled_button("Quit Game", DANGER_COLOR)
+	quit_button.pressed.connect(func():
+		show_confirm_dialog(parent, "ARE YOU SURE?", "Any unsaved progress in this session will be lost.", func(): (Engine.get_main_loop() as SceneTree).quit())
+	)
+	box.add_child(quit_button)
+
 static func centered(child: Control) -> CenterContainer:
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)

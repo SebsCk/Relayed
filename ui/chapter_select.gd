@@ -51,24 +51,48 @@ func _build_top_bar() -> void:
 	add_child(settings_button)
 
 func _build_grid() -> void:
-	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
-	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(center)
+	# Districts group a range of chapters (GameProgress.DISTRICTS) — each
+	# gets its own header and row(s) of chapter tiles, rather than one flat
+	# grid of all 10 chapters.
+	var scroll := ScrollContainer.new()
+	scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
+	scroll.offset_top = 64
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(scroll)
 
-	var box := UIKit.vbox(16)
-	center.add_child(box)
+	var outer := CenterContainer.new()
+	outer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	outer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(outer)
+
+	var box := UIKit.vbox(20)
+	outer.add_child(box)
 	box.add_child(UIKit.title_label("Select a District", 24))
+
+	for district in GameProgress.DISTRICTS:
+		box.add_child(_build_district_section(district))
+
+func _build_district_section(district: Dictionary) -> Control:
+	var section := UIKit.vbox(8)
+	var start: int = district["start"]
+	var end: int = district["end"]
+	var stars_earned := 0
+	for chapter in range(start, end + 1):
+		stars_earned += GameProgress.stars_for(chapter)
+	var header := UIKit.body_label("%s  (%d/%d ★)" % [district["name"], stars_earned, (end - start + 1) * 3], 14, Color(0.85, 0.85, 0.85))
+	header.autowrap_mode = TextServer.AUTOWRAP_OFF
+	section.add_child(header)
 
 	var grid := GridContainer.new()
 	grid.columns = 3
 	grid.add_theme_constant_override("h_separation", 10)
 	grid.add_theme_constant_override("v_separation", 10)
 	grid.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	box.add_child(grid)
-
-	for chapter in range(1, GameProgress.TOTAL_CHAPTERS + 1):
+	section.add_child(grid)
+	for chapter in range(start, end + 1):
 		grid.add_child(_build_chapter_tile(chapter))
+
+	return section
 
 func _build_chapter_tile(chapter: int) -> Control:
 	var unlocked := GameProgress.is_unlocked(chapter)
@@ -164,7 +188,8 @@ func _on_tile_pressed(chapter: int) -> void:
 	for i in range(3):
 		var tint := Color(1.0, 0.85, 0.2) if i < earned else Color(0.4, 0.4, 0.4)
 		popup_stars.add_child(UIKit.icon("res://ui/icons/star.svg", Vector2(22, 22), tint))
-	popup_body.text = "Chapter progress: %d / 3 stars" % earned
+	var district: Dictionary = GameProgress.district_for_chapter(chapter)
+	popup_body.text = "%s\nChapter progress: %d / 3 stars" % [district["name"], earned]
 	popup_action.text = "REPLAY" if earned > 0 else "PLAY"
 	popup_action.visible = true
 	popup.visible = true

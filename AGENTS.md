@@ -1,14 +1,32 @@
 # Relayed — Project Instructions
 
+This project is a prototype of the team's capstone manuscript, "RELAYED:
+A Telecommunication-Inspired Mobile Game" (BS Information Technology
+proposal, University of Cebu Lapu-Lapu and Mandaue). The manuscript is
+the authoritative source for scope, terminology, database schema, and
+game design — this file summarizes it for day-to-day coding, but defer to
+the manuscript itself when the two disagree. Per the manuscript's List of
+Modules, the user (Estrada, Sebastian Clark) personally owns the
+**Gameplay Module** (Puzzle/Drag-and-Drop/Matching/Tower Placement/City
+Management/Mission Completion) and the **Assessment Module** (Chapter
+Quiz/Completion Score/Rewards/Star Rating) — everything else (accounts,
+story, settings, progress tracking) is a teammate's module, built here as
+needed to keep the prototype runnable end-to-end.
+
 ## Game
-Isometric city-building puzzle game made in Godot 4.7.
-80% puzzle, 20% city-building visual context.
-Use GDScript.
+Isometric city-building puzzle game made in Godot 4.7, mobile (Android)
+target. 80% puzzle, 20% city-building visual context. Use GDScript.
+
+Single-player, story-driven. The player is a **Telecommunications
+Administrator** restoring communication across **Relay City**, told across
+**10 chapters** grouped into **Districts** (a District spans a
+`chapter_range` of chapters — District ≠ Chapter, don't conflate them).
+Each chapter teaches one telecom concept and can use a different gameplay
+type (tower-placement puzzle, quiz, drag-and-drop, matching, ...) — not
+every chapter has to be the same mechanic.
 
 ## Game Concept
-Players act as network administrators managing a growing digital city's
-telecommunications infrastructure. The city is the visual skin — the
-core gameplay is a network routing puzzle where players:
+The core gameplay is a network routing puzzle where players:
 - Allocate bandwidth to city buildings/zones
 - Manage QoS (Quality of Service) priority across network paths
 - Route signals between nodes without crossing or congesting paths
@@ -16,23 +34,27 @@ core gameplay is a network routing puzzle where players:
 
 Think Mini Metro meets city builder — not the other way around.
 
+## Progression terminology (manuscript's Player Profile schema — use these exact terms, not ad hoc ones)
+- **Infrastructure Fund** — in-game currency, earned on chapter completion, spent on placements. Not "credits."
+- **XP** — experience points, accumulated across chapters, drives Administration Rank.
+- **City Reputation** — overall telecom-satisfaction metric, star-rating based.
+- **Administration Rank** — a title derived from XP (starts at "Trainee").
+- **Badges** — milestone-based achievement rewards.
+- **Stars** (0–3 per chapter) — per-chapter performance rating.
+
 ## Architecture
-- Backend: ExpressJS + MS SQL (cloud save only, REST API)
-- Frontend: Godot 4.7 (mobile-first, Android/iOS export)
-- Auth/Cloud: Firebase Authentication + Firestore
-- Local save: Godot built-in `user://` save files
-- Cloud sync: HTTPRequest node → Express API (background, optional)
-- Game works 100% offline — cloud save is a bonus, not a requirement
+- Backend: Firebase (Authentication + Cloud Firestore) — **not yet implemented**; everything is local-only stubs (`AuthState`, `GameProgress`) for now.
+- Frontend: Godot 4.7 + GDScript (mobile-first, Android export)
+- Local save: Godot built-in `user://` save files (`GameProgress` autoload)
+- Cloud sync: Firebase Firestore, real-time — only needed for auth/sync; core gameplay must work fully offline after login
+- Platform tooling: Android Studio / Kotlin / Java for the export pipeline (not game logic)
 
 ## AI Systems
-- Adaptive Difficulty Engine (GDScript, rule-based, no external API)
-  - Tracks player score per level
-  - Adjusts bandwidth demand, QoS complexity, and node count
-  - Target: keep player in Flow state (not too hard, not too easy)
-- Context-sensitive Hint System (Express → OpenAI, online only)
-  - Triggered when player fails same puzzle 2+ times
-  - Returns a 1-sentence TelCom-flavored hint
-  - Falls back to pre-generated Firestore hints when offline
+- **ALP (Adjustable Learning Program)** — the manuscript's name for this project's AI system. Rule-based, no external API (not an LLM call). Two jobs:
+  - Adaptive hint delivery: tracks wrong attempts and time-on-task per chapter; surfaces a contextual hint (progressively more specific) when a player is struggling, without revealing the answer outright.
+  - Performance tracking: records accuracy, attempt count, and completion time per chapter (manuscript: `ALP_SESSION`, `CHAPTER_PROGRESS` collections).
+  - Non-punitive and self-paced by design — this is the same spirit as the existing "never punish exploration" rule below, just formalized with a name and a data model.
+  - **Not yet implemented** in this prototype.
 
 ## Core TelCom Concepts the Game Teaches
 These must be reflected in puzzle mechanics, not just flavor text:
@@ -77,8 +99,8 @@ func adjust_difficulty(player_score: int, current_level: int) -> void:
 ```
 
 ## Save System
-- Local save: `user://save_data.json` via Godot's FileAccess
-- Cloud save: POST to `/api/save` on Express backend
+- Local save: `user://save_data.json` via Godot's FileAccess (`GameProgress` autoload — implemented)
+- Cloud save: Firebase Firestore (`SAVE_DATA` collection: current chapter + serialized city state) — **not yet implemented**
 - On launch: load local first, then sync from cloud if online
 - Never block gameplay waiting for cloud sync
 
@@ -89,20 +111,17 @@ func adjust_difficulty(player_score: int, current_level: int) -> void:
 - Keep scene organization clean
 - One responsibility per script — routing logic ≠ UI logic ≠ save logic
 
-## Scene Structure (suggested)
-- Main.tscn
-├── GameWorld (Node2D)
-│ ├── TileMap (isometric grid)
-│ ├── BuildingLayer (Y-sorted)
-│ ├── NetworkLayer (wires, signals, QoS visuals)
-│ └── UILayer (HUD, bandwidth meters, QoS indicators)
-├── AdaptiveDifficultyManager (Autoload)
-├── SaveManager (Autoload)
-└── HintManager (Autoload)
-
+## Autoloads (actual, as implemented)
+- `GameSettings` — camera speed, audio volume, notifications (session/local settings, not player progress)
+- `AuthState` — in-memory login/username stub, standing in for Firebase Authentication
+- `GameProgress` — the Player Profile stack (Infrastructure Fund, XP, City Reputation, Badges, Rank, chapter unlocks/stars, Districts), persisted to `user://save_data.json`
+- `BuildingInfoPanel` — the building detail overlay
 
 ## Current Goal
-Build the basic isometric city grid and allow the player to place buildings.
+Terminology and progression stack now align with the manuscript (this
+session). Next candidates, not yet decided: more chapters with distinct
+gameplay types, the ALP adaptive-hint system, or starting the Firebase
+backend — ask before assuming which.
 
 ## Important
 - The project uses Godot 4.7

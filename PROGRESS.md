@@ -1,5 +1,67 @@
 # Progress
 
+## 2026-09-20 (quiz district + capstone manuscript alignment)
+
+User shared the team's actual capstone manuscript ("RELAYED: A
+Telecommunication-Inspired Mobile Game," BS IT proposal, University of Cebu
+Lapu-Lapu and Mandaue). Read it in full — it's a much bigger vision than
+what's built (10 chapters, Firebase backend, an adaptive-hint AI system
+called the ALP, a full Player Profile progression stack, an admin console)
+— and per the List of Modules table, the user (Estrada, Sebastian Clark) is
+personally assigned the **Gameplay Module** (Puzzle/Drag-and-Drop/Matching/
+Tower Placement/City Management/Mission Completion) and the **Assessment
+Module** (Chapter Quiz/Completion Score/Rewards/Star Rating) — confirming
+this session's tower-placement puzzle and quiz work were on-target. User
+chose to prioritize aligning terminology and the progression stack over
+building more chapters or starting the Firebase backend.
+
+- **District 2 is a quiz**, per an earlier request in the same session
+  ("the 2nd district would be a quiz type"). New `scenes/quiz.tscn` +
+  `ui/quiz.gd`: 6 multiple-choice TelCom questions (QoS, congestion,
+  latency, packet loss, bandwidth allocation, routing — the exact concepts
+  AGENTS.md lists), wrong answers can retry with no penalty (matches the
+  existing "never punish exploration" rule), correct answers show a
+  one-line explanation. `story_event.gd` now routes chapter 2's "BEGIN" to
+  the quiz instead of `relayed.tscn`, with matching objectives text; this
+  is a direct `QUIZ_CHAPTER == 2` special case, not a general "district
+  type" system — worth generalizing if more non-puzzle chapters get added.
+  Refactored the in-game settings overlay out of `relayed.gd` into
+  `UIKit.show_in_game_settings()` so the quiz screen didn't need its own
+  copy.
+- **GameProgress now carries the manuscript's Player Profile stack**:
+  `infrastructure_fund` (renamed from the old ad hoc "credits", and now
+  *persistent* across districts rather than resetting to 600 every
+  playthrough — spending/earning in one district affects what's available
+  in the next, matching "Infrastructure Fund... earned upon chapter
+  completion" in the spec), `xp`, `city_reputation`, `badges`,
+  `administration_rank()` (an XP-threshold title lookup, starting at
+  "Trainee" per the spec's default). `relayed.gd`'s `credits` is now a
+  computed property backed by `GameProgress.infrastructure_fund` rather
+  than a separate local variable, so every screen sees the same number.
+  `TOTAL_CHAPTERS` is 10, not 6. Verified the whole award flow directly:
+  first completion of a chapter awards XP/reputation/a badge exactly once,
+  replaying the same chapter does not double-award, and spending through
+  `relayed.gd`'s `credits` property genuinely mutates
+  `GameProgress.infrastructure_fund`.
+- **District ≠ Chapter now**, per the manuscript's ERD (a District spans a
+  `chapter_range` of Chapters). Added `GameProgress.DISTRICTS` (3 districts
+  covering chapters 1-3/4-6/7-10 — names and exact boundaries are
+  placeholders pending real content design) and `district_for_chapter()`.
+  Chapter Select now groups tiles under a district header with a per-
+  district star tally, inside a `ScrollContainer` (10 chapters no longer
+  reliably fit one screen the way 6 did) instead of one flat grid.
+- **Player Profile's stubs are real now**: View Stats shows rank/XP/
+  Infrastructure Fund/chapters/stars; View Achievements lists actually-
+  earned badges (two placeholder badges exist — `first_contact`,
+  `city_restored` — the manuscript defines the badge *schema*, not
+  specific badges); View Reputation shows the real City Reputation number.
+- Explicitly **not** done this pass (out of scope for "terms and
+  progression," left for later): Firebase Auth/Firestore (still local-only
+  stubs), the ALP adaptive-hint AI system, per-chapter distinct gameplay
+  types beyond the puzzle/quiz split, building categories/routing/relay
+  abilities from the Building Types schema, the admin console, network-
+  disruption events (network_attack/infrastructure_failure).
+
 ## 2026-09-20 (next district + in-game settings)
 
 Two feature requests from the "Network Complete" screen.

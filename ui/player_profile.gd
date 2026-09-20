@@ -108,6 +108,11 @@ func _on_save_account() -> void:
 		name_label.text = new_name
 	edit_panel.visible = false
 
+const BADGE_NAMES := {
+	"first_contact": "First Contact — completed your first district",
+	"city_restored": "City Restored — completed every district",
+}
+
 func _show_stats() -> void:
 	var completed := 0
 	var total_stars := 0
@@ -115,13 +120,22 @@ func _show_stats() -> void:
 		total_stars += int(GameProgress.stars[chapter])
 		if int(GameProgress.stars[chapter]) > 0:
 			completed += 1
-	_show_info("Stats", "Chapters completed: %d / %d\nTotal stars: %d" % [completed, GameProgress.TOTAL_CHAPTERS, total_stars])
+	_show_info("Stats", "Rank: %s\nXP: %d\nInfrastructure Fund: %d\nChapters completed: %d / %d\nTotal stars: %d" % [
+		GameProgress.administration_rank(), GameProgress.xp, GameProgress.infrastructure_fund,
+		completed, GameProgress.TOTAL_CHAPTERS, total_stars,
+	])
 
 func _show_achievements() -> void:
-	_show_info("Achievements", "Achievements are coming in a future update.")
+	if GameProgress.badges.is_empty():
+		_show_info("Achievements", "No badges earned yet — complete a district to earn your first.")
+		return
+	var lines := PackedStringArray()
+	for badge_id in GameProgress.badges:
+		lines.append("• " + String(BADGE_NAMES.get(badge_id, badge_id)))
+	_show_info("Achievements", "\n".join(lines))
 
 func _show_reputation() -> void:
-	_show_info("Reputation", "Reputation tracking is coming in a future update.")
+	_show_info("Reputation", "City Reputation: %d\nRelay City's overall telecom satisfaction, earned by completing districts." % GameProgress.city_reputation)
 
 func _show_info(title: String, body: String) -> void:
 	info_title.text = title

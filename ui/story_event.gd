@@ -10,6 +10,11 @@ extends Control
 const REWARD_COLORS := [Color(0.15, 0.85, 1.0), Color(0.35, 1.0, 0.45)]
 const REWARD_LABELS := ["5G Bonus", "Fiber Bonus"]
 
+# District 2 is a TelCom quiz instead of the tower-placement puzzle (see
+# ui/quiz.gd). This is a direct special case, not a general "district type"
+# system — worth generalizing if more non-puzzle districts get added later.
+const QUIZ_CHAPTER := 2
+
 var intro_view: Control
 var objectives_view: Control
 
@@ -74,7 +79,8 @@ func _build_objectives() -> Control:
 
 	var objectives_list := UIKit.vbox(4)
 	box.add_child(objectives_list)
-	for line in ["Connect every building to its preferred network", "Resolve any tower congestion"]:
+	var objective_lines := ["Answer every TelCom question correctly"] if GameProgress.selected_chapter == QUIZ_CHAPTER else ["Connect every building to its preferred network", "Resolve any tower congestion"]
+	for line in objective_lines:
 		objectives_list.add_child(UIKit.body_label("• " + line, 13))
 
 	box.add_child(UIKit.body_label("Progress", 12, Color(0.75, 0.75, 0.75)))
@@ -108,4 +114,7 @@ func _show_objectives() -> void:
 	objectives_view.visible = true
 
 func _on_begin_pressed() -> void:
-	UIKit.go_to_scene("res://scenes/relayed.tscn")
+	if GameProgress.selected_chapter == QUIZ_CHAPTER:
+		UIKit.go_to_scene("res://scenes/quiz.tscn")
+	else:
+		UIKit.go_to_scene("res://scenes/relayed.tscn")

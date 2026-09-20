@@ -12,7 +12,14 @@ const BUILDING_COST := 100
 const MAX_ROUNDS := 3
 const TOWER_CAPACITY := {"5G": 150, "Ethernet": 120}
 
-var credits := 600
+# Backed by GameProgress.infrastructure_fund (persists across districts, per
+# the manuscript's Player Profile schema) rather than resetting to a flat
+# amount each district — in-district spending only reaches disk when
+# GameProgress next saves (e.g. on chapter completion), matching how puzzle
+# state was already not persisted mid-district before this change.
+var credits: int:
+	get: return GameProgress.infrastructure_fund
+	set(value): GameProgress.infrastructure_fund = max(0, value)
 var score := 0
 var current_round := 1
 var placement_kind := ""
@@ -79,7 +86,7 @@ func place_current_item(world_position: Vector2) -> void:
 
 func begin_placement(network_type: String) -> void:
 	if credits < TOWER_COST:
-		set_status("Not enough credits. A site costs %d credits." % TOWER_COST)
+		set_status("Not enough Infrastructure Fund. A site costs %d." % TOWER_COST)
 		return
 	placing_network = network_type
 	placement_kind = "tower"
@@ -126,7 +133,7 @@ func place_tower(world_position: Vector2) -> void:
 
 func begin_building_placement() -> void:
 	if credits < BUILDING_COST:
-		set_status("Not enough credits. A building costs %d credits." % BUILDING_COST)
+		set_status("Not enough Infrastructure Fund. A building costs %d." % BUILDING_COST)
 		return
 	placement_kind = "building"
 	placement_network = "5G"
@@ -244,14 +251,14 @@ func undo_last_placement() -> void:
 		deployed_towers.erase(node as CellTower)
 	else:
 		extra_buildings.erase(node as Building)
-	set_status("Last placement removed and credits refunded.")
+	set_status("Last placement removed and Infrastructure Fund refunded.")
 	refresh_network()
 
 func reset_player_placements() -> void:
 	while not placement_history.is_empty():
 		undo_last_placement()
 	cancel_placement()
-	set_status("Player placements reset; credits refunded.")
+	set_status("Player placements reset; Infrastructure Fund refunded.")
 
 func world_to_cell(world_position: Vector2) -> Vector2i:
 	return $Ground.local_to_map($Ground.to_local(world_position))
@@ -383,7 +390,7 @@ func refresh_network() -> void:
 		var bonus := 250 + current_round * 100
 		score += bonus
 		credits += bonus
-		set_status("District network online! +%d credits and points." % bonus)
+		set_status("District network online! +%d Infrastructure Fund and points." % bonus)
 		show_round_result()
 	elif congested_count > 0:
 		set_status("%d building(s) congested — add coverage to relieve overloaded towers." % congested_count)
@@ -498,7 +505,7 @@ func update_hud(congested_count: int = -1) -> void:
 	for node in get_tree().get_nodes_in_group("buildings"):
 		if (node as Building).connected_to_network and not (node as Building).congested:
 			online += 1
-	credits_label.text = "Credits: %d    Score: %d" % [credits, score]
+	credits_label.text = "Infrastructure Fund: %d    Score: %d" % [credits, score]
 	if congested > 0:
 		coverage_label.text = "Coverage: %d / %d online (%d congested)" % [online, total, congested]
 	else:
@@ -620,63 +627,4 @@ func _open_in_game_settings() -> void:
 	# scene's puzzle state (credits, placements, round) lives only in this
 	# script instance with no save/resume, so a full scene change to reach
 	# settings and back would silently discard the current district.
-	var settings_layer := CanvasLayer.new()
-	settings_layer.layer = 20
-	add_child(settings_layer)
-	settings_layer.add_child(UIKit.full_rect_bg(Color(0, 0, 0, 0.6)))
-
-	var panel := UIKit.panel(Vector2(280, 0))
-	settings_layer.add_child(UIKit.centered(panel))
-	var box := UIKit.vbox(10)
-	panel.add_child(box)
-	box.add_child(UIKit.title_label("Settings", 22))
-
-	box.add_child(UIKit.body_label("Camera Speed", 12, Color(0.75, 0.75, 0.75)))
-	var speed_slider := HSlider.new()
-	speed_slider.custom_minimum_size = Vector2(220, 24)
-	speed_slider.min_value = 0.5
-	speed_slider.max_value = 2.0
-	speed_slider.step = 0.25
-	speed_slider.value = GameSettings.camera_speed_multiplier
-	speed_slider.value_changed.connect(func(v): GameSettings.camera_speed_multiplier = v)
-	box.add_child(speed_slider)
-
-	box.add_child(UIKit.body_label("Audio", 12, Color(0.75, 0.75, 0.75)))
-	var audio_slider := HSlider.new()
-	audio_slider.custom_minimum_size = Vector2(220, 24)
-	audio_slider.min_value = 0.0
-	audio_slider.max_value = 1.0
-	audio_slider.step = 0.05
-	audio_slider.value = GameSettings.audio_volume
-	audio_slider.value_changed.connect(GameSettings.set_audio_volume)
-	box.add_child(audio_slider)
-
-	var notif_row := UIKit.hbox(8)
-	box.add_child(notif_row)
-	var notif_label := UIKit.body_label("Notifications", 13)
-	notif_label.autowrap_mode = TextServer.AUTOWRAP_OFF
-	notif_row.add_child(notif_label)
-	var notif_toggle := CheckButton.new()
-	notif_toggle.button_pressed = GameSettings.notifications_enabled
-	notif_toggle.toggled.connect(func(pressed): GameSettings.notifications_enabled = pressed)
-	notif_row.add_child(notif_toggle)
-
-	var close_button := UIKit.styled_button("Close")
-	close_button.pressed.connect(func(): settings_layer.queue_free())
-	box.add_child(close_button)
-
-	var sign_out_button := UIKit.styled_button("Sign Out", Color(0.3, 0.3, 0.32))
-	sign_out_button.pressed.connect(func():
-		UIKit.show_confirm_dialog(self, "SIGN OUT?", "Progress in this district will be lost.", func():
-			settings_layer.queue_free()
-			AuthState.logout()
-			UIKit.go_to_scene("res://scenes/login.tscn")
-		)
-	)
-	box.add_child(sign_out_button)
-
-	var quit_button := UIKit.styled_button("Quit Game", UIKit.DANGER_COLOR)
-	quit_button.pressed.connect(func():
-		UIKit.show_confirm_dialog(self, "ARE YOU SURE?", "Any unsaved progress in this session will be lost.", func(): get_tree().quit())
-	)
-	box.add_child(quit_button)
+	UIKit.show_in_game_settings(self, "Progress in this district will be lost.")

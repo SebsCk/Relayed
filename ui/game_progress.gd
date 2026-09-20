@@ -1,18 +1,44 @@
 extends Node
 
-# Local save for campaign progress, matching AGENTS.md's Save System section
-# ("Local save: user://save_data.json via Godot's FileAccess"). This is
-# intentionally minimal: chapter unlock state and per-chapter stars. It does
-# not yet cover in-round puzzle state (credits/score/placements) — that still
-# lives only in ui/relayed.gd for the current session.
+# Local save for campaign progress. Local-only — matches AGENTS.md's Save
+# System section (user://save_data.json via FileAccess), no Firebase yet
+# (see the capstone manuscript's Player Profile / Save Data collections for
+# the eventual cloud schema this is standing in for).
 
 const SAVE_PATH := "user://save_data.json"
-const TOTAL_CHAPTERS := 6
+const TOTAL_CHAPTERS := 10
+const STARTING_INFRASTRUCTURE_FUND := 600
+
+# Districts group a range of chapters (manuscript: DISTRICTS.chapter_range).
+# Names/boundaries are placeholders pending real story/content design.
+const DISTRICTS := [
+	{"name": "Downtown District", "start": 1, "end": 3},
+	{"name": "Suburban District", "start": 4, "end": 6},
+	{"name": "Industrial District", "start": 7, "end": 10},
+]
+
+# Administration Rank is a title derived from XP (manuscript: Player
+# Profile.administration_rank, default "Trainee").
+const RANK_THRESHOLDS := [
+	{"xp": 0, "rank": "Trainee"},
+	{"xp": 200, "rank": "Technician"},
+	{"xp": 500, "rank": "Administrator"},
+	{"xp": 1000, "rank": "Senior Administrator"},
+	{"xp": 2000, "rank": "Chief Administrator"},
+]
+
+const XP_PER_CHAPTER := 100
+const REPUTATION_PER_CHAPTER := 10
 
 var unlocked_chapters: int = 1
 var stars: Dictionary = {}
 var selected_chapter: int = 1
 var settings_return_path: String = "res://scenes/chapter_select.tscn"
+
+var infrastructure_fund: int = STARTING_INFRASTRUCTURE_FUND
+var xp: int = 0
+var city_reputation: int = 0
+var badges: Array = []
 
 func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
@@ -20,6 +46,10 @@ func has_save() -> bool:
 func start_new_game() -> void:
 	unlocked_chapters = 1
 	stars.clear()
+	infrastructure_fund = STARTING_INFRASTRUCTURE_FUND
+	xp = 0
+	city_reputation = 0
+	badges.clear()
 	save_progress()
 
 func load_progress() -> void:
@@ -37,9 +67,24 @@ func load_progress() -> void:
 	if typeof(raw_stars) == TYPE_DICTIONARY:
 		for key in raw_stars.keys():
 			stars[int(key)] = int(raw_stars[key])
+	infrastructure_fund = int(parsed.get("infrastructure_fund", STARTING_INFRASTRUCTURE_FUND))
+	xp = int(parsed.get("xp", 0))
+	city_reputation = int(parsed.get("city_reputation", 0))
+	badges.clear()
+	var raw_badges = parsed.get("badges", [])
+	if typeof(raw_badges) == TYPE_ARRAY:
+		for b in raw_badges:
+			badges.append(String(b))
 
 func save_progress() -> void:
-	var data := {"unlocked_chapters": unlocked_chapters, "stars": stars}
+	var data := {
+		"unlocked_chapters": unlocked_chapters,
+		"stars": stars,
+		"infrastructure_fund": infrastructure_fund,
+		"xp": xp,
+		"city_reputation": city_reputation,
+		"badges": badges,
+	}
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	file.store_string(JSON.stringify(data))
 	file.close()
@@ -50,8 +95,52 @@ func unlock_next_chapter() -> void:
 		save_progress()
 
 func set_chapter_stars(chapter: int, count: int) -> void:
+	var first_completion := int(stars.get(chapter, 0)) == 0 and count > 0
 	stars[chapter] = max(int(stars.get(chapter, 0)), count)
+	if first_completion:
+		add_xp(XP_PER_CHAPTER)
+		add_city_reputation(REPUTATION_PER_CHAPTER)
+		_check_badges(chapter)
 	save_progress()
+
+func add_xp(amount: int) -> void:
+	xp = max(0, xp + amount)
+	save_progress()
+
+func add_infrastructure_fund(amount: int) -> void:
+	infrastructure_fund = max(0, infrastructure_fund + amount)
+	save_progress()
+
+func add_city_reputation(amount: int) -> void:
+	city_reputation = max(0, city_reputation + amount)
+	save_progress()
+
+func award_badge(badge_id: String) -> void:
+	if not badges.has(badge_id):
+		badges.append(badge_id)
+		save_progress()
+
+# Placeholder badge content (only two milestones) pending a real badge list —
+# the manuscript defines the schema (milestone_type/milestone_value) but not
+# specific badges.
+func _check_badges(chapter: int) -> void:
+	if chapter == 1:
+		award_badge("first_contact")
+	if stars.size() >= TOTAL_CHAPTERS:
+		award_badge("city_restored")
+
+func administration_rank() -> String:
+	var rank := "Trainee"
+	for tier in RANK_THRESHOLDS:
+		if xp >= int(tier["xp"]):
+			rank = String(tier["rank"])
+	return rank
+
+func district_for_chapter(chapter: int) -> Dictionary:
+	for district in DISTRICTS:
+		if chapter >= int(district["start"]) and chapter <= int(district["end"]):
+			return district
+	return {"name": "Unknown District", "start": chapter, "end": chapter}
 
 func stars_for(chapter: int) -> int:
 	return int(stars.get(chapter, 0))
