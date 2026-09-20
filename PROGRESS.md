@@ -1,5 +1,47 @@
 # Progress
 
+## 2026-09-20 (next district + in-game settings)
+
+Two feature requests from the "Network Complete" screen.
+
+- **Next District after finishing a chapter.** Previously the final
+  round's overlay always said "Play Again" and just reloaded the same
+  scene (`get_tree().reload_current_scene()`), even though
+  `GameProgress.unlock_next_chapter()` was already unlocking the next one
+  on completion — there was just no way to actually go play it without
+  manually backing out to Chapter Select. Now: if
+  `GameProgress.selected_chapter < GameProgress.TOTAL_CHAPTERS`, the
+  button reads "Next District" and, on press, increments
+  `GameProgress.selected_chapter` and navigates to `story_event.tscn`
+  (the same intro/objectives screen every district already starts
+  through) instead of reloading. On the actual last chapter it still
+  says "Play Again" and replays the same district, since there's nothing
+  further to unlock yet (only one puzzle map exists — see "not yet
+  implemented" further down). Verified the chapter-increment and
+  navigation directly by forcing `current_round` to `MAX_ROUNDS` and
+  calling `advance_round()`.
+- **In-game settings**, reachable from a new gear icon in the gameplay
+  HUD, not just from Chapter Select. This is deliberately an **overlay**,
+  not a navigation to `scenes/settings.tscn` — the puzzle's state
+  (credits, score, round, placed towers/buildings) lives only in the
+  `relayed.gd` instance with no save/resume, so a real scene change to
+  reach settings and back would silently discard the whole district in
+  progress. `_open_in_game_settings()` in `ui/relayed.gd` builds a small
+  panel (camera speed, audio, notifications, Close, Sign Out, Quit Game)
+  reusing the same `UIKit` helpers as every other screen, and Close just
+  frees the overlay layer. Verified with scripted tests: opening/closing
+  it leaves `credits`/`deployed_towers` and `current_scene` completely
+  unchanged, and the gear icon itself responds to a real routed click
+  (not just a direct function call — see the back-arrow entry below for
+  why that distinction matters).
+- Caught one real bug while screenshotting the new overlay: the
+  "Notifications" label was wrapping one character per line inside its
+  horizontal row, because `UIKit.body_label()` always enables word-wrap
+  and the label had no guaranteed width in a narrow `HBoxContainer`.
+  Fixed by turning off autowrap on that specific label rather than
+  changing the shared helper's default (which is reasonable for the
+  wider contexts it's normally used in).
+
 ## 2026-09-20 (playtest round 5: back arrow genuinely unclickable — real root cause)
 
 User report: "back arrow still unresponsive" on Chapter Select, after the

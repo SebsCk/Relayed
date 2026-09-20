@@ -453,11 +453,14 @@ func show_round_result() -> void:
 	if current_round >= MAX_ROUNDS:
 		title.text = "Network Complete"
 		body.text = "All districts are online. Final score: %d" % score
-		next_button.text = "Play Again"
 		# Flat 3-star award until a real per-chapter scoring rubric exists
 		# (e.g. based on score or leftover credits).
 		GameProgress.set_chapter_stars(GameProgress.selected_chapter, 3)
 		GameProgress.unlock_next_chapter()
+		if GameProgress.selected_chapter < GameProgress.TOTAL_CHAPTERS:
+			next_button.text = "Next District"
+		else:
+			next_button.text = "Play Again"
 	else:
 		title.text = "Round %d Complete" % current_round
 		body.text = "Every building has compatible coverage. Prepare for the next district."
@@ -465,7 +468,11 @@ func show_round_result() -> void:
 
 func advance_round() -> void:
 	if current_round >= MAX_ROUNDS:
-		get_tree().reload_current_scene()
+		if GameProgress.selected_chapter < GameProgress.TOTAL_CHAPTERS:
+			GameProgress.selected_chapter += 1
+			UIKit.go_to_scene("res://scenes/story_event.tscn")
+		else:
+			get_tree().reload_current_scene()
 		return
 	current_round += 1
 	round_complete = false
@@ -507,6 +514,17 @@ func build_hud() -> void:
 	var layer := CanvasLayer.new()
 	layer.layer = 5
 	add_child(layer)
+
+	var settings_button := Button.new()
+	settings_button.flat = true
+	settings_button.custom_minimum_size = Vector2(44, 44)
+	settings_button.anchor_left = 1.0
+	settings_button.anchor_right = 1.0
+	settings_button.position = Vector2(-56, 12)
+	settings_button.add_child(UIKit.icon("res://ui/icons/gear.svg", Vector2(26, 26)))
+	settings_button.pressed.connect(_open_in_game_settings)
+	layer.add_child(settings_button)
+
 	var hud := PanelContainer.new()
 	hud.position = Vector2(16, 76)
 	hud.size = Vector2(390, 250)
@@ -596,3 +614,69 @@ func build_hud() -> void:
 	next_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	next_button.pressed.connect(advance_round)
 	result_box.add_child(next_button)
+
+func _open_in_game_settings() -> void:
+	# An overlay rather than navigating to scenes/settings.tscn: this
+	# scene's puzzle state (credits, placements, round) lives only in this
+	# script instance with no save/resume, so a full scene change to reach
+	# settings and back would silently discard the current district.
+	var settings_layer := CanvasLayer.new()
+	settings_layer.layer = 20
+	add_child(settings_layer)
+	settings_layer.add_child(UIKit.full_rect_bg(Color(0, 0, 0, 0.6)))
+
+	var panel := UIKit.panel(Vector2(280, 0))
+	settings_layer.add_child(UIKit.centered(panel))
+	var box := UIKit.vbox(10)
+	panel.add_child(box)
+	box.add_child(UIKit.title_label("Settings", 22))
+
+	box.add_child(UIKit.body_label("Camera Speed", 12, Color(0.75, 0.75, 0.75)))
+	var speed_slider := HSlider.new()
+	speed_slider.custom_minimum_size = Vector2(220, 24)
+	speed_slider.min_value = 0.5
+	speed_slider.max_value = 2.0
+	speed_slider.step = 0.25
+	speed_slider.value = GameSettings.camera_speed_multiplier
+	speed_slider.value_changed.connect(func(v): GameSettings.camera_speed_multiplier = v)
+	box.add_child(speed_slider)
+
+	box.add_child(UIKit.body_label("Audio", 12, Color(0.75, 0.75, 0.75)))
+	var audio_slider := HSlider.new()
+	audio_slider.custom_minimum_size = Vector2(220, 24)
+	audio_slider.min_value = 0.0
+	audio_slider.max_value = 1.0
+	audio_slider.step = 0.05
+	audio_slider.value = GameSettings.audio_volume
+	audio_slider.value_changed.connect(GameSettings.set_audio_volume)
+	box.add_child(audio_slider)
+
+	var notif_row := UIKit.hbox(8)
+	box.add_child(notif_row)
+	var notif_label := UIKit.body_label("Notifications", 13)
+	notif_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	notif_row.add_child(notif_label)
+	var notif_toggle := CheckButton.new()
+	notif_toggle.button_pressed = GameSettings.notifications_enabled
+	notif_toggle.toggled.connect(func(pressed): GameSettings.notifications_enabled = pressed)
+	notif_row.add_child(notif_toggle)
+
+	var close_button := UIKit.styled_button("Close")
+	close_button.pressed.connect(func(): settings_layer.queue_free())
+	box.add_child(close_button)
+
+	var sign_out_button := UIKit.styled_button("Sign Out", Color(0.3, 0.3, 0.32))
+	sign_out_button.pressed.connect(func():
+		UIKit.show_confirm_dialog(self, "SIGN OUT?", "Progress in this district will be lost.", func():
+			settings_layer.queue_free()
+			AuthState.logout()
+			UIKit.go_to_scene("res://scenes/login.tscn")
+		)
+	)
+	box.add_child(sign_out_button)
+
+	var quit_button := UIKit.styled_button("Quit Game", UIKit.DANGER_COLOR)
+	quit_button.pressed.connect(func():
+		UIKit.show_confirm_dialog(self, "ARE YOU SURE?", "Any unsaved progress in this session will be lost.", func(): get_tree().quit())
+	)
+	box.add_child(quit_button)
