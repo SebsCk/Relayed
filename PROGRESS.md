@@ -1,5 +1,46 @@
 # Progress
 
+## 2026-09-20 (playtest round 4: back button label, building z-order, drag camera)
+
+Three more items from the same playtest pass.
+
+- **"Back arrow doesn't work/redirect to main menu."** Tested the actual
+  navigation directly (both Chapter Select's back arrow and gameplay's
+  "Back to Main Menu" button) — both genuinely fire and change scenes; this
+  wasn't a dead button. The real problem was a label/behavior mismatch:
+  the gameplay screen's button is literally labeled "Back to Main Menu"
+  but has gone to `chapter_select.tscn` since the navigation flow was
+  rebuilt (`main_menu.tscn` is no longer part of the primary flow — kept
+  as an orphaned legacy screen per the user's earlier "leave it as-is").
+  Renamed the button's text to "Back to Districts" to match what it
+  actually does, in `scenes/relayed.tscn` directly (a plain text property,
+  not the tile_data — safe to hand-edit, no resave-script needed).
+- **"Corner house is in front of apartments."** Real z-order bug: the
+  three original scene-authored buildings (`Building`, `Building2`,
+  `Building3`) default to `z_index=0` (never set explicitly), while
+  round-demand and player-placed buildings get `z_index=1` via
+  `prepare_placed_building()` — so a demand building would always draw in
+  front of an original building regardless of which one should visually
+  occlude the other. Fixed by setting `z_index=1` on `scenes/building.tscn`'s
+  root node, so every `Building` instance (scene-authored or runtime)
+  inherits the same z-tier by default and Y-sort alone decides draw order
+  between them, same fix pattern as the tower-vs-building z-index bug from
+  earlier today. Verified both that scene-authored buildings now report
+  `z_index=1` and with a screenshot showing correct occlusion.
+- **"Want click-and-drag navigation instead of WASD — it's a mobile game."**
+  Rewrote `ui/camera_2d.gd`: removed the WASD `_process()` movement
+  entirely, replaced with press-drag-release panning (`InputEventMouseButton`
+  + `InputEventMouseMotion` for desktop, `InputEventScreenTouch` +
+  `InputEventScreenDrag` for touch), 1:1 with the pointer (delta divided by
+  current zoom so panning tracks the pointer correctly at any zoom level).
+  Explicitly skips panning while `current_scene.is_placing()` is true, so
+  dragging to place a tower/building doesn't also drag the camera under it
+  — verified with a scripted input test that camera position is completely
+  unchanged during a placement drag, and moves correctly (and in the
+  correct direction) otherwise. Mouse-wheel zoom (unrelated control)
+  untouched. The existing "camera movement speed" setting still applies,
+  now as a drag-sensitivity multiplier rather than a WASD velocity.
+
 ## 2026-09-20 (playtest round 3: demand buildings spawning on the puddle patch)
 
 User report: "Riverside Apartments" (round 3 demand building) visually

@@ -71,7 +71,7 @@ offset_left = 21.0
 offset_top = 19.0
 offset_right = 215.0
 offset_bottom = 62.0
-text = "Back to Main Menu"
+text = "Back to Districts"
 script = ExtResource("3_smj7p")
 
 [editable path="Buildings/Building"]

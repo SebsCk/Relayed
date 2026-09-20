@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://m17aqoobxnmv" path="res://Isometric Suburban Pack/Buildings/house 01a.png" id="2_uvy8r"]
 
 [node name="Building" type="Node2D" unique_id=1249641597]
+z_index = 1
 script = ExtResource("1_5j34s")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=187053034]
