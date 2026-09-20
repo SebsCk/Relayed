@@ -30,9 +30,11 @@ func _ready() -> void:
 func _build_intro() -> Control:
 	var view := Control.new()
 	view.set_anchors_preset(Control.PRESET_FULL_RECT)
+	view.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	view.add_child(center)
 
 	var row := UIKit.hbox(16)
@@ -56,9 +58,11 @@ func _build_intro() -> Control:
 func _build_objectives() -> Control:
 	var view := Control.new()
 	view.set_anchors_preset(Control.PRESET_FULL_RECT)
+	view.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	view.add_child(center)
 
 	var panel := UIKit.panel(Vector2(300, 0))

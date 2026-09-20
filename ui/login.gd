@@ -19,6 +19,7 @@ func _build_login_layout() -> void:
 	var root_box := UIKit.vbox(18)
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(center)
 	center.add_child(root_box)
 
@@ -38,6 +39,7 @@ func _build_login_layout() -> void:
 	box.add_child(password_field)
 
 	var forgot_row := HBoxContainer.new()
+	forgot_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	forgot_row.alignment = BoxContainer.ALIGNMENT_END
 	box.add_child(forgot_row)
 	var forgot_link := UIKit.link_button("Forgot Password?")

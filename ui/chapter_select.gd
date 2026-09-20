@@ -53,6 +53,7 @@ func _build_top_bar() -> void:
 func _build_grid() -> void:
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(center)
 
 	var box := UIKit.vbox(16)
@@ -63,6 +64,7 @@ func _build_grid() -> void:
 	grid.columns = 3
 	grid.add_theme_constant_override("h_separation", 10)
 	grid.add_theme_constant_override("v_separation", 10)
+	grid.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(grid)
 
 	for chapter in range(1, GameProgress.TOTAL_CHAPTERS + 1):

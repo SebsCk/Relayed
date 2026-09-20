@@ -18,6 +18,7 @@ func _ready() -> void:
 	add_child(UIKit.full_rect_bg())
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(center)
 
 	var root_box := UIKit.vbox(16)
@@ -46,6 +47,7 @@ func _build_step_one() -> Control:
 	email_field = UIKit.text_field("Email")
 	box.add_child(email_field)
 	var next_row := HBoxContainer.new()
+	next_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	next_row.alignment = BoxContainer.ALIGNMENT_END
 	box.add_child(next_row)
 	var next_button := UIKit.styled_button("▶")

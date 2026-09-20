@@ -124,11 +124,19 @@ static func icon(path: String, size: Vector2 = Vector2(28, 28), tint: Color = TE
 static func vbox(separation: int = 10) -> VBoxContainer:
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", separation)
+	# Containers default to MOUSE_FILTER_PASS, which still wins a hit-test
+	# over an unrelated sibling positioned behind/around it (e.g. a corner
+	# back button) even though it has nothing to actually do with the
+	# click. These are pure layout wrappers; IGNORE lets clicks fall
+	# through to whatever's really there. Buttons/fields added as children
+	# still receive their own clicks regardless of the parent's filter.
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return box
 
 static func hbox(separation: int = 10) -> HBoxContainer:
 	var box := HBoxContainer.new()
 	box.add_theme_constant_override("separation", separation)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return box
 
 static func centered_icon(path: String, size: Vector2 = Vector2(28, 28), tint: Color = TEXT_LIGHT) -> CenterContainer:
@@ -164,5 +172,11 @@ static func show_confirm_dialog(parent: Node, title: String, body: String, on_co
 static func centered(child: Control) -> CenterContainer:
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	# A pure layout wrapper shouldn't itself consume clicks over its empty
+	# area — that silently blocks sibling controls (e.g. a corner back
+	# button) positioned behind/around it. Its child still receives input
+	# normally; a modal's own background layer is what should block clicks,
+	# not this.
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	center.add_child(child)
 	return center

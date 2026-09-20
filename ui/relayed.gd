@@ -519,6 +519,7 @@ func build_hud() -> void:
 	hud.add_child(margin)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 7)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.add_child(box)
 	var title := Label.new()
 	title.text = "RELAYED  |  Network Operations"
@@ -532,6 +533,7 @@ func build_hud() -> void:
 	box.add_child(coverage_label)
 	var buttons := HBoxContainer.new()
 	buttons.add_theme_constant_override("separation", 8)
+	buttons.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(buttons)
 	five_g_button = Button.new()
 	five_g_button.text = "Place 5G ($%d)" % TOWER_COST
@@ -543,6 +545,7 @@ func build_hud() -> void:
 	buttons.add_child(fiber_button)
 	var placement_tools := HBoxContainer.new()
 	placement_tools.add_theme_constant_override("separation", 8)
+	placement_tools.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(placement_tools)
 	building_button = Button.new()
 	building_button.text = "Place Building ($%d)" % BUILDING_COST
@@ -576,6 +579,7 @@ func build_hud() -> void:
 	overlay.add_child(result_margin)
 	var result_box := VBoxContainer.new()
 	result_box.name = "Box"
+	result_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	result_box.add_theme_constant_override("separation", 14)
 	result_margin.add_child(result_box)
 	var result_title := Label.new()

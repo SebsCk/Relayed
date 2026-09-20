@@ -1,5 +1,53 @@
 # Progress
 
+## 2026-09-20 (playtest round 5: back arrow genuinely unclickable — real root cause)
+
+User report: "back arrow still unresponsive" on Chapter Select, after the
+previous entry's fix (renaming the mislabeled gameplay button). That
+previous fix was real but addressed a different button — Chapter Select's
+arrow icon had a separate, actual click-through bug the whole time.
+
+- My first diagnosis attempt (emit_signal on the button directly) was
+  methodologically wrong for this class of bug: it invokes the connected
+  handler directly, bypassing Godot's real hit-testing entirely, so it
+  can't detect "button is wired correctly but physically unclickable."
+  Re-tested with `Viewport.push_input()` (a real routed click) and
+  confirmed: the click did nothing. Root cause: `CenterContainer`s (and
+  other layout containers — `VBoxContainer`, `HBoxContainer`,
+  `GridContainer`) default to `MOUSE_FILTER_PASS`, not `IGNORE`. A
+  full-rect `CenterContainer` added *after* the back button in every one
+  of these screens sat on top of it in hit-testing priority — its own
+  rect spans the whole screen (regardless of where its centered content
+  actually renders), so it claims clicks anywhere on screen, including
+  directly over the back button, a separate sibling positioned underneath.
+- Fixed at the shared source: `UIKit.centered()`, `UIKit.vbox()`, and
+  `UIKit.hbox()` (`ui/ui_kit.gd`) now default to `MOUSE_FILTER_IGNORE` —
+  they're pure layout wrappers, and IGNORE lets clicks fall through to
+  whatever's actually there while their own button/field children still
+  receive clicks normally regardless of the parent's filter. Also fixed
+  the handful of `CenterContainer`/`GridContainer`/`HBoxContainer`
+  instances constructed directly rather than through those helpers
+  (`chapter_select.gd`'s grid, `login.gd`/`register.gd`'s button rows, and
+  `relayed.gd`'s HUD containers), plus `story_event.gd`'s `intro_view`/
+  `objectives_view` wrapper `Control`s, which had the identical problem
+  one level up (full-rect, default filter, added after the back button).
+- Modal/popup overlays (login's forgot-password panel, chapter select's
+  district popup, player profile's info/edit panels) were **not**
+  touched — those correctly rely on their own wrapping `Control`'s default
+  `STOP` filter to block background clicks while shown, which is intended,
+  not a bug.
+- Verification pitfall worth remembering: my first re-test after the fix
+  still failed — because it ran via `--headless` without `--resolution`,
+  which silently defaults to a tiny **64×64** viewport. At that size, the
+  profile/settings buttons (anchored to the right edge with negative
+  offsets) land on top of the back button by coincidence, making the test
+  meaningless. Real click-routing tests need a non-headless run with
+  `--resolution` to get realistic control geometry — headless mode doesn't
+  apply `--resolution` at all.
+- Re-verified with real routed clicks (not emit_signal) at 390×844 on both
+  Chapter Select's and Choose Game's back arrows — both now correctly
+  navigate.
+
 ## 2026-09-20 (playtest round 4: back button label, building z-order, drag camera)
 
 Three more items from the same playtest pass.
