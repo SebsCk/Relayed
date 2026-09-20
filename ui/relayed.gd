@@ -334,6 +334,10 @@ func show_round_result() -> void:
 		title.text = "Network Complete"
 		body.text = "All districts are online. Final score: %d" % score
 		next_button.text = "Play Again"
+		# Flat 3-star award until a real per-chapter scoring rubric exists
+		# (e.g. based on score or leftover credits).
+		GameProgress.set_chapter_stars(GameProgress.selected_chapter, 3)
+		GameProgress.unlock_next_chapter()
 	else:
 		title.text = "Round %d Complete" % current_round
 		body.text = "Every building has compatible coverage. Prepare for the next district."

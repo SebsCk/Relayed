@@ -1,5 +1,104 @@
 # Progress
 
+## 2026-09-20 (storyboard screens)
+
+Implemented the "doable" screens from a UI/UX storyboard document the user
+shared (Login, Register, Forgot Password, Settings extensions, Quit
+confirmation, Choose Game, Chapter Selection, Player Profile, Story
+Event/Objectives). Screens needing dedicated art we don't have use clearly
+labeled placeholders.
+
+- New shared UI helper `ui/ui_kit.gd` (`class_name UIKit`, static factory
+  functions) builds all Control styling in code — same pattern as
+  `build_hud()` in `ui/relayed.gd` — so each screen script stays focused on
+  layout/logic. Buttons, panels, text fields, and a reusable
+  `show_confirm_dialog()` all live here.
+- 8 placeholder SVG icons added under `ui/icons/` (lock, star, person, phone,
+  signal, wrench, gear, clipboard) since neither asset pack has UI icons.
+  The Google sign-in button is a neutral placeholder, not Google's actual
+  branded logo — real Google Sign-In needs their official branding assets
+  before shipping.
+- New scenes: `scenes/login.tscn`, `register.tscn`, `choose_game.tscn`,
+  `chapter_select.tscn`, `player_profile.tscn`, `story_event.tscn` — each a
+  minimal `Control` root whose script builds the UI in `_ready()`.
+- New autoloads: `AuthState` (in-memory login/username stub — no Firebase
+  yet, matches AGENTS.md's stated but unimplemented Firebase Auth
+  architecture) and `GameProgress` (real local save to
+  `user://save_data.json` for chapter unlocks + stars, per AGENTS.md's Save
+  System section — this is the first actual implementation of that section,
+  previously only described).
+- Project entry point (`run/main_scene`) changed from `main_menu.tscn` to
+  `login.tscn`. Full flow: Login/Register → Choose Game (New/Continue, gated
+  on save existence) → Chapter Select (6 chapters, locked/unlocked, stars,
+  Play/Replay/locked popups) → Story Event (objectives) → `relayed.tscn`
+  gameplay. Finishing all 3 rounds in `relayed.tscn` now calls
+  `GameProgress.set_chapter_stars()` (flat 3 stars — no scoring rubric
+  exists yet) and `unlock_next_chapter()`, so the chapter-select stars/locks
+  are real, not decorative.
+- `scenes/main_menu.tscn` is **not deleted** but is no longer the entry
+  point — it's orphaned from the new flow. Its Start/Settings/Quit buttons
+  still work if opened directly (useful as a dev shortcut into
+  `relayed.tscn`), and Quit now goes through the same confirm dialog.
+  Worth deciding later whether to repurpose or remove it.
+- `ui/back_to_mm.gd` (in-gameplay back button) and `ui/control.gd` (Settings
+  back button) now return to `chapter_select.tscn` instead of
+  `main_menu.tscn`, matching the new hub screen. Settings' back button
+  target is stored in `GameProgress.settings_return_path` so it can still
+  return to `main_menu.tscn` when reached from there directly.
+- Settings screen (`ui/settings.gd`) extended in place (existing camera
+  speed slider untouched): Audio slider is real (wired to
+  `AudioServer` master bus volume), Notifications toggle is a stub
+  (`GameSettings.notifications_enabled`, no push-notification system
+  exists), Sign Out is real (`AuthState.logout()`), Quit Game routes through
+  the shared confirm dialog.
+
+## Gotchas found this session
+
+- `TextureRect.expand_mode` defaults matter even when the control has
+  `PRESET_FULL_RECT` anchors: `EXPAND_FIT_WIDTH_PROPORTIONAL` (used
+  originally in `UIKit.icon()` and the chapter-select district icon) lets
+  the texture's native pixel size leak into the *minimum size* calculation,
+  which can override `custom_minimum_size` and blow up the control's actual
+  rect — this showed up as the chapter-select ground tiles and district icon
+  overflowing their 100×100 button at 390px width. Fixed by setting
+  `expand_mode = EXPAND_IGNORE_SIZE` wherever a fixed display size is
+  wanted regardless of the source texture's resolution. `UIKit.icon()` now
+  defaults to this; watch for the same issue in any future TextureRect use
+  with a non-icon-sized source texture.
+- No GUI automation is available in this environment to click through the
+  editor by hand. Verification instead used: (1) a headless project
+  import + a short headless run of every scene to catch parser/runtime
+  errors, and (2) a throwaway `SceneTree` script
+  (`await process_frame` × a few, then `get_viewport().get_texture()
+  .get_image().save_png()`) launched non-headless at `--resolution 390x844`
+  to get real rendered screenshots for visual review — this is how the
+  `expand_mode` bug above was actually caught. That script and a temporary
+  `_icon_test.tscn`/`.gd` scene were scratch files, not committed.
+- Local Godot install problem (not fixed, just worked around): `Downloads\
+  Godot_v4.7.2-stable_win64.exe` is a folder, not an executable — it's
+  missing the real ~180MB engine binary and only contains the console
+  launcher plus an unrelated installer. Testing this session extracted the
+  real executable from `Godot_v4.7.2-stable_win64.exe.zip` into a scratch
+  temp folder instead. Fixing the Downloads folder would make headless
+  testing easier to set up next session.
+
+## Not yet implemented (explicitly out of scope this session)
+
+- Story Event's character portrait — needs real 2D character-portrait art;
+  current placeholder is a generic silhouette icon. The project's only
+  character sprites (`Isometric Suburban Pack/Characters/`) are isometric
+  walk-cycles, a different style entirely.
+- Chapter Selection's diamond/isometric map arrangement — simplified to a
+  plain grid of ground-tile buttons. Same locked/star/popup interaction,
+  different (simpler) visual arrangement than the storyboard mockup.
+- Per-chapter level content — all "chapters" currently load the same single
+  `relayed.tscn` puzzle map (3 rounds). Chapter → level-design mapping is
+  future work.
+- Objectives progress bar in Story Event is inert (always 0%) — no
+  per-objective progress tracking exists yet to drive it.
+- Real Firebase Authentication / Firestore — `AuthState` is a pure
+  in-memory session stub.
+
 ## 2026-09-20
 
 - Cleaned up the repo: removed stray Godot autosave `.tmp` files, gitignored

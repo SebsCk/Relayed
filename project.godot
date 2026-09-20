@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Relayed (4.7)"
-run/main_scene="uid://crg517q64aqen"
+run/main_scene="res://scenes/login.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 BuildingInfoPanel="*uid://meqpeed67h37"
 GameSettings="*res://ui/game_settings.gd"
+AuthState="*res://ui/auth_state.gd"
+GameProgress="*res://ui/game_progress.gd"
 MCPRuntimeServer="*res://addons/godot_mcp_toolkit/runtime/mcp_runtime_server.gd"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
