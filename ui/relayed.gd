@@ -2,8 +2,6 @@ extends Node2D
 
 const TOWER_SCENE := preload("res://scenes/cell_tower.tscn")
 const BUILDING_SCENE := preload("res://scenes/building.tscn")
-const HOUSE_TEXTURE := preload("res://Isometric Suburban Pack/Buildings/house 02a.png")
-const APARTMENT_TEXTURE := preload("res://Isometric Suburban Pack/Buildings/apartment complex 01a.png")
 const PLACEABLE_BUILDING_TEXTURE := preload("res://Isometric Suburban Pack/Buildings/house 01a.png")
 const TOWER_TEXTURE := preload("res://Isometric City - Starter Set/Buildings/bld_watertower_blue_SW_normal.png")
 
@@ -12,12 +10,22 @@ const BUILDING_COST := 100
 const MAX_ROUNDS := 3
 const TOWER_CAPACITY := {"5G": 150, "Ethernet": 120}
 
+# Round 2 and 3's demand buildings (see apply_round_demands()) are real,
+# hand-editable nodes in scenes/relayed.tscn now — CornerHouse and
+# RiversideApartments under $Buildings — rather than being constructed at
+# runtime, so their position/sprite/texture can be tweaked directly in the
+# editor. They start hidden and process-disabled (see
+# _deactivate_demand_buildings()) and are revealed by name when their round
+# arrives, in the order they should appear.
+const DEMAND_BUILDING_NAMES := ["CornerHouse", "RiversideApartments"]
+
 # Building sprite sources vary wildly in native pixel size (a plain house is
 # 225px wide, the apartment complex is 425px) — normalize every
-# spawn_building()/place_building() sprite to this rendered width so a
-# building's visual footprint reflects its actual grid-cell spacing instead
-# of its source art's resolution. Matches roughly the hand-tuned scale
-# (~0.7-0.75) already used on the scene's original starting buildings.
+# place_building() sprite to this rendered width so a building's visual
+# footprint reflects its actual grid-cell spacing instead of its source
+# art's resolution. Matches roughly the hand-tuned scale (~0.7-0.75) already
+# used on the scene's original starting buildings, and the same scale
+# CornerHouse/RiversideApartments were baked at.
 const BUILDING_SPRITE_TARGET_WIDTH := 170.0
 
 # Backed by GameProgress.infrastructure_fund (persists across districts, per
@@ -61,6 +69,7 @@ func _ready() -> void:
 	wire_layer.name = "WireLayer"
 	wire_layer.z_index = 5
 	add_child(wire_layer)
+	_deactivate_demand_buildings()
 	register_existing_buildings()
 	build_hud()
 	apply_round_demands()
@@ -294,27 +303,33 @@ func apply_round_demands() -> void:
 	# The first map starts with three structures.  Each later round adds a new
 	# demand point, so the player must extend the network instead of reusing one solve.
 	if current_round == 2 and round_demand_count == 0:
-		spawn_building("Corner House", 75, "D", "5G", Vector2(1700, 20), HOUSE_TEXTURE)
+		_activate_demand_building("CornerHouse")
 	if current_round == 3 and round_demand_count == 1:
-		spawn_building("Riverside Apartments", 90, "E", "Ethernet", Vector2(1900, -115), APARTMENT_TEXTURE)
+		_activate_demand_building("RiversideApartments")
 	set_status("Round %d: connect every active building with its preferred network." % current_round)
 	update_hud()
 
-func spawn_building(title: String, bandwidth: int, district: String, network: String, world_position: Vector2, texture: Texture2D) -> void:
-	var building := BUILDING_SCENE.instantiate() as Building
-	building.name = title.replace(" ", "")
-	var cell := world_to_cell(world_position)
-	building.position = cell_to_world(cell)
-	building.building_name = title
-	building.bandwidth_level = bandwidth
-	building.district_id = district
-	building.preferred_network = network
-	building.hitbox_size = Vector2(110, 110)
-	(building.get_node("Sprite2D") as Sprite2D).texture = texture
-	prepare_placed_building(building)
-	$Buildings.add_child(building)
-	extra_buildings.append(building)
+# CornerHouse/RiversideApartments start hidden and process-disabled (baked
+# in scenes/relayed.tscn) so Building's own _unhandled_input can't register
+# phantom clicks on one before its round arrives — Building._ready() still
+# runs immediately on scene load regardless of that (process_mode only
+# gates _process/input callbacks, not _ready), so it joins the "buildings"
+# group right away too. Strip that back out before register_existing_
+# buildings() runs, so this round-gating is enforced from the very start.
+func _deactivate_demand_buildings() -> void:
+	for building_name in DEMAND_BUILDING_NAMES:
+		var building := $Buildings.get_node_or_null(building_name) as Building
+		if building:
+			building.remove_from_group("buildings")
+
+func _activate_demand_building(building_name: String) -> void:
+	var building := $Buildings.get_node(building_name) as Building
+	building.visible = true
+	building.process_mode = Node.PROCESS_MODE_INHERIT
+	building.add_to_group("buildings")
+	var cell := world_to_cell(building.global_position)
 	occupied_cells[cell] = building
+	extra_buildings.append(building)
 	round_demand_count += 1
 
 func refresh_network() -> void:

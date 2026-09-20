@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://btb7fukwjlu2j" path="res://ui/back_to_mm.gd" id="3_smj7p"]
 [ext_resource type="Texture2D" uid="uid://cf2fjabkdkfsu" path="res://Isometric Suburban Pack/Buildings/apartment complex 01a.png" id="4_gjmb1"]
 [ext_resource type="Script" uid="uid://yfi5ibyt6mj6" path="res://ui/relayed.gd" id="5_game"]
+[ext_resource type="Texture2D" path="res://Isometric Suburban Pack/Buildings/house 02a.png" id="6_ch02a"]
 
 [node name="RELAYED" type="Node2D" unique_id=2097634734]
 y_sort_enabled = true
@@ -58,6 +59,35 @@ position = Vector2(-71, -107.999985)
 scale = Vector2(1.1757776, 1.1077669)
 texture = ExtResource("4_gjmb1")
 offset = Vector2(100, 100)
+
+[node name="CornerHouse" parent="Buildings" unique_id=1700000032 instance=ExtResource("2_331ux")]
+position = Vector2(1728, 32)
+visible = false
+process_mode = 4
+building_name = "Corner House"
+bandwidth_level = 75
+district_id = "D"
+hitbox_size = Vector2(110, 110)
+
+[node name="Sprite2D" parent="Buildings/CornerHouse" index="0" unique_id=1700000033]
+position = Vector2(0, -72.911111)
+scale = Vector2(0.7555556, 0.7555556)
+texture = ExtResource("6_ch02a")
+
+[node name="RiversideApartments" parent="Buildings" unique_id=1900000128 instance=ExtResource("2_331ux")]
+position = Vector2(1920, -128)
+visible = false
+process_mode = 4
+building_name = "Riverside Apartments"
+bandwidth_level = 90
+district_id = "E"
+preferred_network = "Ethernet"
+hitbox_size = Vector2(110, 110)
+
+[node name="Sprite2D" parent="Buildings/RiversideApartments" index="0" unique_id=1900000129]
+position = Vector2(0, -69)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("4_gjmb1")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1246282708]
 position = Vector2(1183, -178)

@@ -1,5 +1,71 @@
 # Progress
 
+## 2026-09-21 (round 2/3 demand buildings baked into real editor nodes)
+
+User asked where to edit the round 2/3 building assets, then asked to make
+them real child nodes — same motivation as the earlier "why are all tscn
+that I did not create empty?" baking pass, but harder here: Corner House
+(round 2) and Riverside Apartments (round 3) aren't always present, they're
+revealed partway through a playthrough, so they can't just be baked as
+always-visible nodes the way the UI screens were.
+
+- Added both as real `Building` instances (`scenes/building.tscn`) directly
+  under `Buildings` in `scenes/relayed.tscn`, at their exact previously-
+  verified snapped positions and sprite scale (from the cramped-buildings
+  fix earlier), so they're now fully visible/editable in the Godot editor
+  (position, sprite, hitbox, bandwidth, district, network — all Inspector
+  fields on a real node) instead of living only inside
+  `spawn_building()`'s construction code in `ui/relayed.gd`.
+- **Round-gating without runtime construction**: baked both `visible =
+  false` and `process_mode = 4` (`PROCESS_MODE_DISABLED`). The visibility
+  hides them; disabling process_mode stops `Building._unhandled_input` from
+  registering phantom clicks on a building that exists in the tree but
+  hasn't "arrived" yet. `Building._ready()` still runs immediately on scene
+  load regardless (process_mode only gates process/input callbacks, not
+  `_ready()`), which means it joins the global `"buildings"` group right
+  away too — `relayed.gd`'s new `_deactivate_demand_buildings()` strips
+  that back out before `register_existing_buildings()` runs, so round 1's
+  building count/coverage totals aren't affected by the two hidden nodes.
+  `apply_round_demands()` now calls `_activate_demand_building(name)`
+  (reveal, re-enable, re-join the group, register into `occupied_cells`)
+  by name instead of `spawn_building()` constructing a new node.
+- `spawn_building()` and the `HOUSE_TEXTURE`/`APARTMENT_TEXTURE` preload
+  constants it was the only user of are gone — the texture/scale/position
+  are now baked properties on the two nodes themselves.
+- **Editing the .tscn directly, not via instantiate+repack**: the technique
+  used for the 7 UI screens (`PackedScene.instantiate(GEN_EDIT_STATE_
+  INSTANCE)`, claim ownership, repack, save) hung indefinitely on this file
+  — turned out `GEN_EDIT_STATE_INSTANCE`'s script reload path can't resolve
+  the `BuildingInfoPanel` autoload while recompiling `building.gd`
+  (`Building` is referenced by every building node in this scene), which
+  fails the load entirely and cascades into a stuck process. Worked around
+  by hand-editing the `.tscn` text directly instead — adding one
+  `ext_resource` line for the missing house texture (the apartment texture
+  was already referenced) and two new `[node]` blocks mirroring the exact
+  format of the existing hand-placed `Building2`, computed from the same
+  values `spawn_building()` used to produce. Confirmed clean with a
+  headless reimport before touching any code.
+- **Verification methodology note**: the real-click regression test for
+  this hit two more environment-specific (not app-side) gotchas worth
+  remembering — using `Building` as an explicit static type in a scratchpad
+  script (outside the project tree) forces the same `BuildingInfoPanel`
+  compile failure as above, even without `GEN_EDIT_STATE_INSTANCE` (fixed
+  by typing the variable `Node` instead, matching every other test script
+  this session); and `Building._unhandled_input` checks
+  `get_global_mouse_position()`, which reads `Input`'s OS-tracked cursor
+  position — `push_input()` alone never updates that (only real hardware
+  events or `Input.warp_mouse()` do), so a synthetic click test needs an
+  explicit `Input.warp_mouse(screen_pos)` before pushing the button event,
+  on top of the usual world→screen conversion through the viewport's
+  `canvas_transform`.
+- Verified with a real-click functional test covering all three rounds:
+  both buildings correctly hidden/unclickable/uncounted before their round,
+  correctly revealed/clickable/counted exactly when their round starts, and
+  each remains active once later rounds begin. Re-ran the full 3-round
+  playthrough regression (same tower positions as the cramped-buildings
+  fix) — identical result, solvability unchanged. Re-screenshotted the
+  cluster — pixel-identical to the already-verified layout.
+
 ## 2026-09-21 (building info panel stuck on screen after district completion)
 
 User report, with a screenshot: the Story Event "Welcome to Chapter 4"
