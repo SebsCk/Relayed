@@ -10,6 +10,7 @@ const TOWER_TEXTURE := preload("res://Isometric City - Starter Set/Buildings/bld
 const TOWER_COST := 200
 const BUILDING_COST := 100
 const MAX_ROUNDS := 3
+const TOWER_CAPACITY := {"5G": 150, "Ethernet": 120}
 
 var credits := 600
 var score := 0
@@ -104,6 +105,7 @@ func place_tower(world_position: Vector2) -> void:
 	var tower := TOWER_SCENE.instantiate() as CellTower
 	tower.position = cell_to_world(cell)
 	tower.network_type = placing_network
+	tower.capacity = TOWER_CAPACITY.get(placing_network, 150)
 	prepare_placed_tower(tower)
 	add_child(tower)
 	deployed_towers.append(tower)
@@ -285,18 +287,34 @@ func spawn_building(title: String, bandwidth: int, district: String, network: St
 	round_demand_count += 1
 
 func refresh_network() -> void:
+	for tower in deployed_towers:
+		tower.reset_load()
 	var buildings := get_tree().get_nodes_in_group("buildings")
-	var connected := 0
+	var serving_tower: Dictionary = {}
 	for node in buildings:
 		var building := node as Building
-		var has_service := false
+		var nearest: CellTower = null
+		var nearest_distance := INF
 		for tower in deployed_towers:
-			if tower.provides_coverage(building):
-				has_service = true
-				break
-		building.set_connected(has_service)
-		if has_service:
+			if not tower.provides_coverage(building):
+				continue
+			var distance := tower.global_position.distance_to(building.global_position)
+			if distance < nearest_distance:
+				nearest = tower
+				nearest_distance = distance
+		if nearest:
+			nearest.add_load(building.bandwidth_level)
+			serving_tower[building] = nearest
+	var connected := 0
+	var congested_count := 0
+	for node in buildings:
+		var building := node as Building
+		var tower: CellTower = serving_tower.get(building)
+		building.set_network_state(tower != null, tower != null and tower.is_congested)
+		if tower and not tower.is_congested:
 			connected += 1
+		elif tower:
+			congested_count += 1
 	if not buildings.is_empty() and connected == buildings.size() and not round_complete:
 		round_complete = true
 		var bonus := 250 + current_round * 100
@@ -304,7 +322,9 @@ func refresh_network() -> void:
 		credits += bonus
 		set_status("District network online! +%d credits and points." % bonus)
 		show_round_result()
-	update_hud()
+	elif congested_count > 0:
+		set_status("%d building(s) congested — add coverage to relieve overloaded towers." % congested_count)
+	update_hud(congested_count)
 
 func show_round_result() -> void:
 	overlay.visible = true
@@ -333,16 +353,25 @@ func set_status(message: String) -> void:
 	if status_label:
 		status_label.text = message
 
-func update_hud() -> void:
+func update_hud(congested_count: int = -1) -> void:
 	if not credits_label:
 		return
 	var total := get_tree().get_nodes_in_group("buildings").size()
 	var online := 0
+	var congested := congested_count
+	if congested < 0:
+		congested = 0
+		for node in get_tree().get_nodes_in_group("buildings"):
+			if (node as Building).congested:
+				congested += 1
 	for node in get_tree().get_nodes_in_group("buildings"):
-		if (node as Building).connected_to_network:
+		if (node as Building).connected_to_network and not (node as Building).congested:
 			online += 1
 	credits_label.text = "Credits: %d    Score: %d" % [credits, score]
-	coverage_label.text = "Coverage: %d / %d buildings online" % [online, total]
+	if congested > 0:
+		coverage_label.text = "Coverage: %d / %d online (%d congested)" % [online, total, congested]
+	else:
+		coverage_label.text = "Coverage: %d / %d buildings online" % [online, total]
 	round_label.text = "District %d of %d" % [current_round, MAX_ROUNDS]
 	five_g_button.disabled = credits < TOWER_COST or round_complete
 	fiber_button.disabled = credits < TOWER_COST or round_complete

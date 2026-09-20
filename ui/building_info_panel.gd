@@ -15,7 +15,12 @@ func show_building(building: Building):
 	name_label.text = building.building_name
 	bandwidth_label.text = "Bandwidth: %d%%" % building.bandwidth_level
 	district_label.text = "District: " + building.district_id
-	network_label.text = "Prefers: " + building.preferred_network
+	if not building.connected_to_network:
+		network_label.text = "Prefers: %s (no coverage)" % building.preferred_network
+	elif building.congested:
+		network_label.text = "Prefers: %s (congested)" % building.preferred_network
+	else:
+		network_label.text = "Prefers: " + building.preferred_network
 	panel.visible = true
 
 func _on_close_pressed():
