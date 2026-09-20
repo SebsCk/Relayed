@@ -17,8 +17,12 @@ func show_building(building: Building):
 	district_label.text = "District: " + building.district_id
 	if not building.connected_to_network:
 		network_label.text = "Prefers: %s (no coverage)" % building.preferred_network
+	elif building.congested and building.wire_crossing:
+		network_label.text = "Prefers: %s (congested, wire crossing)" % building.preferred_network
 	elif building.congested:
 		network_label.text = "Prefers: %s (congested)" % building.preferred_network
+	elif building.wire_crossing:
+		network_label.text = "Prefers: %s (wire crossing)" % building.preferred_network
 	else:
 		network_label.text = "Prefers: " + building.preferred_network
 	panel.visible = true

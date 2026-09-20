@@ -11,6 +11,7 @@ class_name Building
 
 var connected_to_network: bool = false
 var congested: bool = false
+var wire_crossing: bool = false
 
 func _ready():
 	add_to_group("buildings")
@@ -33,13 +34,16 @@ func get_rect_global() -> Rect2:
 	var top_left = global_position + hitbox_offset - size / 2
 	return Rect2(top_left, size)
 
-func set_network_state(is_connected: bool, is_congested: bool = false):
+func set_network_state(is_connected: bool, is_congested: bool = false, is_crossing: bool = false):
 	connected_to_network = is_connected
 	congested = is_congested
+	wire_crossing = is_crossing
 	if not is_connected:
 		modulate = Color(1, 0.4, 0.4)
 	elif is_congested:
 		modulate = Color(1, 0.75, 0.25)
+	elif is_crossing:
+		modulate = Color(0.75, 0.45, 1.0)
 	else:
 		modulate = Color(1, 1, 1)
 

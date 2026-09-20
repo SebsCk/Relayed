@@ -1,5 +1,70 @@
 # Progress
 
+## 2026-09-20 (wire routing + downtown)
+
+Implemented the network-routing/wiring mechanic from AGENTS.md (AStarGrid2D
+pathfinding, "wires light up on valid connection", "route signals... without
+crossing... paths") and painted a decorative downtown into the map.
+
+- **Routing**: `ui/relayed.gd` now builds an `AStarGrid2D` (region = a small
+  margin around all occupied cells, rebuilt every `refresh_network()` call)
+  and pathfinds an actual grid route from each tower to each building it
+  serves, instead of a straight-line/Euclidean-only check. The existing
+  Euclidean-range eligibility rule is unchanged (so round balance from last
+  session's congestion mechanic isn't disturbed) — among towers already in
+  range, the building now picks whichever has the *shortest routed path*,
+  not just the closest in a straight line.
+- **Wires**: new `ui/wire_layer.gd` (`class_name WireLayer`, immediate-mode
+  `_draw()`, same pattern as `CellTower`'s coverage circle) renders each
+  computed path as a glowing polyline in the tower's network color, orange
+  if the tower is congested. Verified with real rendered screenshots (not
+  just headless — headless mode doesn't rasterize) that paths bend around
+  obstacles rather than drawing straight lines.
+- **Crossing detection**: wires are grouped by tower; a path is flagged
+  `crossing` only if it shares a *non-endpoint* cell with a **different**
+  tower's wire (wires converging on the same tower's own hub cell is normal
+  trunk cabling, not flagged). Crossing buildings get a third visual state
+  (violet tint, `Building.wire_crossing`) alongside the existing
+  connected/congested states, and the info panel names it. Deliberately
+  **not** a round-completion blocker yet — with no way to interactively
+  click through the editor this session, gating completion on it risked
+  silently making a round unsolvable without being able to verify. Currently
+  informational only (status line + visual).
+- `is_buildable_cell()` now excludes road/decorative-building ground
+  sources (see below) via `NON_BUILDABLE_GROUND_SOURCES`; a separate
+  `_is_routable_cell()` excludes only decorative buildings, since wires can
+  reasonably run alongside roads.
+
+## 2026-09-20 (downtown)
+
+- Painted a small decorative "downtown" block directly into
+  `scenes/relayed.tscn`'s `Ground` TileMapLayer (cells x:13-21, y:-15..-6 —
+  east of the three starting gameplay buildings, confirmed via a coordinate
+  dump not to overlap them or the round-2/3 spawn points at cells (9,2) and
+  (4,-5)). Uses tile sources already registered in `TileSets/Ground.tres`
+  but previously unused on the Ground layer: road source 44
+  (`RelayedTileSheets/Roads.png`, plain-surface variants — not a directional
+  piece set, just texture variety) and 12 building sources (45-59: autoshop,
+  barbershop, barn, church, firestation, gasstation, gunshop, hospital,
+  house2/house3 variants).
+- The whole existing grass field is ~55x93 cells — far larger than the
+  actual play area — so downtown occupies one corner as a backdrop; the
+  rest stays open grass for player placement, unchanged.
+- **How this was done**: a throwaway `SceneTree` script loaded
+  `relayed.tscn` with `PackedScene.instantiate(PackedScene
+  .GEN_EDIT_STATE_INSTANCE)` (critical — plain `instantiate()` flattens
+  the `Building`/`Building2` instanced children of `building.tscn` into
+  inline copies, losing their link to the base scene), painted cells via
+  `TileMapLayer.set_cell()`, and resaved with
+  `ResourceSaver.save(PackedScene.pack(scene), path)`. Verified via `git
+  diff` that only the tile data changed (plus one harmless metadata
+  reorder) before keeping the result. The resave still stripped every
+  `uid="..."` from the scene's ext_resource lines — these were restored by
+  hand afterward; something to double check if this technique is used
+  again.
+- Not committed: the one-off painting script itself (scratch file, same as
+  the screenshot tooling from last session).
+
 ## 2026-09-20 (storyboard screens)
 
 Implemented the "doable" screens from a UI/UX storyboard document the user
