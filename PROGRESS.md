@@ -1,5 +1,38 @@
 # Progress
 
+## 2026-09-21 (building info panel stuck on screen after district completion)
+
+User report, with a screenshot: the Story Event "Welcome to Chapter 4"
+screen still showed the building-info side panel ("Riverside Apartments...
+Prefers: Ethernet") from the previous district's gameplay, overlapping the
+new screen.
+
+- `BuildingInfoPanel` is an autoloaded `CanvasLayer` (`ui/canvas_layer.gd`,
+  via `scenes/BuildingInfoPanel.tscn`) that draws on top of every scene, so
+  it stays visible across a scene change unless explicitly hidden. Only two
+  call sites did that — `main_menu.gd` and `back_to_mm.gd`'s `_ready()`
+  (from an earlier session's fix, see the "phantom click" era entries
+  below) — but `advance_round()` in `ui/relayed.gd` navigates straight to
+  `story_event.tscn` on completing the final round ("Next District")
+  without going through either of those, so a panel left open from clicking
+  a building earlier in the district stayed on screen through the
+  transition. Also affected the "Play Again" path on the very last chapter
+  (`get_tree().reload_current_scene()`), for the same reason.
+- Fixed at the single chokepoint every scene transition already goes
+  through instead of patching one call site at a time: `UIKit.go_to_scene()`
+  now calls `BuildingInfoPanel.hide_panel()` before deferring the scene
+  change, so every one of its 18+ existing call sites (login, sign-out,
+  chapter navigation, etc.) is covered, present and future. Added the same
+  call directly to the one remaining path that doesn't use
+  `go_to_scene()` — the last-chapter `reload_current_scene()` branch in
+  `advance_round()`.
+- Verified with two scripted regressions (not committed): opening the panel
+  on a building then completing the final round and pressing "Next
+  District" — panel now hidden on arrival at Story Event; and the same but
+  ending on the actual last chapter ("Play Again" reload) — panel hidden
+  after reload. Also re-ran the full scene-load regression across all 9
+  non-gameplay scenes — all clean.
+
 ## 2026-09-21 (round-demand buildings cramped/overlapping)
 
 User report, with a screenshot: "all are cramped and overlapping with each

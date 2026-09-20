@@ -14,6 +14,14 @@ const TEXT_LIGHT := Color(0.95, 0.95, 0.95)
 const TEXT_DARK := Color(0.12, 0.12, 0.12)
 
 static func go_to_scene(path: String) -> void:
+	# The building-info side panel is an autoloaded CanvasLayer that draws on
+	# top of every scene, so it stays visible across a scene change unless
+	# explicitly hidden — previously only main_menu.gd and back_to_mm.gd did
+	# this, so any other exit from gameplay (e.g. "Next District" after the
+	# final round) left it stuck on screen over the next scene. Hiding it
+	# here, at the single chokepoint every scene transition already goes
+	# through, covers every path instead of one call site at a time.
+	BuildingInfoPanel.hide_panel()
 	# Deferred so the click that triggered navigation finishes being
 	# dispatched to the OLD scene before the new one loads — changing scenes
 	# synchronously inside a Button's `pressed` handler can otherwise leak

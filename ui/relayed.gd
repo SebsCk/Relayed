@@ -489,6 +489,7 @@ func advance_round() -> void:
 			GameProgress.selected_chapter += 1
 			UIKit.go_to_scene("res://scenes/story_event.tscn")
 		else:
+			BuildingInfoPanel.hide_panel()
 			get_tree().reload_current_scene()
 		return
 	current_round += 1
