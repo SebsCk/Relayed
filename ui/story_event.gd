@@ -18,7 +18,7 @@ func _ready() -> void:
 
 	var back := UIKit.back_button()
 	back.position = Vector2(12, 12)
-	back.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/chapter_select.tscn"))
+	back.pressed.connect(func(): UIKit.go_to_scene("res://scenes/chapter_select.tscn"))
 	add_child(back)
 
 	intro_view = _build_intro()
@@ -104,4 +104,4 @@ func _show_objectives() -> void:
 	objectives_view.visible = true
 
 func _on_begin_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/relayed.tscn")
+	UIKit.go_to_scene("res://scenes/relayed.tscn")

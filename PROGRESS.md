@@ -1,5 +1,28 @@
 # Progress
 
+## 2026-09-20 (playtest fix: phantom click on scene change)
+
+User playtest report: pressing "New Game" on the Choose Game screen
+immediately showed the Chapter Select screen's "LOCKED DISTRICT!" popup —
+before clicking anything on that screen.
+
+- Root cause: every screen this session navigates with
+  `get_tree().change_scene_to_file(...)` called synchronously from inside a
+  Button's `pressed` handler. Godot frees the old scene and instances the
+  new one mid-input-dispatch, so the same click event that triggered
+  navigation can bleed into whatever control ends up at the same screen
+  position in the brand new scene — here, "NEW GAME" and a locked district
+  tile happened to land close enough together for the same click to
+  register on both.
+- Fix: added `UIKit.go_to_scene(path)` (`ui/ui_kit.gd`), which defers the
+  scene change via `change_scene_to_file.call_deferred(path)` so it runs
+  after the current input event has fully finished dispatching to the old
+  scene. Replaced all 18 call sites across every screen script with it (not
+  just the one that was reported — the bug applied equally to all of them).
+- Not yet re-verified interactively (this fix was made from the bug report
+  alone) — worth confirming in the next playtest pass that Choose Game →
+  New Game now lands cleanly on Chapter Select with no popup.
+
 ## 2026-09-20 (wire routing + downtown)
 
 Implemented the network-routing/wiring mechanic from AGENTS.md (AStarGrid2D

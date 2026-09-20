@@ -79,7 +79,7 @@ func _build_extra_settings(control: Node) -> void:
 
 func _on_sign_out_pressed() -> void:
 	AuthState.logout()
-	get_tree().change_scene_to_file("res://scenes/login.tscn")
+	UIKit.go_to_scene("res://scenes/login.tscn")
 
 func _on_quit_pressed() -> void:
 	UIKit.show_confirm_dialog(self, "ARE YOU SURE?", "Any unsaved progress in this session will be lost.", func(): get_tree().quit())

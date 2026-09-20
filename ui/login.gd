@@ -116,10 +116,10 @@ func _on_enter_pressed() -> void:
 		status_label.text = "Enter a username and password."
 		return
 	AuthState.login(username)
-	get_tree().change_scene_to_file("res://scenes/choose_game.tscn")
+	UIKit.go_to_scene("res://scenes/choose_game.tscn")
 
 func _on_create_account_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/register.tscn")
+	UIKit.go_to_scene("res://scenes/register.tscn")
 
 func _on_google_pressed() -> void:
 	status_label.text = "Google Sign-In needs Firebase setup — not connected yet."

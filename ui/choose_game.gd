@@ -36,12 +36,12 @@ func _ready() -> void:
 
 func _on_new_game_pressed() -> void:
 	GameProgress.start_new_game()
-	get_tree().change_scene_to_file("res://scenes/chapter_select.tscn")
+	UIKit.go_to_scene("res://scenes/chapter_select.tscn")
 
 func _on_continue_pressed() -> void:
 	GameProgress.load_progress()
-	get_tree().change_scene_to_file("res://scenes/chapter_select.tscn")
+	UIKit.go_to_scene("res://scenes/chapter_select.tscn")
 
 func _on_back_pressed() -> void:
 	AuthState.logout()
-	get_tree().change_scene_to_file("res://scenes/login.tscn")
+	UIKit.go_to_scene("res://scenes/login.tscn")

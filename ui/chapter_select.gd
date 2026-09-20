@@ -24,7 +24,7 @@ func _ready() -> void:
 func _build_top_bar() -> void:
 	var back := UIKit.back_button()
 	back.position = Vector2(12, 12)
-	back.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/choose_game.tscn"))
+	back.pressed.connect(func(): UIKit.go_to_scene("res://scenes/choose_game.tscn"))
 	add_child(back)
 
 	var profile_button := Button.new()
@@ -34,7 +34,7 @@ func _build_top_bar() -> void:
 	profile_button.anchor_right = 1.0
 	profile_button.position = Vector2(-96, 12)
 	profile_button.add_child(UIKit.icon("res://ui/icons/person.svg", Vector2(28, 28)))
-	profile_button.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/player_profile.tscn"))
+	profile_button.pressed.connect(func(): UIKit.go_to_scene("res://scenes/player_profile.tscn"))
 	add_child(profile_button)
 
 	var settings_button := Button.new()
@@ -46,7 +46,7 @@ func _build_top_bar() -> void:
 	settings_button.add_child(UIKit.icon("res://ui/icons/gear.svg", Vector2(24, 24)))
 	settings_button.pressed.connect(func():
 		GameProgress.settings_return_path = "res://scenes/chapter_select.tscn"
-		get_tree().change_scene_to_file("res://scenes/settings.tscn")
+		UIKit.go_to_scene("res://scenes/settings.tscn")
 	)
 	add_child(settings_button)
 
@@ -169,4 +169,4 @@ func _on_tile_pressed(chapter: int) -> void:
 
 func _on_popup_action_pressed() -> void:
 	GameProgress.selected_chapter = selected_chapter
-	get_tree().change_scene_to_file("res://scenes/story_event.tscn")
+	UIKit.go_to_scene("res://scenes/story_event.tscn")

@@ -99,4 +99,4 @@ func _on_create_pressed() -> void:
 		status_label.text = "Passwords do not match."
 		return
 	AuthState.login(username_field.text.strip_edges())
-	get_tree().change_scene_to_file("res://scenes/choose_game.tscn")
+	UIKit.go_to_scene("res://scenes/choose_game.tscn")

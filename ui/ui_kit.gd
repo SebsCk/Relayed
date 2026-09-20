@@ -13,6 +13,14 @@ const DANGER_COLOR := Color(0.85, 0.3, 0.3)
 const TEXT_LIGHT := Color(0.95, 0.95, 0.95)
 const TEXT_DARK := Color(0.12, 0.12, 0.12)
 
+static func go_to_scene(path: String) -> void:
+	# Deferred so the click that triggered navigation finishes being
+	# dispatched to the OLD scene before the new one loads — changing scenes
+	# synchronously inside a Button's `pressed` handler can otherwise leak
+	# that same input event into whatever control ends up at the same
+	# screen position in the new scene, firing a phantom click there.
+	(Engine.get_main_loop() as SceneTree).change_scene_to_file.call_deferred(path)
+
 static func full_rect_bg(color: Color = BG_COLOR) -> ColorRect:
 	var bg := ColorRect.new()
 	bg.color = color
