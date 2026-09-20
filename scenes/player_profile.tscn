@@ -1,11 +1,445 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/player_profile.gd" id="1"]
+[ext_resource type="Texture2D" path="res://ui/icons/person.svg" id="2_bnc1k"]
 
-[node name="PlayerProfile" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nvck6"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kwc6j"]
+bg_color = Color(0.3, 0.3, 0.32, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_33jg1"]
+bg_color = Color(0.264, 0.264, 0.2816, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2luf3"]
+bg_color = Color(0.384, 0.384, 0.4016, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j5jco"]
+bg_color = Color(0.21000001, 0.21000001, 0.22399999, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dvkvg"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_22mri"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n6hs0"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gwcwp"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqevm"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t6jdj"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4fy7u"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6xw81"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frqgi"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7lqt2"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dvn2n"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kq5uc"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kko67"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_16sxx"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s5188"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.95, 0.95, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s0ljx"]
+bg_color = Color(0.3, 0.3, 0.32, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_87vmu"]
+bg_color = Color(0.264, 0.264, 0.2816, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_252kk"]
+bg_color = Color(0.384, 0.384, 0.4016, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_txnjm"]
+bg_color = Color(0.21000001, 0.21000001, 0.22399999, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fe5nb"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rlne8"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_axqoo"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_olhdg"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="PlayerProfile" type="Control" unique_id=1950722530]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=492711683]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.16, 0.16, 0.18, 1)
+
+[node name="BackButton" type="Button" parent="." unique_id=626579929]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 12.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "◀"
+flat = true
+
+[node name="Center" type="CenterContainer" parent="." unique_id=363663964]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="ProfilePanel" type="PanelContainer" parent="Center" unique_id=478063610]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nvck6")
+
+[node name="ProfileBox" type="VBoxContainer" parent="Center/ProfilePanel" unique_id=91556908]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="AvatarCenter" type="CenterContainer" parent="Center/ProfilePanel/ProfileBox" unique_id=210468820]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AvatarIcon" type="TextureRect" parent="Center/ProfilePanel/ProfileBox/AvatarCenter" unique_id=1254078880]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+texture = ExtResource("2_bnc1k")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="Center/ProfilePanel/ProfileBox" unique_id=311192810]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 20
+text = "Player"
+horizontal_alignment = 1
+
+[node name="EditButton" type="Button" parent="Center/ProfilePanel/ProfileBox" unique_id=2133326148]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_kwc6j")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_33jg1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2luf3")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_j5jco")
+text = "Edit Account"
+
+[node name="StatsButton" type="Button" parent="Center/ProfilePanel/ProfileBox" unique_id=298284505]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_dvkvg")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_22mri")
+theme_override_styles/hover = SubResource("StyleBoxFlat_n6hs0")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_gwcwp")
+text = "View Stats"
+
+[node name="AchievementsButton" type="Button" parent="Center/ProfilePanel/ProfileBox" unique_id=169817255]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_wqevm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_t6jdj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4fy7u")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_6xw81")
+text = "View Achievements"
+
+[node name="ReputationButton" type="Button" parent="Center/ProfilePanel/ProfileBox" unique_id=101717672]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_frqgi")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7lqt2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dvn2n")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_kq5uc")
+text = "View Reputation"
+
+[node name="InfoPanel" type="Control" parent="." unique_id=1056210249]
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="InfoPanel" unique_id=1505012026]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="DismissButton" type="Button" parent="InfoPanel" unique_id=1858100713]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+flat = true
+
+[node name="InfoCenter" type="CenterContainer" parent="InfoPanel" unique_id=1311824262]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="InfoInnerPanel" type="PanelContainer" parent="InfoPanel/InfoCenter" unique_id=1125302600]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_kko67")
+
+[node name="InfoBox" type="VBoxContainer" parent="InfoPanel/InfoCenter/InfoInnerPanel" unique_id=1354982946]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="InfoTitle" type="Label" parent="InfoPanel/InfoCenter/InfoInnerPanel/InfoBox" unique_id=1697821682]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+
+[node name="InfoBody" type="Label" parent="InfoPanel/InfoCenter/InfoInnerPanel/InfoBox" unique_id=2015642108]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="EditPanel" type="Control" parent="." unique_id=744902163]
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="EditPanel" unique_id=1241653159]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="EditCenter" type="CenterContainer" parent="EditPanel" unique_id=831323030]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="EditInnerPanel" type="PanelContainer" parent="EditPanel/EditCenter" unique_id=515136070]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_16sxx")
+
+[node name="EditBox" type="VBoxContainer" parent="EditPanel/EditCenter/EditInnerPanel" unique_id=1892897840]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="EditTitle" type="Label" parent="EditPanel/EditCenter/EditInnerPanel/EditBox" unique_id=279554922]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 18
+text = "Edit Account"
+horizontal_alignment = 1
+
+[node name="EditField" type="LineEdit" parent="EditPanel/EditCenter/EditInnerPanel/EditBox" unique_id=2004164474]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_colors/font_placeholder_color = Color(0.35, 0.35, 0.35, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_s5188")
+theme_override_styles/focus = SubResource("StyleBoxFlat_s5188")
+placeholder_text = "Username"
+
+[node name="EditRow" type="HBoxContainer" parent="EditPanel/EditCenter/EditInnerPanel/EditBox" unique_id=7380074]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="CancelButton" type="Button" parent="EditPanel/EditCenter/EditInnerPanel/EditBox/EditRow" unique_id=408182852]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_s0ljx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_87vmu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_252kk")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_txnjm")
+text = "Cancel"
+
+[node name="SaveButton" type="Button" parent="EditPanel/EditCenter/EditInnerPanel/EditBox/EditRow" unique_id=215964015]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_fe5nb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rlne8")
+theme_override_styles/hover = SubResource("StyleBoxFlat_axqoo")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_olhdg")
+text = "Save"

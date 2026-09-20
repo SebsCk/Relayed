@@ -2,10 +2,355 @@
 
 [ext_resource type="Script" path="res://ui/login.gd" id="1"]
 
-[node name="Login" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pymad"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nw41r"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.95, 0.95, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0emk2"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.95, 0.95, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cs5o2"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_47b6t"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r3fp8"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bw5rt"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_31byv"]
+bg_color = Color(0.25, 0.25, 0.27, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1u3ka"]
+bg_color = Color(0.22, 0.22, 0.23760001, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wlyqo"]
+bg_color = Color(0.34, 0.34, 0.3576, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tbijj"]
+bg_color = Color(0.175, 0.175, 0.18900001, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_47vyr"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ngwtj"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.95, 0.95, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8mo1x"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p2j7e"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ep5o7"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g30j5"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Login" type="Control" unique_id=1558025145]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=957374750]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.16, 0.16, 0.18, 1)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=519649405]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="RootBox" type="VBoxContainer" parent="Center" unique_id=1848491119]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="TitleLabel" type="Label" parent="Center/RootBox" unique_id=444870571]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 40
+text = "RELAYED"
+horizontal_alignment = 1
+
+[node name="LoginPanel" type="PanelContainer" parent="Center/RootBox" unique_id=870925796]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pymad")
+
+[node name="LoginBox" type="VBoxContainer" parent="Center/RootBox/LoginPanel" unique_id=2133474994]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="LoginLabel" type="Label" parent="Center/RootBox/LoginPanel/LoginBox" unique_id=1288032572]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "LOGIN"
+horizontal_alignment = 1
+
+[node name="UsernameField" type="LineEdit" parent="Center/RootBox/LoginPanel/LoginBox" unique_id=1835932714]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_colors/font_placeholder_color = Color(0.35, 0.35, 0.35, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_nw41r")
+theme_override_styles/focus = SubResource("StyleBoxFlat_nw41r")
+placeholder_text = "Username"
+
+[node name="PasswordField" type="LineEdit" parent="Center/RootBox/LoginPanel/LoginBox" unique_id=1814955922]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_colors/font_placeholder_color = Color(0.35, 0.35, 0.35, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_0emk2")
+theme_override_styles/focus = SubResource("StyleBoxFlat_0emk2")
+placeholder_text = "Password"
+secret = true
+
+[node name="ForgotRow" type="HBoxContainer" parent="Center/RootBox/LoginPanel/LoginBox" unique_id=898858165]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="ForgotPasswordLink" type="Button" parent="Center/RootBox/LoginPanel/LoginBox/ForgotRow" unique_id=2118603279]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.75, 1, 1)
+theme_override_colors/font_hover_color = Color(0.7, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "Forgot Password?"
+flat = true
+
+[node name="EnterButton" type="Button" parent="Center/RootBox/LoginPanel/LoginBox" unique_id=1999219986]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_cs5o2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_47b6t")
+theme_override_styles/hover = SubResource("StyleBoxFlat_r3fp8")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_bw5rt")
+text = "ENTER"
+
+[node name="CreateAccountCenter" type="CenterContainer" parent="Center/RootBox/LoginPanel/LoginBox" unique_id=1407040251]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CreateAccountLink" type="Button" parent="Center/RootBox/LoginPanel/LoginBox/CreateAccountCenter" unique_id=672826094]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.55, 0.75, 1, 1)
+theme_override_colors/font_hover_color = Color(0.7, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "CREATE ACCOUNT"
+flat = true
+
+[node name="GoogleButton" type="Button" parent="Center/RootBox" unique_id=1775223403]
+custom_minimum_size = Vector2(320, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_31byv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1u3ka")
+theme_override_styles/hover = SubResource("StyleBoxFlat_wlyqo")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_tbijj")
+text = "Sign in with Google"
+
+[node name="StatusLabel" type="Label" parent="Center/RootBox" unique_id=913421344]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.4, 1)
+theme_override_font_sizes/font_size = 13
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ForgotOverlay" type="Control" parent="." unique_id=2041902166]
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="ForgotOverlay" unique_id=457872403]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="ForgotCenter" type="CenterContainer" parent="ForgotOverlay" unique_id=317083229]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="ForgotPanel" type="PanelContainer" parent="ForgotOverlay/ForgotCenter" unique_id=987339766]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_47vyr")
+
+[node name="ForgotBox" type="VBoxContainer" parent="ForgotOverlay/ForgotCenter/ForgotPanel" unique_id=1899432017]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="ForgotHeader" type="HBoxContainer" parent="ForgotOverlay/ForgotCenter/ForgotPanel/ForgotBox" unique_id=1546852966]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="BackButton" type="Button" parent="ForgotOverlay/ForgotCenter/ForgotPanel/ForgotBox/ForgotHeader" unique_id=302988388]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "◀"
+flat = true
+
+[node name="ForgotTitleLabel" type="Label" parent="ForgotOverlay/ForgotCenter/ForgotPanel/ForgotBox/ForgotHeader" unique_id=1065025375]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 20
+text = "Forgot Password"
+horizontal_alignment = 1
+
+[node name="InstructionsLabel" type="Label" parent="ForgotOverlay/ForgotCenter/ForgotPanel/ForgotBox" unique_id=2082855431]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+text = "Please enter your email address"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ForgotEmailField" type="LineEdit" parent="ForgotOverlay/ForgotCenter/ForgotPanel/ForgotBox" unique_id=2006199367]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_colors/font_placeholder_color = Color(0.35, 0.35, 0.35, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_ngwtj")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ngwtj")
+placeholder_text = "Email"
+
+[node name="SubmitCenter" type="CenterContainer" parent="ForgotOverlay/ForgotCenter/ForgotPanel/ForgotBox" unique_id=1274022582]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SubmitButton" type="Button" parent="ForgotOverlay/ForgotCenter/ForgotPanel/ForgotBox/SubmitCenter" unique_id=1773058258]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_8mo1x")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_p2j7e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ep5o7")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_g30j5")
+text = "SUBMIT"
+
+[node name="ForgotStatusLabel" type="Label" parent="ForgotOverlay/ForgotCenter/ForgotPanel/ForgotBox" unique_id=438741251]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.9, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+autowrap_mode = 3

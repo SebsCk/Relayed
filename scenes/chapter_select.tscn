@@ -1,11 +1,911 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/chapter_select.gd" id="1"]
+[ext_resource type="Texture2D" path="res://ui/icons/person.svg" id="2_71fvu"]
+[ext_resource type="Texture2D" path="res://ui/icons/gear.svg" id="3_7b1ab"]
+[ext_resource type="Texture2D" path="res://Isometric City - Starter Set/Roads and Grounds/tile_ground_grass.png" id="4_vwi4h"]
+[ext_resource type="Texture2D" path="res://Isometric City - Starter Set/Buildings/bld_watertower_blue_SW_normal.png" id="5_wbc80"]
+[ext_resource type="Texture2D" path="res://ui/icons/lock.svg" id="6_lkrba"]
+[ext_resource type="Texture2D" path="res://ui/icons/star.svg" id="7_rabck"]
 
-[node name="ChapterSelect" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_den0g"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hhxk"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vw30n"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xuq0g"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ckv7o"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="ChapterSelect" type="Control" unique_id=228486921]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=2063702576]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.16, 0.16, 0.18, 1)
+
+[node name="BackButton" type="Button" parent="." unique_id=1655071132]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 12.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "◀"
+flat = true
+
+[node name="ProfileButton" type="Button" parent="." unique_id=796923217]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -96.0
+offset_top = 12.0
+offset_right = -96.0
+offset_bottom = 12.0
+flat = true
+
+[node name="Icon" type="TextureRect" parent="ProfileButton" unique_id=1472151918]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+texture = ExtResource("2_71fvu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SettingsButton" type="Button" parent="." unique_id=1893837600]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -48.0
+offset_top = 12.0
+offset_right = -48.0
+offset_bottom = 12.0
+flat = true
+
+[node name="Icon" type="TextureRect" parent="SettingsButton" unique_id=1655675534]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+texture = ExtResource("3_7b1ab")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Scroll" type="ScrollContainer" parent="." unique_id=752802322]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 64.0
+horizontal_scroll_mode = 0
+
+[node name="Outer" type="CenterContainer" parent="Scroll" unique_id=886691927]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="DistrictBox" type="VBoxContainer" parent="Scroll/Outer" unique_id=655975667]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="Scroll/Outer/DistrictBox" unique_id=944807097]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 24
+text = "Select a District"
+horizontal_alignment = 1
+
+[node name="District_DowntownDistrict" type="VBoxContainer" parent="Scroll/Outer/DistrictBox" unique_id=2072367054]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderLabel" type="Label" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict" unique_id=2126308897]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_font_sizes/font_size = 14
+text = "Downtown District  (0/9 ★)"
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict" unique_id=567516638]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="Tile1" type="Button" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid" unique_id=490730550]
+custom_minimum_size = Vector2(100, 100)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+flat = true
+
+[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile1" unique_id=916694005]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("4_vwi4h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile1" unique_id=288615490]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("5_wbc80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile1" unique_id=128676614]
+visible = false
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_lkrba")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile1" unique_id=151866318]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "Chapter 1"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Tile2" type="Button" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid" unique_id=1133597364]
+modulate = Color(0.55, 0.55, 0.55, 1)
+custom_minimum_size = Vector2(100, 100)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+flat = true
+
+[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile2" unique_id=1078162438]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("4_vwi4h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile2" unique_id=909634862]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("5_wbc80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile2" unique_id=2073002879]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_lkrba")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile2" unique_id=1100008667]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "Chapter 2"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Tile3" type="Button" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid" unique_id=1970828799]
+modulate = Color(0.55, 0.55, 0.55, 1)
+custom_minimum_size = Vector2(100, 100)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+flat = true
+
+[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile3" unique_id=2128398896]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("4_vwi4h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile3" unique_id=1595947638]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("5_wbc80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile3" unique_id=1944809025]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_lkrba")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile3" unique_id=1880697729]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "Chapter 3"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="District_SuburbanDistrict" type="VBoxContainer" parent="Scroll/Outer/DistrictBox" unique_id=85028922]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderLabel" type="Label" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict" unique_id=42363580]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_font_sizes/font_size = 14
+text = "Suburban District  (0/9 ★)"
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict" unique_id=2032360117]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="Tile4" type="Button" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid" unique_id=1420550029]
+modulate = Color(0.55, 0.55, 0.55, 1)
+custom_minimum_size = Vector2(100, 100)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+flat = true
+
+[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile4" unique_id=1011029367]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("4_vwi4h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile4" unique_id=470899190]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("5_wbc80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile4" unique_id=614119382]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_lkrba")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile4" unique_id=1902977115]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "Chapter 4"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Tile5" type="Button" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid" unique_id=413877034]
+modulate = Color(0.55, 0.55, 0.55, 1)
+custom_minimum_size = Vector2(100, 100)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+flat = true
+
+[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile5" unique_id=1763099203]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("4_vwi4h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile5" unique_id=1856595107]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("5_wbc80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile5" unique_id=894819019]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_lkrba")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile5" unique_id=591530757]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "Chapter 5"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Tile6" type="Button" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid" unique_id=2006666524]
+modulate = Color(0.55, 0.55, 0.55, 1)
+custom_minimum_size = Vector2(100, 100)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+flat = true
+
+[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile6" unique_id=675237217]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("4_vwi4h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile6" unique_id=1064560914]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("5_wbc80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile6" unique_id=2125569065]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_lkrba")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile6" unique_id=1395535389]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "Chapter 6"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="District_IndustrialDistrict" type="VBoxContainer" parent="Scroll/Outer/DistrictBox" unique_id=867461064]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderLabel" type="Label" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict" unique_id=1626817574]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_font_sizes/font_size = 14
+text = "Industrial District  (0/12 ★)"
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict" unique_id=1835369544]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="Tile7" type="Button" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid" unique_id=805445255]
+modulate = Color(0.55, 0.55, 0.55, 1)
+custom_minimum_size = Vector2(100, 100)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+flat = true
+
+[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile7" unique_id=613146727]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("4_vwi4h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile7" unique_id=1174867520]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("5_wbc80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile7" unique_id=262656406]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_lkrba")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile7" unique_id=605325238]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "Chapter 7"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Tile8" type="Button" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid" unique_id=287235196]
+modulate = Color(0.55, 0.55, 0.55, 1)
+custom_minimum_size = Vector2(100, 100)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+flat = true
+
+[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile8" unique_id=855269339]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("4_vwi4h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile8" unique_id=620239692]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("5_wbc80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile8" unique_id=1268258162]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_lkrba")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile8" unique_id=149331512]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "Chapter 8"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Tile9" type="Button" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid" unique_id=1992231616]
+modulate = Color(0.55, 0.55, 0.55, 1)
+custom_minimum_size = Vector2(100, 100)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+flat = true
+
+[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile9" unique_id=2128592657]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("4_vwi4h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile9" unique_id=87244685]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("5_wbc80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile9" unique_id=1689860473]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_lkrba")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile9" unique_id=1039718811]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "Chapter 9"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Tile10" type="Button" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid" unique_id=1133255624]
+modulate = Color(0.55, 0.55, 0.55, 1)
+custom_minimum_size = Vector2(100, 100)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+flat = true
+
+[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile10" unique_id=558758961]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("4_vwi4h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile10" unique_id=271007346]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("5_wbc80")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile10" unique_id=1256129612]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 38.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("6_lkrba")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile10" unique_id=2098559876]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "Chapter 10"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Popup" type="Control" parent="." unique_id=704541592]
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Popup" unique_id=1113867902]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.55)
+
+[node name="DismissButton" type="Button" parent="Popup" unique_id=1829834528]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+flat = true
+
+[node name="PopupCenter" type="CenterContainer" parent="Popup" unique_id=88697594]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="PopupPanel" type="PanelContainer" parent="Popup/PopupCenter" unique_id=963429814]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_den0g")
+
+[node name="PopupBox" type="VBoxContainer" parent="Popup/PopupCenter/PopupPanel" unique_id=1857104580]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="PopupTitle" type="Label" parent="Popup/PopupCenter/PopupPanel/PopupBox" unique_id=1744839283]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+
+[node name="PopupStars" type="HBoxContainer" parent="Popup/PopupCenter/PopupPanel/PopupBox" unique_id=1710346414]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Star0" type="TextureRect" parent="Popup/PopupCenter/PopupPanel/PopupBox/PopupStars" unique_id=1791977579]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+texture = ExtResource("7_rabck")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Star1" type="TextureRect" parent="Popup/PopupCenter/PopupPanel/PopupBox/PopupStars" unique_id=1131922961]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+texture = ExtResource("7_rabck")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Star2" type="TextureRect" parent="Popup/PopupCenter/PopupPanel/PopupBox/PopupStars" unique_id=1722216054]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+texture = ExtResource("7_rabck")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PopupBody" type="Label" parent="Popup/PopupCenter/PopupPanel/PopupBox" unique_id=981937724]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="PopupAction" type="Button" parent="Popup/PopupCenter/PopupPanel/PopupBox" unique_id=601769267]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_0hhxk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_vw30n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xuq0g")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ckv7o")

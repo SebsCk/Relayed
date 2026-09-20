@@ -2,10 +2,255 @@
 
 [ext_resource type="Script" path="res://ui/register.gd" id="1"]
 
-[node name="Register" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gvynn"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_th0y5"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.95, 0.95, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ul2ju"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.95, 0.95, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2w5e"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i4ar7"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b7sfs"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m6wqx"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jv4ey"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.95, 0.95, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mxuud"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.95, 0.95, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y787s"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ugs73"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tvbe1"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uayrd"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Register" type="Control" unique_id=1517345013]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=858028729]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.16, 0.16, 0.18, 1)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=828434949]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="RootBox" type="VBoxContainer" parent="Center" unique_id=1489515765]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="Center/RootBox" unique_id=1558604377]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 28
+text = "REGISTER"
+horizontal_alignment = 1
+
+[node name="RegisterPanel" type="PanelContainer" parent="Center/RootBox" unique_id=1986256684]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gvynn")
+
+[node name="PanelBox" type="VBoxContainer" parent="Center/RootBox/RegisterPanel" unique_id=2081987553]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="StepOne" type="VBoxContainer" parent="Center/RootBox/RegisterPanel/PanelBox" unique_id=544157933]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="UsernameField" type="LineEdit" parent="Center/RootBox/RegisterPanel/PanelBox/StepOne" unique_id=635773774]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_colors/font_placeholder_color = Color(0.35, 0.35, 0.35, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_th0y5")
+theme_override_styles/focus = SubResource("StyleBoxFlat_th0y5")
+placeholder_text = "Username"
+
+[node name="EmailField" type="LineEdit" parent="Center/RootBox/RegisterPanel/PanelBox/StepOne" unique_id=2004214276]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_colors/font_placeholder_color = Color(0.35, 0.35, 0.35, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_ul2ju")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ul2ju")
+placeholder_text = "Email"
+
+[node name="NextRow" type="HBoxContainer" parent="Center/RootBox/RegisterPanel/PanelBox/StepOne" unique_id=1582759807]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="NextButton" type="Button" parent="Center/RootBox/RegisterPanel/PanelBox/StepOne/NextRow" unique_id=1171635212]
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_n2w5e")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_i4ar7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b7sfs")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_m6wqx")
+text = "▶"
+
+[node name="StepTwo" type="VBoxContainer" parent="Center/RootBox/RegisterPanel/PanelBox" unique_id=1436203360]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="PasswordField" type="LineEdit" parent="Center/RootBox/RegisterPanel/PanelBox/StepTwo" unique_id=1449630203]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_colors/font_placeholder_color = Color(0.35, 0.35, 0.35, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_jv4ey")
+theme_override_styles/focus = SubResource("StyleBoxFlat_jv4ey")
+placeholder_text = "Password"
+secret = true
+
+[node name="ConfirmField" type="LineEdit" parent="Center/RootBox/RegisterPanel/PanelBox/StepTwo" unique_id=1274700702]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_colors/font_placeholder_color = Color(0.35, 0.35, 0.35, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_mxuud")
+theme_override_styles/focus = SubResource("StyleBoxFlat_mxuud")
+placeholder_text = "Confirm Password"
+secret = true
+
+[node name="Row" type="HBoxContainer" parent="Center/RootBox/RegisterPanel/PanelBox/StepTwo" unique_id=381219673]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="Center/RootBox/RegisterPanel/PanelBox/StepTwo/Row" unique_id=1905060947]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "◀"
+flat = true
+
+[node name="CreateButton" type="Button" parent="Center/RootBox/RegisterPanel/PanelBox/StepTwo/Row" unique_id=1325524]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_y787s")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ugs73")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tvbe1")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_uayrd")
+text = "CREATE ACCOUNT"
+
+[node name="StatusLabel" type="Label" parent="Center/RootBox" unique_id=1699164848]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.4, 1)
+theme_override_font_sizes/font_size = 13
+horizontal_alignment = 1
+autowrap_mode = 3

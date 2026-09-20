@@ -1,11 +1,398 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/quiz.gd" id="1"]
+[ext_resource type="Texture2D" path="res://ui/icons/gear.svg" id="2_jng0p"]
 
-[node name="Quiz" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2fkxq"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3bubg"]
+bg_color = Color(0.3, 0.3, 0.32, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w5ac1"]
+bg_color = Color(0.264, 0.264, 0.2816, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m81w7"]
+bg_color = Color(0.384, 0.384, 0.4016, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xq7j8"]
+bg_color = Color(0.21000001, 0.21000001, 0.22399999, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bn6h1"]
+bg_color = Color(0.3, 0.3, 0.32, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t0h63"]
+bg_color = Color(0.264, 0.264, 0.2816, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lcje5"]
+bg_color = Color(0.384, 0.384, 0.4016, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_euwqo"]
+bg_color = Color(0.21000001, 0.21000001, 0.22399999, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vwwmd"]
+bg_color = Color(0.3, 0.3, 0.32, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_16nxq"]
+bg_color = Color(0.264, 0.264, 0.2816, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xcx78"]
+bg_color = Color(0.384, 0.384, 0.4016, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kp58l"]
+bg_color = Color(0.21000001, 0.21000001, 0.22399999, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4qkfh"]
+bg_color = Color(0.3, 0.3, 0.32, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5da4r"]
+bg_color = Color(0.264, 0.264, 0.2816, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d56me"]
+bg_color = Color(0.384, 0.384, 0.4016, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wsttk"]
+bg_color = Color(0.21000001, 0.21000001, 0.22399999, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24vnv"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fpy57"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fiaka"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4l17v"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ahqvi"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8d1ti"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nyefh"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xoaf3"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p88x8"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Quiz" type="Control" unique_id=945057111]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1045437303]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.16, 0.16, 0.18, 1)
+
+[node name="BackButton" type="Button" parent="." unique_id=1981647172]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 12.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "◀"
+flat = true
+
+[node name="SettingsButton" type="Button" parent="." unique_id=801084882]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -56.0
+offset_top = 12.0
+offset_right = -56.0
+offset_bottom = 12.0
+flat = true
+
+[node name="GearIcon" type="TextureRect" parent="SettingsButton" unique_id=747027852]
+modulate = Color(0.95, 0.95, 0.95, 1)
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 0
+texture = ExtResource("2_jng0p")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Center" type="CenterContainer" parent="." unique_id=592568522]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="QuizPanel" type="PanelContainer" parent="Center" unique_id=1772863044]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2fkxq")
+
+[node name="QuizBox" type="VBoxContainer" parent="Center/QuizPanel" unique_id=1481598695]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="ProgressLabel" type="Label" parent="Center/QuizPanel/QuizBox" unique_id=440251349]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Question 1 of 6"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="QuestionLabel" type="Label" parent="Center/QuizPanel/QuizBox" unique_id=933970415]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 17
+text = "What does QoS stand for?"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="OptionButton0" type="Button" parent="Center/QuizPanel/QuizBox" unique_id=99088486]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_3bubg")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_w5ac1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m81w7")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_xq7j8")
+text = "Quality of Service"
+text_overrun_behavior = 3
+
+[node name="OptionButton1" type="Button" parent="Center/QuizPanel/QuizBox" unique_id=1505982303]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_bn6h1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_t0h63")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lcje5")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_euwqo")
+text = "Queue over Server"
+text_overrun_behavior = 3
+
+[node name="OptionButton2" type="Button" parent="Center/QuizPanel/QuizBox" unique_id=1886538582]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_vwwmd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_16nxq")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xcx78")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_kp58l")
+text = "Quick Online Signal"
+text_overrun_behavior = 3
+
+[node name="OptionButton3" type="Button" parent="Center/QuizPanel/QuizBox" unique_id=859169623]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_4qkfh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5da4r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_d56me")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_wsttk")
+text = "Quantum of Speed"
+text_overrun_behavior = 3
+
+[node name="FeedbackLabel" type="Label" parent="Center/QuizPanel/QuizBox" unique_id=728238258]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ContinueButton" type="Button" parent="Center/QuizPanel/QuizBox" unique_id=1437375957]
+visible = false
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_24vnv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fpy57")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fiaka")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_4l17v")
+text = "Continue"
+
+[node name="CompletionOverlay" type="Control" parent="." unique_id=1523964285]
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="CompletionOverlay" unique_id=1868970652]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="CompletionCenter" type="CenterContainer" parent="CompletionOverlay" unique_id=1351093664]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="CompletionPanel" type="PanelContainer" parent="CompletionOverlay/CompletionCenter" unique_id=24511705]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ahqvi")
+
+[node name="CompletionBox" type="VBoxContainer" parent="CompletionOverlay/CompletionCenter/CompletionPanel" unique_id=2077601021]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="CompletionTitle" type="Label" parent="CompletionOverlay/CompletionCenter/CompletionPanel/CompletionBox" unique_id=1016675061]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "District Complete!"
+horizontal_alignment = 1
+
+[node name="Summary" type="Label" parent="CompletionOverlay/CompletionCenter/CompletionPanel/CompletionBox" unique_id=139818282]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="NextButton" type="Button" parent="CompletionOverlay/CompletionCenter/CompletionPanel/CompletionBox" unique_id=505651821]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_8d1ti")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nyefh")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xoaf3")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_p88x8")

@@ -6,6 +6,8 @@ extends Control
 # content of its own rather than just replaying district 1's map again.
 # Questions cover the TelCom concepts AGENTS.md lists as what the game
 # should teach (QoS, congestion, latency, packet loss, bandwidth, routing).
+# UI is authored directly in scenes/quiz.tscn; this script wires up
+# references/signals and drives the fixed 4-option-button layout per question.
 
 const QUESTIONS := [
 	{
@@ -49,71 +51,30 @@ const QUESTIONS := [
 var current_index := 0
 var score := 0
 
-var question_label: Label
-var option_buttons: Array[Button] = []
-var feedback_label: Label
-var continue_button: Button
-var progress_label: Label
-var overlay: Control
+@onready var progress_label: Label = $Center/QuizPanel/QuizBox/ProgressLabel
+@onready var question_label: Label = $Center/QuizPanel/QuizBox/QuestionLabel
+@onready var option_buttons: Array[Button] = [
+	$Center/QuizPanel/QuizBox/OptionButton0,
+	$Center/QuizPanel/QuizBox/OptionButton1,
+	$Center/QuizPanel/QuizBox/OptionButton2,
+	$Center/QuizPanel/QuizBox/OptionButton3,
+]
+@onready var feedback_label: Label = $Center/QuizPanel/QuizBox/FeedbackLabel
+@onready var continue_button: Button = $Center/QuizPanel/QuizBox/ContinueButton
+@onready var overlay: Control = $CompletionOverlay
+@onready var summary_label: Label = $CompletionOverlay/CompletionCenter/CompletionPanel/CompletionBox/Summary
+@onready var next_button: Button = $CompletionOverlay/CompletionCenter/CompletionPanel/CompletionBox/NextButton
 
 func _ready() -> void:
-	add_child(UIKit.full_rect_bg())
-	_build_top_bar()
-	_build_quiz_panel()
-	_build_completion_overlay()
-	_show_question()
+	$BackButton.pressed.connect(func(): UIKit.go_to_scene("res://scenes/chapter_select.tscn"))
+	$SettingsButton.pressed.connect(func(): UIKit.show_in_game_settings(self, "Quiz progress will be lost."))
 
-func _build_top_bar() -> void:
-	var back := UIKit.back_button()
-	back.position = Vector2(12, 12)
-	back.pressed.connect(func(): UIKit.go_to_scene("res://scenes/chapter_select.tscn"))
-	add_child(back)
-
-	var settings_button := Button.new()
-	settings_button.flat = true
-	settings_button.custom_minimum_size = Vector2(44, 44)
-	settings_button.anchor_left = 1.0
-	settings_button.anchor_right = 1.0
-	settings_button.position = Vector2(-56, 12)
-	settings_button.add_child(UIKit.icon("res://ui/icons/gear.svg", Vector2(26, 26)))
-	settings_button.pressed.connect(func(): UIKit.show_in_game_settings(self, "Quiz progress will be lost."))
-	add_child(settings_button)
-
-func _build_quiz_panel() -> void:
-	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
-	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(center)
-
-	var panel := UIKit.panel(Vector2(320, 0))
-	center.add_child(panel)
-	var box := UIKit.vbox(10)
-	panel.add_child(box)
-
-	progress_label = UIKit.body_label("", 12, Color(0.75, 0.75, 0.75))
-	box.add_child(progress_label)
-
-	question_label = UIKit.title_label("", 17)
-	question_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(question_label)
-
-	for i in range(4):
-		var option_button := UIKit.styled_button("", Color(0.3, 0.3, 0.32))
-		option_button.custom_minimum_size = Vector2(0, 40)
-		option_button.add_theme_font_size_override("font_size", 14)
-		option_button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		option_button.pressed.connect(_on_option_pressed.bind(i))
-		box.add_child(option_button)
-		option_buttons.append(option_button)
-
-	feedback_label = UIKit.body_label("", 13)
-	feedback_label.visible = false
-	box.add_child(feedback_label)
-
-	continue_button = UIKit.styled_button("Continue")
-	continue_button.visible = false
+	for i in range(option_buttons.size()):
+		option_buttons[i].pressed.connect(_on_option_pressed.bind(i))
 	continue_button.pressed.connect(_on_continue_pressed)
-	box.add_child(continue_button)
+	next_button.pressed.connect(_on_next_pressed)
+
+	_show_question()
 
 func _show_question() -> void:
 	var data: Dictionary = QUESTIONS[current_index]
@@ -152,37 +113,13 @@ func _on_continue_pressed() -> void:
 	else:
 		_show_question()
 
-func _build_completion_overlay() -> void:
-	overlay = Control.new()
-	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
-	overlay.visible = false
-	add_child(overlay)
-	overlay.add_child(UIKit.full_rect_bg(Color(0, 0, 0, 0.6)))
-
-	var panel := UIKit.panel(Vector2(280, 0))
-	overlay.add_child(UIKit.centered(panel))
-	var box := UIKit.vbox(12)
-	panel.add_child(box)
-
-	box.add_child(UIKit.title_label("District Complete!", 22))
-	var summary := UIKit.body_label("")
-	summary.name = "Summary"
-	box.add_child(summary)
-
-	var next_button := UIKit.styled_button("")
-	next_button.name = "NextButton"
-	next_button.pressed.connect(_on_next_pressed)
-	box.add_child(next_button)
-
 func _show_completion() -> void:
 	overlay.visible = true
-	var summary := overlay.find_child("Summary") as Label
-	summary.text = "You answered every question correctly. Final score: %d / %d" % [score, QUESTIONS.size()]
+	summary_label.text = "You answered every question correctly. Final score: %d / %d" % [score, QUESTIONS.size()]
 	# Flat 3-star award until a real per-district scoring rubric exists,
 	# matching the puzzle's own current placeholder rubric.
 	GameProgress.set_chapter_stars(GameProgress.selected_chapter, 3)
 	GameProgress.unlock_next_chapter()
-	var next_button := overlay.find_child("NextButton") as Button
 	if GameProgress.selected_chapter < GameProgress.TOTAL_CHAPTERS:
 		next_button.text = "Next District"
 	else:

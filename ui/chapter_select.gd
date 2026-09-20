@@ -1,12 +1,12 @@
 extends Control
 
-# Figure 30 — Chapter Selection. Districts are approximated as a grid of
-# isometric ground tiles rather than the storyboard's hand-placed diamond
-# map; the interaction (locked/unlocked, stars, Play/Replay/locked popup) is
-# real, the exact map arrangement is a later visual pass.
-
-const GROUND_TILE := preload("res://Isometric City - Starter Set/Roads and Grounds/tile_ground_grass.png")
-const DISTRICT_ICON := preload("res://Isometric City - Starter Set/Buildings/bld_watertower_blue_SW_normal.png")
+# Figure 30 — Chapter Selection. UI (top bar, district grid, popup) is
+# authored directly in scenes/chapter_select.tscn; this script wires up
+# references/signals and refreshes tile/star state from GameProgress.
+# Districts are approximated as a grid of isometric ground tiles rather
+# than the storyboard's hand-placed diamond map — the interaction
+# (locked/unlocked, stars, Play/Replay/locked popup) is real, the exact
+# map arrangement is a later visual pass.
 
 var popup: Control
 var popup_title: Label
@@ -14,180 +14,69 @@ var popup_body: Label
 var popup_stars: HBoxContainer
 var popup_action: Button
 var selected_chapter: int = 1
+var chapter_tiles: Dictionary = {}
 
 func _ready() -> void:
-	add_child(UIKit.full_rect_bg())
-	_build_top_bar()
-	_build_grid()
-	_build_popup()
-
-func _build_top_bar() -> void:
-	var back := UIKit.back_button()
-	back.position = Vector2(12, 12)
-	back.pressed.connect(func(): UIKit.go_to_scene("res://scenes/choose_game.tscn"))
-	add_child(back)
-
-	var profile_button := Button.new()
-	profile_button.flat = true
-	profile_button.custom_minimum_size = Vector2(44, 44)
-	profile_button.anchor_left = 1.0
-	profile_button.anchor_right = 1.0
-	profile_button.position = Vector2(-96, 12)
-	profile_button.add_child(UIKit.icon("res://ui/icons/person.svg", Vector2(28, 28)))
-	profile_button.pressed.connect(func(): UIKit.go_to_scene("res://scenes/player_profile.tscn"))
-	add_child(profile_button)
-
-	var settings_button := Button.new()
-	settings_button.flat = true
-	settings_button.custom_minimum_size = Vector2(44, 44)
-	settings_button.anchor_left = 1.0
-	settings_button.anchor_right = 1.0
-	settings_button.position = Vector2(-48, 12)
-	settings_button.add_child(UIKit.icon("res://ui/icons/gear.svg", Vector2(24, 24)))
-	settings_button.pressed.connect(func():
+	$BackButton.pressed.connect(func(): UIKit.go_to_scene("res://scenes/choose_game.tscn"))
+	$ProfileButton.pressed.connect(func(): UIKit.go_to_scene("res://scenes/player_profile.tscn"))
+	$SettingsButton.pressed.connect(func():
 		GameProgress.settings_return_path = "res://scenes/chapter_select.tscn"
 		UIKit.go_to_scene("res://scenes/settings.tscn")
 	)
-	add_child(settings_button)
 
-func _build_grid() -> void:
-	# Districts group a range of chapters (GameProgress.DISTRICTS) — each
-	# gets its own header and row(s) of chapter tiles, rather than one flat
-	# grid of all 10 chapters.
-	var scroll := ScrollContainer.new()
-	scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
-	scroll.offset_top = 64
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	add_child(scroll)
-
-	var outer := CenterContainer.new()
-	outer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	outer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.add_child(outer)
-
-	var box := UIKit.vbox(20)
-	outer.add_child(box)
-	box.add_child(UIKit.title_label("Select a District", 24))
+	popup = $Popup
+	popup_title = $Popup/PopupCenter/PopupPanel/PopupBox/PopupTitle
+	popup_stars = $Popup/PopupCenter/PopupPanel/PopupBox/PopupStars
+	popup_body = $Popup/PopupCenter/PopupPanel/PopupBox/PopupBody
+	popup_action = $Popup/PopupCenter/PopupPanel/PopupBox/PopupAction
+	$Popup/DismissButton.pressed.connect(func(): popup.visible = false)
+	popup_action.pressed.connect(_on_popup_action_pressed)
 
 	for district in GameProgress.DISTRICTS:
-		box.add_child(_build_district_section(district))
+		var section_name := "District_%s" % String(district["name"]).replace(" ", "")
+		var section: Node = $Scroll/Outer/DistrictBox.get_node(section_name)
+		for chapter in range(int(district["start"]), int(district["end"]) + 1):
+			var tile: Button = section.get_node("Grid/Tile%d" % chapter)
+			tile.pressed.connect(_on_tile_pressed.bind(chapter))
+			chapter_tiles[chapter] = tile
 
-func _build_district_section(district: Dictionary) -> Control:
-	var section := UIKit.vbox(8)
-	var start: int = district["start"]
-	var end: int = district["end"]
-	var stars_earned := 0
-	for chapter in range(start, end + 1):
-		stars_earned += GameProgress.stars_for(chapter)
-	var header := UIKit.body_label("%s  (%d/%d ★)" % [district["name"], stars_earned, (end - start + 1) * 3], 14, Color(0.85, 0.85, 0.85))
-	header.autowrap_mode = TextServer.AUTOWRAP_OFF
-	section.add_child(header)
+	_refresh_tiles()
 
-	var grid := GridContainer.new()
-	grid.columns = 3
-	grid.add_theme_constant_override("h_separation", 10)
-	grid.add_theme_constant_override("v_separation", 10)
-	grid.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	section.add_child(grid)
-	for chapter in range(start, end + 1):
-		grid.add_child(_build_chapter_tile(chapter))
+func _refresh_tiles() -> void:
+	for district in GameProgress.DISTRICTS:
+		var start: int = district["start"]
+		var end: int = district["end"]
+		var stars_earned := 0
+		for chapter in range(start, end + 1):
+			stars_earned += GameProgress.stars_for(chapter)
+		var section: Node = $Scroll/Outer/DistrictBox.get_node("District_%s" % String(district["name"]).replace(" ", ""))
+		var header := section.get_node("HeaderLabel") as Label
+		header.text = "%s  (%d/%d ★)" % [district["name"], stars_earned, (end - start + 1) * 3]
 
-	return section
-
-func _build_chapter_tile(chapter: int) -> Control:
-	var unlocked := GameProgress.is_unlocked(chapter)
-	var tile := Button.new()
-	tile.custom_minimum_size = Vector2(100, 100)
-	tile.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	tile.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	tile.clip_contents = true
-	tile.flat = true
-	tile.modulate = Color(1, 1, 1) if unlocked else Color(0.55, 0.55, 0.55)
-	tile.pressed.connect(_on_tile_pressed.bind(chapter))
-
-	var background := TextureRect.new()
-	background.texture = GROUND_TILE
-	background.set_anchors_preset(Control.PRESET_FULL_RECT)
-	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	tile.add_child(background)
-
-	if unlocked:
-		var icon := TextureRect.new()
-		icon.texture = DISTRICT_ICON
-		icon.custom_minimum_size = Vector2(28, 28)
-		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon.position = Vector2(36, 14)
-		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		tile.add_child(icon)
-	else:
-		var lock := UIKit.icon("res://ui/icons/lock.svg", Vector2(24, 24))
-		lock.set_anchors_preset(Control.PRESET_CENTER)
-		lock.position = Vector2(38, 20)
-		lock.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		tile.add_child(lock)
-
-	var label := UIKit.body_label("Chapter %d" % chapter, 13)
-	label.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	label.position = Vector2(0, 74)
-	label.size = Vector2(100, 20)
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	tile.add_child(label)
-
-	return tile
-
-func _build_popup() -> void:
-	popup = Control.new()
-	popup.set_anchors_preset(Control.PRESET_FULL_RECT)
-	popup.visible = false
-	add_child(popup)
-	var dismiss := UIKit.full_rect_bg(Color(0, 0, 0, 0.55))
-	dismiss.mouse_filter = Control.MOUSE_FILTER_STOP
-	popup.add_child(dismiss)
-	var dismiss_button := Button.new()
-	dismiss_button.flat = true
-	dismiss_button.set_anchors_preset(Control.PRESET_FULL_RECT)
-	dismiss_button.pressed.connect(func(): popup.visible = false)
-	popup.add_child(dismiss_button)
-
-	var panel := UIKit.panel(Vector2(280, 0))
-	popup.add_child(UIKit.centered(panel))
-	var box := UIKit.vbox(12)
-	panel.add_child(box)
-
-	popup_title = UIKit.title_label("", 22)
-	box.add_child(popup_title)
-
-	popup_stars = UIKit.hbox(4)
-	popup_stars.alignment = BoxContainer.ALIGNMENT_CENTER
-	box.add_child(popup_stars)
-
-	popup_body = UIKit.body_label("")
-	box.add_child(popup_body)
-
-	popup_action = UIKit.styled_button("")
-	popup_action.pressed.connect(_on_popup_action_pressed)
-	box.add_child(popup_action)
+	for chapter in chapter_tiles.keys():
+		var unlocked := GameProgress.is_unlocked(chapter)
+		var tile: Button = chapter_tiles[chapter]
+		tile.modulate = Color(1, 1, 1) if unlocked else Color(0.55, 0.55, 0.55)
+		tile.get_node("UnlockedIcon").visible = unlocked
+		tile.get_node("LockIcon").visible = not unlocked
 
 func _on_tile_pressed(chapter: int) -> void:
 	selected_chapter = chapter
-	for star_icon in popup_stars.get_children():
-		star_icon.queue_free()
 
 	if not GameProgress.is_unlocked(chapter):
 		popup_title.text = "LOCKED DISTRICT!"
 		popup_body.text = "Complete previous chapters to unlock this district."
 		popup_action.visible = false
+		popup_stars.visible = false
 		popup.visible = true
 		return
 
 	popup_title.text = "CHAPTER %d" % chapter
 	var earned := GameProgress.stars_for(chapter)
 	for i in range(3):
-		var tint := Color(1.0, 0.85, 0.2) if i < earned else Color(0.4, 0.4, 0.4)
-		popup_stars.add_child(UIKit.icon("res://ui/icons/star.svg", Vector2(22, 22), tint))
+		var star := popup_stars.get_node("Star%d" % i)
+		star.modulate = Color(1.0, 0.85, 0.2) if i < earned else Color(0.4, 0.4, 0.4)
+	popup_stars.visible = true
 	var district: Dictionary = GameProgress.district_for_chapter(chapter)
 	popup_body.text = "%s\nChapter progress: %d / 3 stars" % [district["name"], earned]
 	popup_action.text = "REPLAY" if earned > 0 else "PLAY"

@@ -2,10 +2,156 @@
 
 [ext_resource type="Script" path="res://ui/choose_game.gd" id="1"]
 
-[node name="ChooseGame" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_apxot"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n12o7"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r7y5k"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e5dof"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kxkxo"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fs0me"]
+bg_color = Color(0.3, 0.3, 0.32, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uuorn"]
+bg_color = Color(0.264, 0.264, 0.2816, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ihsm"]
+bg_color = Color(0.384, 0.384, 0.4016, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_664xf"]
+bg_color = Color(0.21000001, 0.21000001, 0.22399999, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="ChooseGame" type="Control" unique_id=592265493]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=935081595]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.16, 0.16, 0.18, 1)
+
+[node name="BackButton" type="Button" parent="." unique_id=482271320]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 12.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "◀"
+flat = true
+
+[node name="Center" type="CenterContainer" parent="." unique_id=316896138]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="RootBox" type="VBoxContainer" parent="Center" unique_id=1792789679]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="Center/RootBox" unique_id=1328974392]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 34
+text = "RELAYED"
+horizontal_alignment = 1
+
+[node name="ChoicePanel" type="PanelContainer" parent="Center/RootBox" unique_id=1303182784]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_apxot")
+
+[node name="PanelBox" type="VBoxContainer" parent="Center/RootBox/ChoicePanel" unique_id=353957851]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="NewGameButton" type="Button" parent="Center/RootBox/ChoicePanel/PanelBox" unique_id=44697235]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_n12o7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_r7y5k")
+theme_override_styles/hover = SubResource("StyleBoxFlat_e5dof")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_kxkxo")
+text = "NEW GAME"
+
+[node name="ContinueButton" type="Button" parent="Center/RootBox/ChoicePanel/PanelBox" unique_id=41315595]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_fs0me")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_uuorn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4ihsm")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_664xf")
+text = "CONTINUE GAME"
+
+[node name="NoSessionLabel" type="Label" parent="Center/RootBox/ChoicePanel/PanelBox" unique_id=1737056228]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+text = "No previous session found."
+horizontal_alignment = 1
+autowrap_mode = 3

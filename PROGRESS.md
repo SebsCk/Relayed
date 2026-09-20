@@ -1,5 +1,88 @@
 # Progress
 
+## 2026-09-20 (baked runtime-built screens into real editor scene nodes)
+
+User noticed every `.tscn` I'd built this session (login, register,
+choose_game, chapter_select, player_profile, story_event, quiz) appeared
+**empty** in the Godot editor — no visible/editable child nodes — because
+each screen's whole UI was constructed in code inside `_ready()` rather than
+authored as real scene nodes, unlike the user's own hand-authored scenes
+(`relayed.tscn`, `main_menu.tscn`, `settings.tscn`, `building.tscn`). Asked
+to convert all of them to have real child nodes.
+
+- **Technique**: for each screen, (1) added an explicit `.name = "X"` to
+  every node the `_ready()` code constructs (Godot auto-names unnamed nodes
+  `@ClassName@N`, useless for hand-editing later), (2) ran a one-off
+  `SceneTree` script that instantiates the scene with
+  `PackedScene.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)`, walks the
+  tree recursively setting `owner = scene_root` on every descendant (nodes
+  `add_child()`ed at runtime never get an owner, and `PackedScene.pack()`
+  silently drops any node without one — this was the actual cause of the
+  "empty" scenes), then `ResourceSaver.save(PackedScene.pack(root), path)`,
+  (3) rewrote the script a second time to reference the now-real nodes via
+  `@onready var x = $Path/To/Node` and connect signals in `_ready()`,
+  instead of constructing them.
+- **Fixed-count-but-dynamic-content pattern**: several screens have UI whose
+  element *count* never changes at runtime but whose *text/visibility/tint*
+  does — these got baked as always-present nodes with state applied by
+  lookup, never conditionally created/destroyed:
+  - `choose_game.tscn`: the "No previous session found" label always exists;
+    `_ready()` toggles its `.visible` based on `GameProgress.has_save()`.
+  - `chapter_select.tscn`: all 10 chapter tiles across 3 district sections,
+    and the popup's 3 star icons (`Star0/1/2`), are baked as fixed nodes;
+    `_refresh_tiles()` looks them up by name pattern and updates
+    modulate/visibility rather than building the grid at runtime.
+  - `player_profile.tscn`: `NameLabel`'s text is set from
+    `AuthState.username` in `_ready()`, same pattern.
+  - `story_event.tscn`: both `ObjectiveLine1` and `ObjectiveLine2` are
+    always baked; the quiz chapter (`QUIZ_CHAPTER == 2`) just hides
+    `ObjectiveLine2` and sets `ObjectiveLine1`'s text to the quiz's single
+    objective, instead of building a variable-length list at runtime.
+  - `quiz.tscn`: all 4 `OptionButtonN` nodes are baked; `_show_question()`
+    sets each one's `.text` from `QUESTIONS[current_index]["options"]`
+    rather than building buttons per-question.
+- **Verification per screen** (headless-only testing was not sufficient —
+  see "Gotchas" below): (1) headless `--quit --import` for parser errors,
+  (2) a real routed-click functional test via `Viewport.push_input()` with
+  actual `InputEventMouseButton` press/release pairs (not `emit_signal()`,
+  which bypasses hit-testing and would have masked a real click-blocking
+  bug the way it did earlier this session — see the "back arrow" entry
+  further down), run non-headless at `--resolution 390x844` (headless mode
+  silently ignores `--resolution` and defaults to a 64×64 viewport, making
+  any position-based click test meaningless), (3) a rendered screenshot
+  compared against the pre-conversion layout.
+- All 7 screens converted and verified this way: `login`, `register`,
+  `choose_game`, `chapter_select`, `player_profile`, `story_event`, `quiz`.
+  Final regression: headless project import (whole project, zero errors)
+  plus a scripted load-and-instantiate pass over every non-gameplay scene
+  (`login`, `register`, `choose_game`, `chapter_select`, `player_profile`,
+  `story_event`, `quiz`, `settings`, `main_menu`) — all load clean.
+- **Gotchas**:
+  - `PackedScene.pack()` needs every node's `.owner` set to the scene root
+    or it's silently excluded — the root cause of the original "empty
+    scene" complaint.
+  - Auto-generated node names (`@Label@5`) survive a naive bake; give every
+    constructed node an explicit `.name` *before* baking, not after.
+  - A modal/popup's `DismissButton` sitting behind a *centered* panel only
+    receives a click if the click lands outside the panel's own bounding
+    box (the panel itself defaults to `MOUSE_FILTER_PASS`, letting the
+    click fall through to whatever's behind it at that exact point, but a
+    click that lands *on* the panel is absorbed by the panel first). This
+    is pre-existing behavior in every screen using this Dim+DismissButton+
+    CenterContainer modal pattern (chapter_select's district popup,
+    player_profile's info/edit panels, quiz's completion overlay) — not
+    introduced by this conversion, but worth knowing when writing a click
+    test against one: tap a corner, not the button's own computed center.
+  - A `SceneTree` test script that manually swaps `current_scene` between
+    segments (instead of using `change_scene_to_file`, which frees the old
+    scene automatically) must free the previous scene itself — otherwise it
+    keeps running (`_process`, input handling) alongside the next segment
+    and silently corrupts later click results. Cost real debugging time
+    twice in this pass (once for `story_event`'s quiz-chapter segment via a
+    leftover `relayed.tscn` instance, once for `quiz`'s completion flow via
+    a missing final "Continue" click after the last question — same gap
+    noted as a risk earlier this session in `test_quiz_flow.gd`).
+
 ## 2026-09-20 (round-demand spawn vs. hand-edited road)
 
 User manually added a road directly to `scenes/relayed.tscn`'s Ground

@@ -1,11 +1,266 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/story_event.gd" id="1"]
+[ext_resource type="Texture2D" path="res://ui/icons/person.svg" id="2_a6nwx"]
 
-[node name="StoryEvent" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lqgev"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.95, 0.95, 0.95, 0.95)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m4qmh"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32gvx"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oq4g6"]
+bg_color = Color(0.176, 0.484, 0.83599997, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_et0xh"]
+bg_color = Color(0.296, 0.60400003, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s27ww"]
+bg_color = Color(0.14, 0.385, 0.66499996, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="StoryEvent" type="Control" unique_id=396867433]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=920189355]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.16, 0.16, 0.18, 1)
+
+[node name="BackButton" type="Button" parent="." unique_id=1577445756]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 12.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "◀"
+flat = true
+
+[node name="IntroView" type="Control" parent="." unique_id=592342083]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Center" type="CenterContainer" parent="IntroView" unique_id=2063308218]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Row" type="HBoxContainer" parent="IntroView/Center" unique_id=395891277]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="Portrait" type="TextureRect" parent="IntroView/Center/Row" unique_id=1206812287]
+modulate = Color(0.6, 0.6, 0.65, 1)
+custom_minimum_size = Vector2(90, 120)
+layout_mode = 2
+texture = ExtResource("2_a6nwx")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Bubble" type="PanelContainer" parent="IntroView/Center/Row" unique_id=248728448]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lqgev")
+
+[node name="BubbleBox" type="VBoxContainer" parent="IntroView/Center/Row/Bubble" unique_id=1014940609]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="WelcomeLabel" type="Label" parent="IntroView/Center/Row/Bubble/BubbleBox" unique_id=1560306850]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 15
+text = "Welcome to Chapter 1"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ContinueButton" type="Button" parent="IntroView/Center/Row/Bubble/BubbleBox" unique_id=487474376]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.45, 0.8, 1)
+theme_override_colors/font_hover_color = Color(0.7, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "Tap to continue ▶"
+flat = true
+
+[node name="ObjectivesView" type="Control" parent="." unique_id=804858460]
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Center" type="CenterContainer" parent="ObjectivesView" unique_id=1123750573]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="ObjectivesPanel" type="PanelContainer" parent="ObjectivesView/Center" unique_id=1174963087]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_m4qmh")
+
+[node name="ObjectivesBox" type="VBoxContainer" parent="ObjectivesView/Center/ObjectivesPanel" unique_id=766940620]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox" unique_id=1769232435]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "OBJECTIVES"
+horizontal_alignment = 1
+
+[node name="ObjectivesList" type="VBoxContainer" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox" unique_id=1960375031]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="ObjectiveLine1" type="Label" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox/ObjectivesList" unique_id=1578798222]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "• Connect every building to its preferred network"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ObjectiveLine2" type="Label" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox/ObjectivesList" unique_id=1441577627]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "• Resolve any tower congestion"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ProgressLabel" type="Label" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox" unique_id=868166614]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Progress"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Progress" type="ProgressBar" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox" unique_id=311432977]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+show_percentage = false
+
+[node name="RewardsLabel" type="Label" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox" unique_id=1104980238]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_font_sizes/font_size = 12
+text = "Rewards:"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RewardRow" type="HBoxContainer" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox" unique_id=611808752]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Swatch0" type="VBoxContainer" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox/RewardRow" unique_id=1529672283]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="SwatchCenter" type="CenterContainer" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox/RewardRow/Swatch0" unique_id=2097093426]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SwatchColor" type="ColorRect" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox/RewardRow/Swatch0/SwatchCenter" unique_id=1044766303]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+color = Color(0.15, 0.85, 1, 1)
+
+[node name="SwatchLabel" type="Label" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox/RewardRow/Swatch0" unique_id=1758913376]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 10
+text = "5G Bonus"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Swatch1" type="VBoxContainer" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox/RewardRow" unique_id=593357926]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="SwatchCenter" type="CenterContainer" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox/RewardRow/Swatch1" unique_id=1484024915]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SwatchColor" type="ColorRect" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox/RewardRow/Swatch1/SwatchCenter" unique_id=829235580]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+color = Color(0.35, 1, 0.45, 1)
+
+[node name="SwatchLabel" type="Label" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox/RewardRow/Swatch1" unique_id=399902850]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 10
+text = "Fiber Bonus"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="BeginButton" type="Button" parent="ObjectivesView/Center/ObjectivesPanel/ObjectivesBox" unique_id=852787668]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_32gvx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_oq4g6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_et0xh")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_s27ww")
+text = "BEGIN"
