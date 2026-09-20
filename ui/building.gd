@@ -15,6 +15,8 @@ func _ready():
 	add_to_group("buildings")
 
 func _unhandled_input(event):
+	if get_tree().current_scene.has_method("is_placing") and get_tree().current_scene.is_placing():
+		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var local_pos = get_global_mouse_position()
 		var rect = get_rect_global()

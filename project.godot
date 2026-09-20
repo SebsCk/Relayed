@@ -10,14 +10,21 @@ config_version=5
 
 [application]
 
-config/name="Relayed"
+config/name="Relayed (4.7)"
 run/main_scene="uid://crg517q64aqen"
-config/features=PackedStringArray("4.6", "Mobile")
+config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
 
 BuildingInfoPanel="*uid://meqpeed67h37"
+GameSettings="*res://ui/game_settings.gd"
+MCPRuntimeServer="*res://addons/godot_mcp_toolkit/runtime/mcp_runtime_server.gd"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_ai/plugin.cfg", "res://addons/godot_mcp_toolkit/plugin.cfg")
 
 [input]
 

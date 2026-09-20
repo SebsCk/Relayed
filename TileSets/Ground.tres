@@ -36,7 +36,7 @@ texture_region_size = Vector2i(128, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t3pyb"]
 texture = ExtResource("3_gu40t")
-texture_region_size = Vector2i(257, 129)
+texture_region_size = Vector2i(128, 64)
 0:0/0 = 0
 1:0/0 = 0
 1:1/0 = 0

@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://b6etbk3qffmvc"]
 
 [ext_resource type="Script" uid="uid://dxhnnnc1w4y0u" path="res://ui/control.gd" id="1_x2hje"]
+[ext_resource type="Script" path="res://ui/settings.gd" id="2_settings"]
 
 [node name="Settings" type="Node2D" unique_id=1676526986]
+script = ExtResource("2_settings")
 
 [node name="Control" type="Control" parent="." unique_id=1880825958]
 layout_mode = 3

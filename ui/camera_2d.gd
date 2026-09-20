@@ -17,7 +17,7 @@ func _process(delta):
 	if Input.is_action_pressed("up"):
 		direction.y -= 1
 	
-	position += direction * move_speed * delta
+	position += direction * move_speed * GameSettings.camera_speed_multiplier * delta
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton:

@@ -18,5 +18,8 @@ func show_building(building: Building):
 	network_label.text = "Prefers: " + building.preferred_network
 	panel.visible = true
 
-func _on_close_pressed():
+func hide_panel() -> void:
 	panel.visible = false
+
+func _on_close_pressed():
+	hide_panel()
