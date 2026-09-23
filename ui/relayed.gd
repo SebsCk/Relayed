@@ -11,21 +11,20 @@ const MAX_ROUNDS := 3
 const TOWER_CAPACITY := {"5G": 150, "Ethernet": 120}
 
 # Round 2 and 3's demand buildings (see apply_round_demands()) are real,
-# hand-editable nodes in scenes/relayed.tscn now — CornerHouse and
-# RiversideApartments under $Buildings — rather than being constructed at
-# runtime, so their position/sprite/texture can be tweaked directly in the
-# editor. They start hidden and process-disabled (see
-# _deactivate_demand_buildings()) and are revealed by name when their round
-# arrives, in the order they should appear.
-const DEMAND_BUILDING_NAMES := ["CornerHouse", "RiversideApartments"]
+# hand-editable nodes in scenes/relayed.tscn under $Buildings, so their
+# position/sprite/texture can be tweaked directly in the editor. Entry i
+# joins the puzzle in round i + 2. Until then they stay on the map (dimmed,
+# input-disabled, still occupying their grid cell) so the city doesn't
+# visibly change shape between rounds — see _deactivate_demand_buildings().
+const DEMAND_BUILDING_NAMES := ["Apartments3", "Apartments4"]
+const LOCKED_BUILDING_TINT := Color(0.55, 0.55, 0.6)
 
 # Building sprite sources vary wildly in native pixel size (a plain house is
 # 225px wide, the apartment complex is 425px) — normalize every
 # place_building() sprite to this rendered width so a building's visual
 # footprint reflects its actual grid-cell spacing instead of its source
 # art's resolution. Matches roughly the hand-tuned scale (~0.7-0.75) already
-# used on the scene's original starting buildings, and the same scale
-# CornerHouse/RiversideApartments were baked at.
+# used on the scene's original starting buildings.
 const BUILDING_SPRITE_TARGET_WIDTH := 170.0
 
 # Backed by GameProgress.infrastructure_fund (persists across districts, per
@@ -316,32 +315,34 @@ func register_existing_buildings() -> void:
 func apply_round_demands() -> void:
 	# The first map starts with three structures.  Each later round adds a new
 	# demand point, so the player must extend the network instead of reusing one solve.
-	if current_round == 2 and round_demand_count == 0:
-		_activate_demand_building("CornerHouse")
-	if current_round == 3 and round_demand_count == 1:
-		_activate_demand_building("RiversideApartments")
+	while round_demand_count < min(current_round - 1, DEMAND_BUILDING_NAMES.size()):
+		_activate_demand_building(DEMAND_BUILDING_NAMES[round_demand_count])
 	set_status("Round %d: connect every active building with its preferred network." % current_round)
 	hint_label.visible = false
 	HintBot.start_task("chapter_%d_round_%d" % [GameProgress.selected_chapter, current_round])
 	update_hud()
 
-# CornerHouse/RiversideApartments start hidden and process-disabled (baked
-# in scenes/relayed.tscn) so Building's own _unhandled_input can't register
-# phantom clicks on one before its round arrives — Building._ready() still
-# runs immediately on scene load regardless of that (process_mode only
-# gates _process/input callbacks, not _ready), so it joins the "buildings"
-# group right away too. Strip that back out before register_existing_
-# buildings() runs, so this round-gating is enforced from the very start.
+# Demand buildings start process-disabled (baked in scenes/relayed.tscn) so
+# Building's own _unhandled_input can't open their info panel before their
+# round arrives — Building._ready() still runs immediately on scene load
+# regardless of that (process_mode only gates _process/input callbacks, not
+# _ready), so it joins the "buildings" group right away too. Strip that back
+# out before register_existing_buildings() runs, so they don't count toward
+# round completion yet. They stay visible and keep their cell occupied, so
+# the player can't build on top of one or route wires through it.
 func _deactivate_demand_buildings() -> void:
 	for building_name in DEMAND_BUILDING_NAMES:
 		var building := $Buildings.get_node_or_null(building_name) as Building
 		if building:
 			building.remove_from_group("buildings")
+			building.process_mode = Node.PROCESS_MODE_DISABLED
+			building.modulate = LOCKED_BUILDING_TINT
+			occupied_cells[world_to_cell(building.global_position)] = building
 
 func _activate_demand_building(building_name: String) -> void:
 	var building := $Buildings.get_node(building_name) as Building
-	building.visible = true
 	building.process_mode = Node.PROCESS_MODE_INHERIT
+	building.modulate = Color(1, 1, 1)
 	building.add_to_group("buildings")
 	var cell := world_to_cell(building.global_position)
 	occupied_cells[cell] = building

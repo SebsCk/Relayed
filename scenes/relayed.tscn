@@ -6,11 +6,9 @@
 [ext_resource type="Script" uid="uid://btb7fukwjlu2j" path="res://ui/back_to_mm.gd" id="3_smj7p"]
 [ext_resource type="Texture2D" uid="uid://co23ohr30ef5t" path="res://Isometric Suburban Pack/Buildings/apartment complex 01b.png" id="4_3p46k"]
 [ext_resource type="Script" uid="uid://yfi5ibyt6mj6" path="res://ui/relayed.gd" id="5_game"]
+[ext_resource type="Texture2D" uid="uid://cf2fjabkdkfsu" path="res://Isometric Suburban Pack/Buildings/apartment complex 01a.png" id="4_gjmb1"]
 [ext_resource type="Texture2D" uid="uid://bc1ugtyw0a0wp" path="res://Isometric Suburban Pack/Buildings/apartment complex 03a.png" id="5_tqbkr"]
 [ext_resource type="Texture2D" uid="uid://bq1j1lkt8hvx7" path="res://Isometric Suburban Pack/Buildings/apartment complex 03b.png" id="6_wtwqm"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1uq3d"]
-load_path = "res://.godot/imported/apartment complex 01a.png-34c72332a7ac4aa541a9cbe667522ad0.ctex"
 
 [node name="RELAYED" type="Node2D" unique_id=2097634734]
 y_sort_enabled = true
@@ -36,25 +34,48 @@ hitbox_size = Vector2(100, 100)
 [node name="Sprite2D" parent="Buildings/Building2" index="0" unique_id=187053034]
 position = Vector2(-71, -107.999985)
 scale = Vector2(1.1757776, 1.1077669)
-texture = SubResource("CompressedTexture2D_1uq3d")
+texture = ExtResource("4_gjmb1")
 offset = Vector2(100, 100)
 
-[node name="Apartments2" type="Node2D" parent="Buildings" unique_id=770333588]
+[node name="Apartments2" parent="Buildings" unique_id=770333588 instance=ExtResource("2_331ux")]
+position = Vector2(427, 37)
+building_name = "Harbor Apartments"
+bandwidth_level = 60
+district_id = "B"
+preferred_network = "5G"
+hitbox_size = Vector2(160, 160)
+hitbox_offset = Vector2(0, -66)
 
-[node name="ApartmentComplex01b" type="Sprite2D" parent="Buildings/Apartments2" unique_id=360785012]
-position = Vector2(427, -29)
+[node name="Sprite2D" parent="Buildings/Apartments2" index="0" unique_id=187053034]
+position = Vector2(0, -66)
 texture = ExtResource("4_3p46k")
 
-[node name="Apartments3" type="Node2D" parent="Buildings" unique_id=1157302139]
+[node name="Apartments3" parent="Buildings" unique_id=1157302139 instance=ExtResource("2_331ux")]
+position = Vector2(1870, 5)
+process_mode = 4
+building_name = "Riverside Apartments"
+bandwidth_level = 75
+district_id = "D"
+preferred_network = "5G"
+hitbox_size = Vector2(160, 160)
+hitbox_offset = Vector2(0, -66)
 
-[node name="ApartmentComplex03a" type="Sprite2D" parent="Buildings/Apartments3" unique_id=1375151382]
-position = Vector2(1870, -61)
+[node name="Sprite2D" parent="Buildings/Apartments3" index="0" unique_id=187053034]
+position = Vector2(0, -66)
 texture = ExtResource("5_tqbkr")
 
-[node name="Apartments4" type="Node2D" parent="Buildings" unique_id=2077627768]
+[node name="Apartments4" parent="Buildings" unique_id=2077627768 instance=ExtResource("2_331ux")]
+position = Vector2(1011, -252)
+process_mode = 4
+building_name = "Hilltop Apartments"
+bandwidth_level = 90
+district_id = "E"
+preferred_network = "Ethernet"
+hitbox_size = Vector2(160, 160)
+hitbox_offset = Vector2(0, -66)
 
-[node name="ApartmentComplex03b" type="Sprite2D" parent="Buildings/Apartments4" unique_id=1197284874]
-position = Vector2(1011, -318)
+[node name="Sprite2D" parent="Buildings/Apartments4" index="0" unique_id=187053034]
+position = Vector2(0, -66)
 texture = ExtResource("6_wtwqm")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1246282708]
@@ -72,3 +93,6 @@ text = "Back to Districts"
 script = ExtResource("3_smj7p")
 
 [editable path="Buildings/Building2"]
+[editable path="Buildings/Apartments2"]
+[editable path="Buildings/Apartments3"]
+[editable path="Buildings/Apartments4"]

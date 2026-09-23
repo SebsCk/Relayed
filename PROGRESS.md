@@ -21,9 +21,18 @@
 - Gotcha: after editing .tscn files on disk, Godot keeps its open copy. If
   it isn't reloaded, saving from the editor writes the stale version back.
   Always Reload (or close without saving) after external edits.
-- Known issue (the user's own scene state): `relayed.tscn`'s apartments are
-  plain sprites, and `CornerHouse`/`RiversideApartments` were deleted, so
-  round 2 of the puzzle will error until round-gating is rewired.
+- **Round progression rewired to the user's apartments** (fixes round 2
+  erroring after `CornerHouse`/`RiversideApartments` were deleted):
+  `Apartments2/3/4` are now `building.tscn` instances. Each root sits on
+  the building's footprint (sprite centre + 66px) and its sprite is
+  lifted back up, so the art is exactly where the user placed it. Round 1
+  = Building2 + Apartments2 (Harbor, 60 BW, 5G), round 2 adds Apartments3
+  (Riverside, 75 BW, 5G), round 3 adds Apartments4 (Hilltop, 90 BW,
+  Ethernet). Per the user, locked buildings stay **visible** but are
+  tinted `LOCKED_BUILDING_TINT`, input-disabled, out of the "buildings"
+  group, and still occupy their cell. Building2's texture points at
+  `apartment complex 01a.png` again instead of `.godot/imported/`.
+  Verified: 2 → 3 → 4 active buildings across rounds, no errors.
 
 ## 2026-09-21 (round 2/3 demand buildings baked into real editor nodes)
 
