@@ -9,12 +9,22 @@ const SAVE_PATH := "user://save_data.json"
 const TOTAL_CHAPTERS := 10
 const STARTING_INFRASTRUCTURE_FUND := 600
 
-# Districts group a range of chapters (manuscript: DISTRICTS.chapter_range).
-# Names/boundaries are placeholders pending real story/content design.
+# Districts group a range of chapters (manuscript: DISTRICTS.chapter_range),
+# and each District is split into Zones, each spanning its own sub-range of
+# chapters — the chapter select map draws one diamond per Zone with its
+# chapters fanned out beneath it. Layout follows the user's District 1
+# sketch (Zone 1: 1-4, Zone 2: 5-7, Zone 3: 8-10). The later districts have
+# no chapters yet (empty range, no zones) — they're shown as locked
+# "coming soon" sections until their chapters are designed.
 const DISTRICTS := [
-	{"name": "Downtown District", "start": 1, "end": 3},
-	{"name": "Suburban District", "start": 4, "end": 6},
-	{"name": "Industrial District", "start": 7, "end": 10},
+	{"name": "District 1", "start": 1, "end": 10, "zones": [
+		{"name": "Zone 1", "start": 1, "end": 4},
+		{"name": "Zone 2", "start": 5, "end": 7},
+		{"name": "Zone 3", "start": 8, "end": 10},
+	]},
+	{"name": "Downtown District", "start": 0, "end": -1, "zones": []},
+	{"name": "Suburban District", "start": 0, "end": -1, "zones": []},
+	{"name": "Industrial District", "start": 0, "end": -1, "zones": []},
 ]
 
 # Administration Rank is a title derived from XP (manuscript: Player
@@ -141,6 +151,17 @@ func district_for_chapter(chapter: int) -> Dictionary:
 		if chapter >= int(district["start"]) and chapter <= int(district["end"]):
 			return district
 	return {"name": "Unknown District", "start": chapter, "end": chapter}
+
+func zone_for_chapter(chapter: int) -> Dictionary:
+	for zone in district_for_chapter(chapter).get("zones", []):
+		if chapter >= int(zone["start"]) and chapter <= int(zone["end"]):
+			return zone
+	return {"name": "Unknown Zone", "start": chapter, "end": chapter}
+
+# A chapter's objectives count as completed once it has earned any stars —
+# set_chapter_stars() is only called from a finished chapter.
+func is_completed(chapter: int) -> bool:
+	return stars_for(chapter) > 0
 
 func stars_for(chapter: int) -> int:
 	return int(stars.get(chapter, 0))

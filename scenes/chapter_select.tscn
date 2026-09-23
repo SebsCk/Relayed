@@ -3,9 +3,6 @@
 [ext_resource type="Script" path="res://ui/chapter_select.gd" id="1"]
 [ext_resource type="Texture2D" path="res://ui/icons/person.svg" id="2_71fvu"]
 [ext_resource type="Texture2D" path="res://ui/icons/gear.svg" id="3_7b1ab"]
-[ext_resource type="Texture2D" path="res://Isometric City - Starter Set/Roads and Grounds/tile_ground_grass.png" id="4_vwi4h"]
-[ext_resource type="Texture2D" path="res://Isometric City - Starter Set/Buildings/bld_watertower_blue_SW_normal.png" id="5_wbc80"]
-[ext_resource type="Texture2D" path="res://ui/icons/lock.svg" id="6_lkrba"]
 [ext_resource type="Texture2D" path="res://ui/icons/star.svg" id="7_rabck"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_den0g"]
@@ -46,6 +43,15 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_zonecard"]
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.2, 0.2, 0.23, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="ChapterSelect" type="Control" unique_id=228486921]
 layout_mode = 3
@@ -134,694 +140,327 @@ theme_override_constants/separation = 20
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_font_sizes/font_size = 24
-text = "Select a District"
+text = "Select a Chapter"
 horizontal_alignment = 1
 
-[node name="District_DowntownDistrict" type="VBoxContainer" parent="Scroll/Outer/DistrictBox" unique_id=2072367054]
+[node name="DistrictMap" type="Control" parent="Scroll/Outer/DistrictBox" unique_id=807423234]
+custom_minimum_size = Vector2(326, 166)
 layout_mode = 2
+size_flags_horizontal = 4
 mouse_filter = 2
-theme_override_constants/separation = 8
 
-[node name="HeaderLabel" type="Label" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict" unique_id=2126308897]
-layout_mode = 2
+[node name="Canvas" type="Control" parent="Scroll/Outer/DistrictBox/DistrictMap" unique_id=379070015]
+layout_mode = 0
+offset_right = 326.0
+offset_bottom = 166.0
+mouse_filter = 2
+
+[node name="DistrictTitle" type="Label" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas" unique_id=1749410303]
+layout_mode = 0
+offset_right = 326.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 18
+text = "District 1"
+horizontal_alignment = 1
+
+[node name="Zone1" type="Control" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas" unique_id=1195611591]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 118.0
+offset_bottom = 166.0
+mouse_filter = 2
+
+[node name="Diamond" type="Polygon2D" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone1" unique_id=351830200]
+color = Color(0.13, 0.3, 0.16, 1)
+polygon = PackedVector2Array(59, 34, 91, 66, 59, 98, 27, 66)
+
+[node name="Outline" type="Line2D" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone1" unique_id=1027016811]
+points = PackedVector2Array(59, 34, 91, 66, 59, 98, 27, 66)
+closed = true
+width = 3.0
+default_color = Color(0.2, 0.72, 0.3, 1)
+
+[node name="Progress" type="Label" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone1" unique_id=1315771581]
+layout_mode = 0
+offset_top = 56.0
+offset_right = 118.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 12
+text = "0/4"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameLabel" type="Label" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone1" unique_id=1691463528]
+layout_mode = 0
+offset_left = -8.0
+offset_top = 100.0
+offset_right = 126.0
+offset_bottom = 120.0
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
-theme_override_font_sizes/font_size = 14
-text = "Downtown District  (0/9 ★)"
-horizontal_alignment = 1
-
-[node name="Grid" type="GridContainer" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict" unique_id=567516638]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
-columns = 3
-
-[node name="Tile1" type="Button" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid" unique_id=490730550]
-custom_minimum_size = Vector2(100, 100)
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-flat = true
-
-[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile1" unique_id=916694005]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = ExtResource("4_vwi4h")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile1" unique_id=288615490]
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 14.0
-offset_right = 36.0
-offset_bottom = 14.0
-mouse_filter = 2
-texture = ExtResource("5_wbc80")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile1" unique_id=128676614]
-visible = false
-modulate = Color(0.95, 0.95, 0.95, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = 20.0
-offset_right = 38.0
-offset_bottom = 20.0
-mouse_filter = 2
-texture = ExtResource("6_lkrba")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile1" unique_id=151866318]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_font_sizes/font_size = 13
-text = "Chapter 1"
+text = "Zone 1"
 horizontal_alignment = 1
-autowrap_mode = 3
 
-[node name="Tile2" type="Button" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid" unique_id=1133597364]
-modulate = Color(0.55, 0.55, 0.55, 1)
-custom_minimum_size = Vector2(100, 100)
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-flat = true
-
-[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile2" unique_id=1078162438]
+[node name="Chapter1" type="Button" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone1" unique_id=1810794470]
 layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 122.0
+offset_right = 28.0
+offset_bottom = 160.0
+pivot_offset = Vector2(14, 19)
+theme_override_font_sizes/font_size = 16
+text = "1"
+
+[node name="Chapter2" type="Button" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone1" unique_id=1524585680]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 122.0
+offset_right = 58.0
+offset_bottom = 160.0
+pivot_offset = Vector2(14, 19)
+theme_override_font_sizes/font_size = 16
+text = "2"
+
+[node name="Chapter3" type="Button" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone1" unique_id=1417279284]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 122.0
+offset_right = 88.0
+offset_bottom = 160.0
+pivot_offset = Vector2(14, 19)
+theme_override_font_sizes/font_size = 16
+text = "3"
+
+[node name="Chapter4" type="Button" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone1" unique_id=604223385]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 122.0
+offset_right = 118.0
+offset_bottom = 160.0
+pivot_offset = Vector2(14, 19)
+theme_override_font_sizes/font_size = 16
+text = "4"
+
+[node name="Zone2" type="Control" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas" unique_id=1316726708]
+layout_mode = 0
+offset_left = 134.0
+offset_top = 0.0
+offset_right = 222.0
+offset_bottom = 166.0
 mouse_filter = 2
-texture = ExtResource("4_vwi4h")
-expand_mode = 1
-stretch_mode = 5
 
-[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile2" unique_id=909634862]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 14.0
-offset_right = 36.0
-offset_bottom = 14.0
-mouse_filter = 2
-texture = ExtResource("5_wbc80")
-expand_mode = 1
-stretch_mode = 5
+[node name="Diamond" type="Polygon2D" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone2" unique_id=1145055386]
+color = Color(0.13, 0.3, 0.16, 1)
+polygon = PackedVector2Array(44, 34, 76, 66, 44, 98, 12, 66)
 
-[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile2" unique_id=2073002879]
-modulate = Color(0.95, 0.95, 0.95, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = 20.0
-offset_right = 38.0
-offset_bottom = 20.0
-mouse_filter = 2
-texture = ExtResource("6_lkrba")
-expand_mode = 1
-stretch_mode = 5
+[node name="Outline" type="Line2D" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone2" unique_id=943176861]
+points = PackedVector2Array(44, 34, 76, 66, 44, 98, 12, 66)
+closed = true
+width = 3.0
+default_color = Color(0.2, 0.72, 0.3, 1)
 
-[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile2" unique_id=1100008667]
+[node name="Progress" type="Label" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone2" unique_id=279898901]
 layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
+offset_top = 56.0
+offset_right = 88.0
+offset_bottom = 76.0
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_font_sizes/font_size = 13
-text = "Chapter 2"
+theme_override_font_sizes/font_size = 12
+text = "0/3"
 horizontal_alignment = 1
-autowrap_mode = 3
+vertical_alignment = 1
 
-[node name="Tile3" type="Button" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid" unique_id=1970828799]
-modulate = Color(0.55, 0.55, 0.55, 1)
-custom_minimum_size = Vector2(100, 100)
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-flat = true
-
-[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile3" unique_id=2128398896]
+[node name="NameLabel" type="Label" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone2" unique_id=1211071838]
 layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = ExtResource("4_vwi4h")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile3" unique_id=1595947638]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 14.0
-offset_right = 36.0
-offset_bottom = 14.0
-mouse_filter = 2
-texture = ExtResource("5_wbc80")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile3" unique_id=1944809025]
-modulate = Color(0.95, 0.95, 0.95, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = 20.0
-offset_right = 38.0
-offset_bottom = 20.0
-mouse_filter = 2
-texture = ExtResource("6_lkrba")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_DowntownDistrict/Grid/Tile3" unique_id=1880697729]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_font_sizes/font_size = 13
-text = "Chapter 3"
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="District_SuburbanDistrict" type="VBoxContainer" parent="Scroll/Outer/DistrictBox" unique_id=85028922]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 8
-
-[node name="HeaderLabel" type="Label" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict" unique_id=42363580]
-layout_mode = 2
+offset_left = -8.0
+offset_top = 100.0
+offset_right = 96.0
+offset_bottom = 120.0
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
-theme_override_font_sizes/font_size = 14
-text = "Suburban District  (0/9 ★)"
-horizontal_alignment = 1
-
-[node name="Grid" type="GridContainer" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict" unique_id=2032360117]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
-columns = 3
-
-[node name="Tile4" type="Button" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid" unique_id=1420550029]
-modulate = Color(0.55, 0.55, 0.55, 1)
-custom_minimum_size = Vector2(100, 100)
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-flat = true
-
-[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile4" unique_id=1011029367]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = ExtResource("4_vwi4h")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile4" unique_id=470899190]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 14.0
-offset_right = 36.0
-offset_bottom = 14.0
-mouse_filter = 2
-texture = ExtResource("5_wbc80")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile4" unique_id=614119382]
-modulate = Color(0.95, 0.95, 0.95, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = 20.0
-offset_right = 38.0
-offset_bottom = 20.0
-mouse_filter = 2
-texture = ExtResource("6_lkrba")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile4" unique_id=1902977115]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_font_sizes/font_size = 13
-text = "Chapter 4"
+text = "Zone 2"
 horizontal_alignment = 1
-autowrap_mode = 3
 
-[node name="Tile5" type="Button" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid" unique_id=413877034]
-modulate = Color(0.55, 0.55, 0.55, 1)
-custom_minimum_size = Vector2(100, 100)
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-flat = true
-
-[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile5" unique_id=1763099203]
+[node name="Chapter5" type="Button" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone2" unique_id=668023272]
 layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 122.0
+offset_right = 28.0
+offset_bottom = 160.0
+pivot_offset = Vector2(14, 19)
+theme_override_font_sizes/font_size = 16
+text = "5"
+
+[node name="Chapter6" type="Button" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone2" unique_id=118079082]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 122.0
+offset_right = 58.0
+offset_bottom = 160.0
+pivot_offset = Vector2(14, 19)
+theme_override_font_sizes/font_size = 16
+text = "6"
+
+[node name="Chapter7" type="Button" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone2" unique_id=733728103]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 122.0
+offset_right = 88.0
+offset_bottom = 160.0
+pivot_offset = Vector2(14, 19)
+theme_override_font_sizes/font_size = 16
+text = "7"
+
+[node name="Zone3" type="Control" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas" unique_id=1901196066]
+layout_mode = 0
+offset_left = 238.0
+offset_top = 0.0
+offset_right = 326.0
+offset_bottom = 166.0
 mouse_filter = 2
-texture = ExtResource("4_vwi4h")
-expand_mode = 1
-stretch_mode = 5
 
-[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile5" unique_id=1856595107]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 14.0
-offset_right = 36.0
-offset_bottom = 14.0
-mouse_filter = 2
-texture = ExtResource("5_wbc80")
-expand_mode = 1
-stretch_mode = 5
+[node name="Diamond" type="Polygon2D" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone3" unique_id=120132910]
+color = Color(0.13, 0.3, 0.16, 1)
+polygon = PackedVector2Array(44, 34, 76, 66, 44, 98, 12, 66)
 
-[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile5" unique_id=894819019]
-modulate = Color(0.95, 0.95, 0.95, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = 20.0
-offset_right = 38.0
-offset_bottom = 20.0
-mouse_filter = 2
-texture = ExtResource("6_lkrba")
-expand_mode = 1
-stretch_mode = 5
+[node name="Outline" type="Line2D" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone3" unique_id=837231650]
+points = PackedVector2Array(44, 34, 76, 66, 44, 98, 12, 66)
+closed = true
+width = 3.0
+default_color = Color(0.2, 0.72, 0.3, 1)
 
-[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile5" unique_id=591530757]
+[node name="Progress" type="Label" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone3" unique_id=608936275]
 layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
+offset_top = 56.0
+offset_right = 88.0
+offset_bottom = 76.0
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_font_sizes/font_size = 13
-text = "Chapter 5"
+theme_override_font_sizes/font_size = 12
+text = "0/3"
 horizontal_alignment = 1
-autowrap_mode = 3
+vertical_alignment = 1
 
-[node name="Tile6" type="Button" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid" unique_id=2006666524]
-modulate = Color(0.55, 0.55, 0.55, 1)
-custom_minimum_size = Vector2(100, 100)
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-flat = true
-
-[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile6" unique_id=675237217]
+[node name="NameLabel" type="Label" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone3" unique_id=1416589684]
 layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = ExtResource("4_vwi4h")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile6" unique_id=1064560914]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 14.0
-offset_right = 36.0
-offset_bottom = 14.0
-mouse_filter = 2
-texture = ExtResource("5_wbc80")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile6" unique_id=2125569065]
-modulate = Color(0.95, 0.95, 0.95, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = 20.0
-offset_right = 38.0
-offset_bottom = 20.0
-mouse_filter = 2
-texture = ExtResource("6_lkrba")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_SuburbanDistrict/Grid/Tile6" unique_id=1395535389]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_font_sizes/font_size = 13
-text = "Chapter 6"
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="District_IndustrialDistrict" type="VBoxContainer" parent="Scroll/Outer/DistrictBox" unique_id=867461064]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 8
-
-[node name="HeaderLabel" type="Label" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict" unique_id=1626817574]
-layout_mode = 2
+offset_left = -8.0
+offset_top = 100.0
+offset_right = 96.0
+offset_bottom = 120.0
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
-theme_override_font_sizes/font_size = 14
-text = "Industrial District  (0/12 ★)"
+theme_override_font_sizes/font_size = 13
+text = "Zone 3"
 horizontal_alignment = 1
 
-[node name="Grid" type="GridContainer" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict" unique_id=1835369544]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
-columns = 3
+[node name="Chapter8" type="Button" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone3" unique_id=1379473231]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 122.0
+offset_right = 28.0
+offset_bottom = 160.0
+pivot_offset = Vector2(14, 19)
+theme_override_font_sizes/font_size = 16
+text = "8"
 
-[node name="Tile7" type="Button" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid" unique_id=805445255]
-modulate = Color(0.55, 0.55, 0.55, 1)
-custom_minimum_size = Vector2(100, 100)
-clip_contents = true
+[node name="Chapter9" type="Button" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone3" unique_id=1552447421]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 122.0
+offset_right = 58.0
+offset_bottom = 160.0
+pivot_offset = Vector2(14, 19)
+theme_override_font_sizes/font_size = 16
+text = "9"
+
+[node name="Chapter10" type="Button" parent="Scroll/Outer/DistrictBox/DistrictMap/Canvas/Zone3" unique_id=1589676895]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 122.0
+offset_right = 88.0
+offset_bottom = 160.0
+pivot_offset = Vector2(14, 19)
+theme_override_font_sizes/font_size = 16
+text = "10"
+
+[node name="LockedDistrict2" type="PanelContainer" parent="Scroll/Outer/DistrictBox" unique_id=1084383945]
+custom_minimum_size = Vector2(326, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-flat = true
-
-[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile7" unique_id=613146727]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
 mouse_filter = 2
-texture = ExtResource("4_vwi4h")
-expand_mode = 1
-stretch_mode = 5
+theme_override_styles/panel = SubResource("StyleBoxFlat_zonecard")
 
-[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile7" unique_id=1174867520]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 14.0
-offset_right = 36.0
-offset_bottom = 14.0
+[node name="Box" type="VBoxContainer" parent="Scroll/Outer/DistrictBox/LockedDistrict2" unique_id=1352129152]
+layout_mode = 2
 mouse_filter = 2
-texture = ExtResource("5_wbc80")
-expand_mode = 1
-stretch_mode = 5
+theme_override_constants/separation = 2
 
-[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile7" unique_id=262656406]
-modulate = Color(0.95, 0.95, 0.95, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = 20.0
-offset_right = 38.0
-offset_bottom = 20.0
-mouse_filter = 2
-texture = ExtResource("6_lkrba")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile7" unique_id=605325238]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_font_sizes/font_size = 13
-text = "Chapter 7"
+[node name="NameLabel" type="Label" parent="Scroll/Outer/DistrictBox/LockedDistrict2/Box" unique_id=1826861401]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.63, 1)
+theme_override_font_sizes/font_size = 16
+text = "Downtown District"
 horizontal_alignment = 1
-autowrap_mode = 3
 
-[node name="Tile8" type="Button" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid" unique_id=287235196]
-modulate = Color(0.55, 0.55, 0.55, 1)
-custom_minimum_size = Vector2(100, 100)
-clip_contents = true
+[node name="StatusLabel" type="Label" parent="Scroll/Outer/DistrictBox/LockedDistrict2/Box" unique_id=109830588]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.45, 0.48, 1)
+theme_override_font_sizes/font_size = 12
+text = "Locked — coming soon"
+horizontal_alignment = 1
+
+[node name="LockedDistrict3" type="PanelContainer" parent="Scroll/Outer/DistrictBox" unique_id=337344193]
+custom_minimum_size = Vector2(326, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-flat = true
-
-[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile8" unique_id=855269339]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
 mouse_filter = 2
-texture = ExtResource("4_vwi4h")
-expand_mode = 1
-stretch_mode = 5
+theme_override_styles/panel = SubResource("StyleBoxFlat_zonecard")
 
-[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile8" unique_id=620239692]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 14.0
-offset_right = 36.0
-offset_bottom = 14.0
+[node name="Box" type="VBoxContainer" parent="Scroll/Outer/DistrictBox/LockedDistrict3" unique_id=1974658227]
+layout_mode = 2
 mouse_filter = 2
-texture = ExtResource("5_wbc80")
-expand_mode = 1
-stretch_mode = 5
+theme_override_constants/separation = 2
 
-[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile8" unique_id=1268258162]
-modulate = Color(0.95, 0.95, 0.95, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = 20.0
-offset_right = 38.0
-offset_bottom = 20.0
-mouse_filter = 2
-texture = ExtResource("6_lkrba")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile8" unique_id=149331512]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_font_sizes/font_size = 13
-text = "Chapter 8"
+[node name="NameLabel" type="Label" parent="Scroll/Outer/DistrictBox/LockedDistrict3/Box" unique_id=508328272]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.63, 1)
+theme_override_font_sizes/font_size = 16
+text = "Suburban District"
 horizontal_alignment = 1
-autowrap_mode = 3
 
-[node name="Tile9" type="Button" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid" unique_id=1992231616]
-modulate = Color(0.55, 0.55, 0.55, 1)
-custom_minimum_size = Vector2(100, 100)
-clip_contents = true
+[node name="StatusLabel" type="Label" parent="Scroll/Outer/DistrictBox/LockedDistrict3/Box" unique_id=1178889531]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.45, 0.48, 1)
+theme_override_font_sizes/font_size = 12
+text = "Locked — coming soon"
+horizontal_alignment = 1
+
+[node name="LockedDistrict4" type="PanelContainer" parent="Scroll/Outer/DistrictBox" unique_id=646585663]
+custom_minimum_size = Vector2(326, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-flat = true
-
-[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile9" unique_id=2128592657]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
 mouse_filter = 2
-texture = ExtResource("4_vwi4h")
-expand_mode = 1
-stretch_mode = 5
+theme_override_styles/panel = SubResource("StyleBoxFlat_zonecard")
 
-[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile9" unique_id=87244685]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 14.0
-offset_right = 36.0
-offset_bottom = 14.0
-mouse_filter = 2
-texture = ExtResource("5_wbc80")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile9" unique_id=1689860473]
-modulate = Color(0.95, 0.95, 0.95, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = 20.0
-offset_right = 38.0
-offset_bottom = 20.0
-mouse_filter = 2
-texture = ExtResource("6_lkrba")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile9" unique_id=1039718811]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_font_sizes/font_size = 13
-text = "Chapter 9"
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="Tile10" type="Button" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid" unique_id=1133255624]
-modulate = Color(0.55, 0.55, 0.55, 1)
-custom_minimum_size = Vector2(100, 100)
-clip_contents = true
+[node name="Box" type="VBoxContainer" parent="Scroll/Outer/DistrictBox/LockedDistrict4" unique_id=1725486342]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-flat = true
-
-[node name="Background" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile10" unique_id=558758961]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
 mouse_filter = 2
-texture = ExtResource("4_vwi4h")
-expand_mode = 1
-stretch_mode = 5
+theme_override_constants/separation = 2
 
-[node name="UnlockedIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile10" unique_id=271007346]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 14.0
-offset_right = 36.0
-offset_bottom = 14.0
-mouse_filter = 2
-texture = ExtResource("5_wbc80")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="LockIcon" type="TextureRect" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile10" unique_id=1256129612]
-modulate = Color(0.95, 0.95, 0.95, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 38.0
-offset_top = 20.0
-offset_right = 38.0
-offset_bottom = 20.0
-mouse_filter = 2
-texture = ExtResource("6_lkrba")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Scroll/Outer/DistrictBox/District_IndustrialDistrict/Grid/Tile10" unique_id=2098559876]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_font_sizes/font_size = 13
-text = "Chapter 10"
+[node name="NameLabel" type="Label" parent="Scroll/Outer/DistrictBox/LockedDistrict4/Box" unique_id=1334597084]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.63, 1)
+theme_override_font_sizes/font_size = 16
+text = "Industrial District"
 horizontal_alignment = 1
-autowrap_mode = 3
+
+[node name="StatusLabel" type="Label" parent="Scroll/Outer/DistrictBox/LockedDistrict4/Box" unique_id=997466704]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.45, 0.48, 1)
+theme_override_font_sizes/font_size = 12
+text = "Locked — coming soon"
+horizontal_alignment = 1
 
 [node name="Popup" type="Control" parent="." unique_id=704541592]
 visible = false

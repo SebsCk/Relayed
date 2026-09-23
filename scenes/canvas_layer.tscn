@@ -9,7 +9,7 @@ script = ExtResource("1_8f0ss")
 offset_left = 11.0
 offset_top = 29.0
 offset_right = 195.0
-offset_bottom = 637.0
+offset_bottom = 280.0
 
 [node name="Name" type="Label" parent="Panel" unique_id=988628713]
 layout_mode = 1
@@ -48,8 +48,8 @@ text = "District"
 
 [node name="Close" type="Button" parent="Panel" unique_id=928972550]
 layout_mode = 0
-offset_left = 57.0
-offset_top = 554.0
-offset_right = 125.0
-offset_bottom = 585.0
+offset_left = 51.0
+offset_top = 205.0
+offset_right = 119.0
+offset_bottom = 236.0
 text = "Close"

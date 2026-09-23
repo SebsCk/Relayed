@@ -51,9 +51,15 @@ var round_demand_count := 0
 var placement_preview: Node2D
 var building_drag_active := false
 var wire_layer: WireLayer
+var chapter_start_msec := 0
+var chapter_wrong_attempts := 0
+var last_congested_count := 0
+var last_crossing_count := 0
 
 var credits_label: Label
 var coverage_label: Label
+var hint_label: Label
+var hint_timer: Timer
 var round_label: Label
 var status_label: Label
 var five_g_button: Button
@@ -72,6 +78,12 @@ func _ready() -> void:
 	_deactivate_demand_buildings()
 	register_existing_buildings()
 	build_hud()
+	chapter_start_msec = Time.get_ticks_msec()
+	hint_timer = Timer.new()
+	hint_timer.wait_time = 1.0
+	hint_timer.autostart = true
+	hint_timer.timeout.connect(_on_hint_timer_timeout)
+	add_child(hint_timer)
 	apply_round_demands()
 	refresh_network()
 
@@ -130,6 +142,7 @@ func place_tower(world_position: Vector2) -> void:
 	var cell := world_to_cell(world_position)
 	if not is_buildable_cell(cell):
 		set_status("Choose a visible, unoccupied grid tile.")
+		_record_wrong_attempt()
 		return
 	var tower := TOWER_SCENE.instantiate() as CellTower
 	tower.position = cell_to_world(cell)
@@ -215,6 +228,7 @@ func place_building(world_position: Vector2) -> void:
 	var cell := world_to_cell(world_position)
 	if not is_buildable_cell(cell):
 		set_status("Choose a visible, unoccupied grid tile.")
+		_record_wrong_attempt()
 		return
 	placed_building_count += 1
 	var building := BUILDING_SCENE.instantiate() as Building
@@ -307,6 +321,8 @@ func apply_round_demands() -> void:
 	if current_round == 3 and round_demand_count == 1:
 		_activate_demand_building("RiversideApartments")
 	set_status("Round %d: connect every active building with its preferred network." % current_round)
+	hint_label.visible = false
+	HintBot.start_task("chapter_%d_round_%d" % [GameProgress.selected_chapter, current_round])
 	update_hud()
 
 # CornerHouse/RiversideApartments start hidden and process-disabled (baked
@@ -410,6 +426,8 @@ func refresh_network() -> void:
 			congested_count += 1
 		if crossing:
 			crossing_count += 1
+	last_congested_count = congested_count
+	last_crossing_count = crossing_count
 	if not buildings.is_empty() and connected == buildings.size() and not round_complete:
 		round_complete = true
 		var bonus := 250 + current_round * 100
@@ -485,6 +503,10 @@ func show_round_result() -> void:
 	if current_round >= MAX_ROUNDS:
 		title.text = "Network Complete"
 		body.text = "All districts are online. Final score: %d" % score
+		var time_seconds := (Time.get_ticks_msec() - chapter_start_msec) / 1000.0
+		var successes := placement_history.size()
+		var accuracy := 1.0 if successes + chapter_wrong_attempts == 0 else successes / float(successes + chapter_wrong_attempts)
+		HintBot.log_chapter_performance(GameProgress.selected_chapter, accuracy, chapter_wrong_attempts, time_seconds)
 		# Flat 3-star award until a real per-chapter scoring rubric exists
 		# (e.g. based on score or leftover credits).
 		GameProgress.set_chapter_stars(GameProgress.selected_chapter, 3)
@@ -516,6 +538,30 @@ func advance_round() -> void:
 func set_status(message: String) -> void:
 	if status_label:
 		status_label.text = message
+
+func _record_wrong_attempt() -> void:
+	chapter_wrong_attempts += 1
+	if HintBot.record_wrong_attempt():
+		_show_hint()
+
+func _on_hint_timer_timeout() -> void:
+	if hint_label.visible:
+		return
+	if HintBot.poll_time():
+		_show_hint()
+
+func _show_hint() -> void:
+	hint_label.text = "Hint: " + _current_hint_text()
+	hint_label.visible = true
+
+func _current_hint_text() -> String:
+	if deployed_towers.is_empty():
+		return "Place a coverage site (5G or Fiber) near your buildings to get started."
+	if last_congested_count > 0:
+		return "A tower is over capacity — add another site nearby to share the load."
+	if last_crossing_count > 0:
+		return "Two towers' wires are crossing — try relocating one to clear the path."
+	return "Make sure every building sits inside a tower with a matching network type."
 
 func update_hud(congested_count: int = -1) -> void:
 	if not credits_label:
@@ -582,6 +628,11 @@ func build_hud() -> void:
 	box.add_child(credits_label)
 	coverage_label = Label.new()
 	box.add_child(coverage_label)
+	hint_label = Label.new()
+	hint_label.visible = false
+	hint_label.add_theme_color_override("font_color", Color(0.95, 0.8, 0.4, 1))
+	hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(hint_label)
 	var buttons := HBoxContainer.new()
 	buttons.add_theme_constant_override("separation", 8)
 	buttons.mouse_filter = Control.MOUSE_FILTER_IGNORE

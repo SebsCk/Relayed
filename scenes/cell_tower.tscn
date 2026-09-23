@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://di33qjcnotclk"]
 
 [ext_resource type="Script" uid="uid://cx38i2ebjy1w4" path="res://ui/cell_tower.gd" id="1_b53nn"]
-[ext_resource type="Texture2D" path="res://Isometric City - Starter Set/Buildings/bld_watertower_blue_SW_normal.png" id="2_tower"]
+[ext_resource type="Texture2D" uid="uid://cpd8mtpmtuys5" path="res://Isometric City - Starter Set/Buildings/bld_watertower_blue_SW_normal.png" id="2_tower"]
 
 [node name="cell_tower" type="Node2D" unique_id=2077395227]
 script = ExtResource("1_b53nn")

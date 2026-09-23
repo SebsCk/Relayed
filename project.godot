@@ -21,6 +21,7 @@ BuildingInfoPanel="*uid://meqpeed67h37"
 GameSettings="*res://ui/game_settings.gd"
 AuthState="*res://ui/auth_state.gd"
 GameProgress="*res://ui/game_progress.gd"
+HintBot="*res://ui/hint_bot.gd"
 MCPRuntimeServer="*res://addons/godot_mcp_toolkit/runtime/mcp_runtime_server.gd"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 

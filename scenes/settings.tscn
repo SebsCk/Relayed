@@ -3,6 +3,48 @@
 [ext_resource type="Script" uid="uid://dxhnnnc1w4y0u" path="res://ui/control.gd" id="1_x2hje"]
 [ext_resource type="Script" path="res://ui/settings.gd" id="2_settings"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBox_SignOutNormal"]
+bg_color = Color(0.3, 0.3, 0.32, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_SignOutHover"]
+bg_color = Color(0.384, 0.384, 0.4016, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_SignOutPressed"]
+bg_color = Color(0.264, 0.264, 0.2816, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_QuitNormal"]
+bg_color = Color(0.85, 0.3, 0.3, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_QuitHover"]
+bg_color = Color(0.868, 0.384, 0.384, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_QuitPressed"]
+bg_color = Color(0.748, 0.264, 0.264, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [node name="Settings" type="Node2D" unique_id=1676526986]
 script = ExtResource("2_settings")
 
@@ -21,5 +63,113 @@ offset_right = 102.0
 offset_bottom = 618.0
 text = "Back
 "
+
+[node name="Title" type="Label" parent="Control" unique_id=613015116]
+layout_mode = 0
+offset_left = 435.0
+offset_top = 130.0
+offset_right = 435.0
+offset_bottom = 130.0
+theme_override_font_sizes/font_size = 32
+text = "Settings"
+
+[node name="SpeedLabel" type="Label" parent="Control" unique_id=1144777459]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 205.0
+offset_right = 400.0
+offset_bottom = 205.0
+theme_override_font_sizes/font_size = 18
+text = "Camera movement speed"
+
+[node name="SpeedSlider" type="HSlider" parent="Control" unique_id=772557972]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 245.0
+offset_right = 730.0
+offset_bottom = 273.0
+min_value = 0.5
+max_value = 2.0
+step = 0.25
+value = 1.0
+
+[node name="SpeedValue" type="Label" parent="Control" unique_id=358688018]
+layout_mode = 0
+offset_left = 740.0
+offset_top = 245.0
+offset_right = 740.0
+offset_bottom = 245.0
+text = "1.00x"
+
+[node name="SpeedHint" type="Label" parent="Control" unique_id=253108602]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 295.0
+offset_right = 400.0
+offset_bottom = 295.0
+text = "This setting applies immediately in the map."
+
+[node name="AudioLabel" type="Label" parent="Control" unique_id=266466498]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 345.0
+offset_right = 400.0
+offset_bottom = 345.0
+theme_override_font_sizes/font_size = 18
+text = "Audio"
+
+[node name="AudioSlider" type="HSlider" parent="Control" unique_id=1163248886]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 375.0
+offset_right = 730.0
+offset_bottom = 403.0
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="NotificationsLabel" type="Label" parent="Control" unique_id=968607347]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 420.0
+offset_right = 400.0
+offset_bottom = 420.0
+theme_override_font_sizes/font_size = 18
+text = "Notifications"
+
+[node name="NotificationsToggle" type="CheckButton" parent="Control" unique_id=875995849]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 415.0
+offset_right = 694.0
+offset_bottom = 439.0
+button_pressed = true
+
+[node name="SignOutButton" type="Button" parent="Control" unique_id=1563757144]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 0
+offset_left = 400.0
+offset_top = 470.0
+offset_right = 560.0
+offset_bottom = 516.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_styles/normal = SubResource("StyleBox_SignOutNormal")
+theme_override_styles/hover = SubResource("StyleBox_SignOutHover")
+theme_override_styles/pressed = SubResource("StyleBox_SignOutPressed")
+text = "SIGN OUT"
+
+[node name="QuitButton" type="Button" parent="Control" unique_id=329405081]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 0
+offset_left = 570.0
+offset_top = 470.0
+offset_right = 730.0
+offset_bottom = 516.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_styles/normal = SubResource("StyleBox_QuitNormal")
+theme_override_styles/hover = SubResource("StyleBox_QuitHover")
+theme_override_styles/pressed = SubResource("StyleBox_QuitPressed")
+text = "QUIT GAME"
 
 [connection signal="pressed" from="Control/Back" to="Control" method="_on_back_pressed"]

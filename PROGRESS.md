@@ -1,5 +1,30 @@
 # Progress
 
+## 2026-09-23 (Settings baked; District 1 → Zones chapter select)
+
+- **Settings baked into `scenes/settings.tscn`**: in the editor the scene
+  only showed a Back button, because `settings.gd` built everything at
+  runtime. It now has real nodes under `$Control` at the same positions as
+  before: Title, SpeedLabel/SpeedSlider/SpeedValue/SpeedHint,
+  AudioLabel/AudioSlider, NotificationsLabel/NotificationsToggle,
+  SignOutButton, QuitButton. `settings.gd` only loads GameSettings values
+  and connects signals. It looks identical at runtime.
+- **Chapter select follows the user's sketch**: `GameProgress.DISTRICTS[0]`
+  is "District 1" (chapters 1-10), with `zones` Zone 1 = 1-4, Zone 2 = 5-7,
+  Zone 3 = 8-10. Downtown/Suburban/Industrial stay as later districts with
+  an empty range (`start 0, end -1`), shown as `LockedDistrict2..4`
+  "coming soon" panels. Each zone has a green diamond with done/total, a
+  name, and a row of compact 28×38 boxed chapter numbers. Completed boxes
+  are gold, the next chapter has a blue outline and pulses, everything else
+  is dim. No legend label; the user removed it. Added
+  `GameProgress.zone_for_chapter()` and `is_completed()` (stars > 0).
+- Gotcha: after editing .tscn files on disk, Godot keeps its open copy. If
+  it isn't reloaded, saving from the editor writes the stale version back.
+  Always Reload (or close without saving) after external edits.
+- Known issue (the user's own scene state): `relayed.tscn`'s apartments are
+  plain sprites, and `CornerHouse`/`RiversideApartments` were deleted, so
+  round 2 of the puzzle will error until round-gating is rewired.
+
 ## 2026-09-21 (round 2/3 demand buildings baked into real editor nodes)
 
 User asked where to edit the round 2/3 building assets, then asked to make

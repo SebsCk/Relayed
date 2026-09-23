@@ -15,41 +15,49 @@ const QUESTIONS := [
 		"options": ["Quality of Service", "Queue over Server", "Quick Online Signal", "Quantum of Speed"],
 		"correct": 0,
 		"explanation": "QoS lets a network prioritize certain traffic types over others on the same link.",
+		"hint": "Think about giving some traffic priority over others, not queues or signals.",
 	},
 	{
 		"question": "What happens when a link carries more traffic than it can handle?",
 		"options": ["Congestion", "Encryption", "Compression", "Amplification"],
 		"correct": 0,
 		"explanation": "Congestion is what slows or drops traffic once a link exceeds its capacity.",
+		"hint": "It's the same word you'd use for a traffic jam on a road.",
 	},
 	{
 		"question": "What is \"latency\"?",
 		"options": ["Delay before data arrives", "Total bandwidth", "Number of devices", "Signal strength"],
 		"correct": 0,
 		"explanation": "Latency is the time it takes a signal to travel from source to destination.",
+		"hint": "It's measured in time, not size or strength.",
 	},
 	{
 		"question": "What typically causes packet loss?",
 		"options": ["Unresolved congestion", "Too much bandwidth", "A strong signal", "Fast routing"],
 		"correct": 0,
 		"explanation": "When congestion isn't relieved, the network starts dropping packets instead of delivering them.",
+		"hint": "Look at the earlier question about overloaded links.",
 	},
 	{
 		"question": "What does \"bandwidth allocation\" control?",
 		"options": ["Routing capacity per connection", "Signal travel distance", "Number of towers", "Construction speed"],
 		"correct": 0,
 		"explanation": "Bandwidth allocation is how much data-carrying capacity gets assigned between nodes.",
+		"hint": "It's about dividing up capacity, not distance or speed.",
 	},
 	{
 		"question": "What is the goal of network routing?",
 		"options": ["Finding a path to the destination", "Increasing total bandwidth", "Reducing tower cost", "Encrypting traffic"],
 		"correct": 0,
 		"explanation": "Routing finds — and keeps finding — a valid path for signals to travel across the network.",
+		"hint": "Think pathfinding, not capacity or cost.",
 	},
 ]
 
 var current_index := 0
 var score := 0
+var chapter_wrong_attempts := 0
+var chapter_start_msec := 0
 
 @onready var progress_label: Label = $Center/QuizPanel/QuizBox/ProgressLabel
 @onready var question_label: Label = $Center/QuizPanel/QuizBox/QuestionLabel
@@ -59,8 +67,10 @@ var score := 0
 	$Center/QuizPanel/QuizBox/OptionButton2,
 	$Center/QuizPanel/QuizBox/OptionButton3,
 ]
+@onready var hint_label: Label = $Center/QuizPanel/QuizBox/HintLabel
 @onready var feedback_label: Label = $Center/QuizPanel/QuizBox/FeedbackLabel
 @onready var continue_button: Button = $Center/QuizPanel/QuizBox/ContinueButton
+@onready var hint_timer: Timer = $HintTimer
 @onready var overlay: Control = $CompletionOverlay
 @onready var summary_label: Label = $CompletionOverlay/CompletionCenter/CompletionPanel/CompletionBox/Summary
 @onready var next_button: Button = $CompletionOverlay/CompletionCenter/CompletionPanel/CompletionBox/NextButton
@@ -73,7 +83,9 @@ func _ready() -> void:
 		option_buttons[i].pressed.connect(_on_option_pressed.bind(i))
 	continue_button.pressed.connect(_on_continue_pressed)
 	next_button.pressed.connect(_on_next_pressed)
+	hint_timer.timeout.connect(_on_hint_timer_timeout)
 
+	chapter_start_msec = Time.get_ticks_msec()
 	_show_question()
 
 func _show_question() -> void:
@@ -82,11 +94,13 @@ func _show_question() -> void:
 	question_label.text = data["question"]
 	feedback_label.visible = false
 	continue_button.visible = false
+	hint_label.visible = false
 	for i in range(option_buttons.size()):
 		var option_button := option_buttons[i]
 		option_button.text = data["options"][i]
 		option_button.disabled = false
 		option_button.modulate = Color.WHITE
+	HintBot.start_task("chapter_%d_q%d" % [GameProgress.selected_chapter, current_index])
 
 func _on_option_pressed(index: int) -> void:
 	var data: Dictionary = QUESTIONS[current_index]
@@ -105,6 +119,19 @@ func _on_option_pressed(index: int) -> void:
 		feedback_label.text = "Not quite — try again."
 		feedback_label.add_theme_color_override("font_color", Color(1.0, 0.7, 0.6))
 		feedback_label.visible = true
+		chapter_wrong_attempts += 1
+		if HintBot.record_wrong_attempt():
+			_show_hint(data)
+
+func _on_hint_timer_timeout() -> void:
+	if hint_label.visible:
+		return
+	if HintBot.poll_time():
+		_show_hint(QUESTIONS[current_index])
+
+func _show_hint(data: Dictionary) -> void:
+	hint_label.text = "Hint: " + String(data.get("hint", ""))
+	hint_label.visible = true
 
 func _on_continue_pressed() -> void:
 	current_index += 1
@@ -116,6 +143,9 @@ func _on_continue_pressed() -> void:
 func _show_completion() -> void:
 	overlay.visible = true
 	summary_label.text = "You answered every question correctly. Final score: %d / %d" % [score, QUESTIONS.size()]
+	var time_seconds := (Time.get_ticks_msec() - chapter_start_msec) / 1000.0
+	var accuracy := QUESTIONS.size() / float(QUESTIONS.size() + chapter_wrong_attempts)
+	HintBot.log_chapter_performance(GameProgress.selected_chapter, accuracy, chapter_wrong_attempts, time_seconds)
 	# Flat 3-star award until a real per-district scoring rubric exists,
 	# matching the puzzle's own current placeholder rubric.
 	GameProgress.set_chapter_stars(GameProgress.selected_chapter, 3)
