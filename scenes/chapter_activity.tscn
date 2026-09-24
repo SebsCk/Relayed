@@ -1,0 +1,446 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/chapter_activity.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/scenario_view.tscn" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="accent_n"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="accent_h"]
+bg_color = Color(0.296, 0.604, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="accent_p"]
+bg_color = Color(0.176, 0.484, 0.836, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="accent_d"]
+bg_color = Color(0.14, 0.385, 0.665, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="option_n"]
+bg_color = Color(0.3, 0.3, 0.34, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="option_h"]
+bg_color = Color(0.384, 0.384, 0.4192, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="option_p"]
+bg_color = Color(0.264, 0.264, 0.2992, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="option_d"]
+bg_color = Color(0.21, 0.21, 0.238, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="part"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="ChapterActivity" type="Control"]
+script = ExtResource("1")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.16, 0.16, 0.18, 1)
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_top = 60.0
+horizontal_scroll_mode = 0
+
+[node name="Margin" type="MarginContainer" parent="Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Stage" type="VBoxContainer" parent="Scroll/Margin"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="Scroll/Margin/Stage"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 26
+text = "Activity"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Scenario" parent="Scroll/Margin/Stage" instance=ExtResource("2")]
+visible = false
+layout_mode = 2
+
+[node name="ProgressLabel" type="Label" parent="Scroll/Margin/Stage"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Question"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="PromptLabel" type="Label" parent="Scroll/Margin/Stage"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 16
+text = "Prompt"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="OptionsBox" type="VBoxContainer" parent="Scroll/Margin/Stage"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Option1" type="Button" parent="Scroll/Margin/Stage/OptionsBox"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Option"
+
+[node name="Option2" type="Button" parent="Scroll/Margin/Stage/OptionsBox"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Option"
+
+[node name="Option3" type="Button" parent="Scroll/Margin/Stage/OptionsBox"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Option"
+
+[node name="Option4" type="Button" parent="Scroll/Margin/Stage/OptionsBox"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Option"
+
+[node name="SendButton" type="Button" parent="Scroll/Margin/Stage"]
+visible = false
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Send message"
+
+[node name="WatchLabel" type="Label" parent="Scroll/Margin/Stage"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Watch the message travel first. Then label each part."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RolesBox" type="VBoxContainer" parent="Scroll/Margin/Stage"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Role1Label" type="Label" parent="Scroll/Margin/Stage/RolesBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+text = "Part is the..."
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="Role1Row" type="HBoxContainer" parent="Scroll/Margin/Stage/RolesBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Role1Button1" type="Button" parent="Scroll/Margin/Stage/RolesBox/Role1Row"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Role"
+
+[node name="Role1Button2" type="Button" parent="Scroll/Margin/Stage/RolesBox/Role1Row"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Role"
+
+[node name="Role1Button3" type="Button" parent="Scroll/Margin/Stage/RolesBox/Role1Row"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Role"
+
+[node name="Role2Label" type="Label" parent="Scroll/Margin/Stage/RolesBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+text = "Part is the..."
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="Role2Row" type="HBoxContainer" parent="Scroll/Margin/Stage/RolesBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Role2Button1" type="Button" parent="Scroll/Margin/Stage/RolesBox/Role2Row"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Role"
+
+[node name="Role2Button2" type="Button" parent="Scroll/Margin/Stage/RolesBox/Role2Row"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Role"
+
+[node name="Role2Button3" type="Button" parent="Scroll/Margin/Stage/RolesBox/Role2Row"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Role"
+
+[node name="Role3Label" type="Label" parent="Scroll/Margin/Stage/RolesBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+text = "Part is the..."
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="Role3Row" type="HBoxContainer" parent="Scroll/Margin/Stage/RolesBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Role3Button1" type="Button" parent="Scroll/Margin/Stage/RolesBox/Role3Row"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Role"
+
+[node name="Role3Button2" type="Button" parent="Scroll/Margin/Stage/RolesBox/Role3Row"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Role"
+
+[node name="Role3Button3" type="Button" parent="Scroll/Margin/Stage/RolesBox/Role3Row"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("option_n")
+theme_override_styles/hover = SubResource("option_h")
+theme_override_styles/pressed = SubResource("option_p")
+theme_override_styles/disabled = SubResource("option_d")
+text = "Role"
+
+[node name="FeedbackLabel" type="Label" parent="Scroll/Margin/Stage"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.75, 0.6, 1)
+theme_override_font_sizes/font_size = 15
+text = "Feedback"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HintLabel" type="Label" parent="Scroll/Margin/Stage"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.8, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "Hint"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="NextButton" type="Button" parent="Scroll/Margin/Stage"]
+visible = false
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Next"
+
+[node name="CompleteBox" type="VBoxContainer" parent="Scroll/Margin/Stage"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="CompleteMessage" type="Label" parent="Scroll/Margin/Stage/CompleteBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 16
+text = "Message"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RewardLabel" type="Label" parent="Scroll/Margin/Stage/CompleteBox"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
+theme_override_font_sizes/font_size = 15
+text = "Side quest reward"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="BackToHubButton" type="Button" parent="Scroll/Margin/Stage/CompleteBox"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Back to chapter hub"
+
+[node name="BackButton" type="Button" parent="."]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 56.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "◀"
+flat = true
+
+[node name="HintTimer" type="Timer" parent="."]
+wait_time = 1.0
+autostart = true

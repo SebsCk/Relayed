@@ -1,0 +1,872 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/chapter_hub.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/scenario_view.tscn" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="accent_n"]
+bg_color = Color(0.2, 0.55, 0.95, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="accent_h"]
+bg_color = Color(0.296, 0.604, 0.956, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="accent_p"]
+bg_color = Color(0.176, 0.484, 0.836, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="accent_d"]
+bg_color = Color(0.14, 0.385, 0.665, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="gray_n"]
+bg_color = Color(0.38, 0.38, 0.42, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="gray_h"]
+bg_color = Color(0.4544, 0.4544, 0.4896, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="gray_p"]
+bg_color = Color(0.3344, 0.3344, 0.3696, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="gray_d"]
+bg_color = Color(0.266, 0.266, 0.294, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="green_n"]
+bg_color = Color(0.2, 0.62, 0.32, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="green_h"]
+bg_color = Color(0.296, 0.6656, 0.4016, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="green_p"]
+bg_color = Color(0.176, 0.5456, 0.2816, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="green_d"]
+bg_color = Color(0.14, 0.434, 0.224, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="card"]
+content_margin_left = 14.0
+content_margin_top = 14.0
+content_margin_right = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="panel"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="result"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.29, 0.29, 0.31, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[node name="ChapterHub" type="Control"]
+script = ExtResource("1")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.16, 0.16, 0.18, 1)
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_top = 60.0
+horizontal_scroll_mode = 0
+
+[node name="Margin" type="MarginContainer" parent="Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Body" type="VBoxContainer" parent="Scroll/Margin"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 24
+text = "Chapter"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="TopicLabel" type="Label" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Topic"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Scenario" parent="Scroll/Margin/Body" instance=ExtResource("2")]
+layout_mode = 2
+
+[node name="StarsLabel" type="Label" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Stars"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="MainHeader" type="Label" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.8, 0.4, 1)
+theme_override_font_sizes/font_size = 18
+text = "Main objectives"
+
+[node name="MainCard1" type="PanelContainer" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("card")
+
+[node name="Box" type="VBoxContainer" parent="Scroll/Margin/Body/MainCard1"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Head" type="HBoxContainer" parent="Scroll/Margin/Body/MainCard1/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Scroll/Margin/Body/MainCard1/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 17
+text = "Name"
+autowrap_mode = 3
+
+[node name="StatusLabel" type="Label" parent="Scroll/Margin/Body/MainCard1/Box/Head"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Status"
+
+[node name="DescLabel" type="Label" parent="Scroll/Margin/Body/MainCard1/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Description"
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="ActionButton" type="Button" parent="Scroll/Margin/Body/MainCard1/Box"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Start"
+
+[node name="MainCard2" type="PanelContainer" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("card")
+
+[node name="Box" type="VBoxContainer" parent="Scroll/Margin/Body/MainCard2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Head" type="HBoxContainer" parent="Scroll/Margin/Body/MainCard2/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Scroll/Margin/Body/MainCard2/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 17
+text = "Name"
+autowrap_mode = 3
+
+[node name="StatusLabel" type="Label" parent="Scroll/Margin/Body/MainCard2/Box/Head"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Status"
+
+[node name="DescLabel" type="Label" parent="Scroll/Margin/Body/MainCard2/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Description"
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="ActionButton" type="Button" parent="Scroll/Margin/Body/MainCard2/Box"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Start"
+
+[node name="MainCard3" type="PanelContainer" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("card")
+
+[node name="Box" type="VBoxContainer" parent="Scroll/Margin/Body/MainCard3"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Head" type="HBoxContainer" parent="Scroll/Margin/Body/MainCard3/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Scroll/Margin/Body/MainCard3/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 17
+text = "Name"
+autowrap_mode = 3
+
+[node name="StatusLabel" type="Label" parent="Scroll/Margin/Body/MainCard3/Box/Head"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Status"
+
+[node name="DescLabel" type="Label" parent="Scroll/Margin/Body/MainCard3/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Description"
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="ActionButton" type="Button" parent="Scroll/Margin/Body/MainCard3/Box"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Start"
+
+[node name="SideHeader" type="Label" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.8, 0.4, 1)
+theme_override_font_sizes/font_size = 18
+text = "Side quests (optional)"
+
+[node name="SideCard1" type="PanelContainer" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("card")
+
+[node name="Box" type="VBoxContainer" parent="Scroll/Margin/Body/SideCard1"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Head" type="HBoxContainer" parent="Scroll/Margin/Body/SideCard1/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Scroll/Margin/Body/SideCard1/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 17
+text = "Name"
+autowrap_mode = 3
+
+[node name="StatusLabel" type="Label" parent="Scroll/Margin/Body/SideCard1/Box/Head"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Status"
+
+[node name="DescLabel" type="Label" parent="Scroll/Margin/Body/SideCard1/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Description"
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="ActionButton" type="Button" parent="Scroll/Margin/Body/SideCard1/Box"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Start"
+
+[node name="SideCard2" type="PanelContainer" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("card")
+
+[node name="Box" type="VBoxContainer" parent="Scroll/Margin/Body/SideCard2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Head" type="HBoxContainer" parent="Scroll/Margin/Body/SideCard2/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Scroll/Margin/Body/SideCard2/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 17
+text = "Name"
+autowrap_mode = 3
+
+[node name="StatusLabel" type="Label" parent="Scroll/Margin/Body/SideCard2/Box/Head"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Status"
+
+[node name="DescLabel" type="Label" parent="Scroll/Margin/Body/SideCard2/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Description"
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="ActionButton" type="Button" parent="Scroll/Margin/Body/SideCard2/Box"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Start"
+
+[node name="SideCard3" type="PanelContainer" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("card")
+
+[node name="Box" type="VBoxContainer" parent="Scroll/Margin/Body/SideCard3"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Head" type="HBoxContainer" parent="Scroll/Margin/Body/SideCard3/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Scroll/Margin/Body/SideCard3/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 17
+text = "Name"
+autowrap_mode = 3
+
+[node name="StatusLabel" type="Label" parent="Scroll/Margin/Body/SideCard3/Box/Head"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Status"
+
+[node name="DescLabel" type="Label" parent="Scroll/Margin/Body/SideCard3/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Description"
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="ActionButton" type="Button" parent="Scroll/Margin/Body/SideCard3/Box"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Start"
+
+[node name="SideCard4" type="PanelContainer" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("card")
+
+[node name="Box" type="VBoxContainer" parent="Scroll/Margin/Body/SideCard4"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Head" type="HBoxContainer" parent="Scroll/Margin/Body/SideCard4/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Scroll/Margin/Body/SideCard4/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 17
+text = "Name"
+autowrap_mode = 3
+
+[node name="StatusLabel" type="Label" parent="Scroll/Margin/Body/SideCard4/Box/Head"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Status"
+
+[node name="DescLabel" type="Label" parent="Scroll/Margin/Body/SideCard4/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Description"
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="ActionButton" type="Button" parent="Scroll/Margin/Body/SideCard4/Box"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Start"
+
+[node name="NotesHeader" type="Label" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.8, 0.4, 1)
+theme_override_font_sizes/font_size = 18
+text = "Field Notes"
+
+[node name="NotesCard" type="PanelContainer" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("card")
+
+[node name="Box" type="VBoxContainer" parent="Scroll/Margin/Body/NotesCard"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Head" type="HBoxContainer" parent="Scroll/Margin/Body/NotesCard/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Scroll/Margin/Body/NotesCard/Box/Head"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 17
+text = "Name"
+autowrap_mode = 3
+
+[node name="StatusLabel" type="Label" parent="Scroll/Margin/Body/NotesCard/Box/Head"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Status"
+
+[node name="DescLabel" type="Label" parent="Scroll/Margin/Body/NotesCard/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Description"
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="ActionButton" type="Button" parent="Scroll/Margin/Body/NotesCard/Box"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Start"
+
+[node name="FinishButton" type="Button" parent="Scroll/Margin/Body"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("green_n")
+theme_override_styles/hover = SubResource("green_h")
+theme_override_styles/pressed = SubResource("green_p")
+theme_override_styles/disabled = SubResource("green_d")
+text = "Finish chapter"
+
+[node name="FinishHint" type="Label" parent="Scroll/Margin/Body"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 13
+text = "Finish all main objectives to complete the chapter."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="BackButton" type="Button" parent="."]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 56.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "◀"
+flat = true
+
+[node name="FieldNotesLayer" type="CanvasLayer" parent="."]
+layer = 20
+visible = false
+
+[node name="Dim" type="ColorRect" parent="FieldNotesLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="Margin" type="MarginContainer" parent="FieldNotesLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Panel" type="PanelContainer" parent="FieldNotesLayer/Margin"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("panel")
+
+[node name="Column" type="VBoxContainer" parent="FieldNotesLayer/Margin/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NotesTitle" type="Label" parent="FieldNotesLayer/Margin/Panel/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 22
+text = "Field Notes"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="NotesScroll" type="ScrollContainer" parent="FieldNotesLayer/Margin/Panel/Column"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="NoteList" type="VBoxContainer" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="NoteRow1" type="VBoxContainer" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TitleLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 16
+text = "???"
+
+[node name="TextLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Not discovered yet."
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="NoteRow2" type="VBoxContainer" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TitleLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 16
+text = "???"
+
+[node name="TextLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Not discovered yet."
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="NoteRow3" type="VBoxContainer" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TitleLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 16
+text = "???"
+
+[node name="TextLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Not discovered yet."
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="NoteRow4" type="VBoxContainer" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TitleLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow4"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 16
+text = "???"
+
+[node name="TextLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow4"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Not discovered yet."
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="NoteRow5" type="VBoxContainer" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TitleLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow5"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 16
+text = "???"
+
+[node name="TextLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow5"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Not discovered yet."
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="NoteRow6" type="VBoxContainer" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TitleLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow6"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 16
+text = "???"
+
+[node name="TextLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow6"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Not discovered yet."
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="NoteRow7" type="VBoxContainer" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TitleLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow7"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 16
+text = "???"
+
+[node name="TextLabel" type="Label" parent="FieldNotesLayer/Margin/Panel/Column/NotesScroll/NoteList/NoteRow7"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "Not discovered yet."
+horizontal_alignment = 0
+autowrap_mode = 3
+
+[node name="CloseNotesButton" type="Button" parent="FieldNotesLayer/Margin/Panel/Column"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Close"
+
+[node name="ResultLayer" type="CanvasLayer" parent="."]
+layer = 20
+visible = false
+
+[node name="Dim" type="ColorRect" parent="ResultLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="Center" type="CenterContainer" parent="ResultLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ResultPanel" type="PanelContainer" parent="ResultLayer/Center"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("result")
+
+[node name="Box" type="VBoxContainer" parent="ResultLayer/Center/ResultPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ResultTitle" type="Label" parent="ResultLayer/Center/ResultPanel/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 24
+text = "Chapter complete!"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ResultStars" type="Label" parent="ResultLayer/Center/ResultPanel/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 16
+text = "Stars earned: 0 / 3"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ToChaptersButton" type="Button" parent="ResultLayer/Center/ResultPanel/Box"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("accent_n")
+theme_override_styles/hover = SubResource("accent_h")
+theme_override_styles/pressed = SubResource("accent_p")
+theme_override_styles/disabled = SubResource("accent_d")
+text = "Back to chapters"
+
+[node name="KeepExploringButton" type="Button" parent="ResultLayer/Center/ResultPanel/Box"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_disabled_color = Color(0.57, 0.57, 0.57, 1)
+theme_override_styles/normal = SubResource("gray_n")
+theme_override_styles/hover = SubResource("gray_h")
+theme_override_styles/pressed = SubResource("gray_p")
+theme_override_styles/disabled = SubResource("gray_d")
+text = "Keep exploring"

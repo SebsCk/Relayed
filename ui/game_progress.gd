@@ -60,6 +60,7 @@ func start_new_game() -> void:
 	xp = 0
 	city_reputation = 0
 	badges.clear()
+	QuestTracker.reset_all()
 	save_progress()
 
 func load_progress() -> void:

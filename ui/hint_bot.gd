@@ -15,6 +15,16 @@ var _task_id: String = ""
 var _wrong_attempts: int = 0
 var _start_msec: int = 0
 var _hint_already_shown: bool = false
+var _hints_used: int = 0
+var _hint_reason: String = ""
+var _session_start: String = ""
+
+# Call once when a chapter begins; resets the per-chapter hint counters that
+# feed the log entry (manuscript: HINT_BOT_SESSION / CHAPTER_PROGRESS.hints_used).
+func begin_session() -> void:
+	_hints_used = 0
+	_hint_reason = ""
+	_session_start = Time.get_datetime_string_from_system()
 
 func start_task(task_id: String) -> void:
 	_task_id = task_id
@@ -39,21 +49,43 @@ func poll_time() -> bool:
 func _should_trigger() -> bool:
 	if _hint_already_shown:
 		return false
-	if _wrong_attempts >= WRONG_ATTEMPT_THRESHOLD or time_on_task() >= TIME_STRUGGLE_SECONDS:
-		_hint_already_shown = true
-		return true
-	return false
+	var reason := ""
+	if _wrong_attempts >= WRONG_ATTEMPT_THRESHOLD:
+		reason = "attempts"
+	elif time_on_task() >= TIME_STRUGGLE_SECONDS:
+		reason = "time"
+	if reason.is_empty():
+		return false
+	_hint_already_shown = true
+	_hints_used += 1
+	_hint_reason = reason
+	return true
+
+func hints_used() -> int:
+	return _hints_used
+
+func last_hint_reason() -> String:
+	return _hint_reason
 
 # Logs one chapter's outcome: accuracy (0-1), total wrong attempts, and
-# completion time in seconds.
-func log_chapter_performance(chapter: int, accuracy: float, wrong_attempts: int, time_seconds: float) -> void:
+# completion time in seconds. Chapters spread over several scenes (see
+# QuestTracker) pass their own hint totals instead of this scene's counters.
+func log_chapter_performance(chapter: int, accuracy: float, wrong_attempts: int, time_seconds: float, hints_override: int = -1, reason_override: String = "") -> void:
 	var entries := _read_log()
+	var session_end := Time.get_datetime_string_from_system()
+	var hints_total := _hints_used if hints_override < 0 else hints_override
+	var reason := _hint_reason if hints_override < 0 else reason_override
 	entries.append({
+		"session_id": "%d_%d" % [chapter, Time.get_unix_time_from_system()],
 		"chapter": chapter,
 		"accuracy": accuracy,
 		"wrong_attempts": wrong_attempts,
 		"time_seconds": time_seconds,
-		"timestamp": Time.get_datetime_string_from_system(),
+		"hint_triggered": hints_total > 0,
+		"hint_reason": reason,
+		"hints_used": hints_total,
+		"session_start": _session_start,
+		"session_end": session_end,
 	})
 	var file := FileAccess.open(LOG_PATH, FileAccess.WRITE)
 	file.store_string(JSON.stringify(entries))

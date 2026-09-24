@@ -50,11 +50,12 @@ Think Mini Metro meets city builder — not the other way around.
 - Platform tooling: Android Studio / Kotlin / Java for the export pipeline (not game logic)
 
 ## AI Systems
-- **ALP (Adjustable Learning Program)** — the manuscript's name for this project's AI system. Rule-based, no external API (not an LLM call). Two jobs:
-  - Adaptive hint delivery: tracks wrong attempts and time-on-task per chapter; surfaces a contextual hint (progressively more specific) when a player is struggling, without revealing the answer outright.
-  - Performance tracking: records accuracy, attempt count, and completion time per chapter (manuscript: `ALP_SESSION`, `CHAPTER_PROGRESS` collections).
+- **Hint Bot** (`HintBot` autoload, `ui/hint_bot.gd`) — the manuscript's name for this project's AI system (formerly "ALP / Adjustable Learning Program"). Rule-based, no external API (not an LLM call). Two jobs:
+  - Adaptive hint delivery: tracks wrong attempts and time-on-task per question/round; surfaces a contextual on-screen hint/tooltip when a player is struggling, without revealing the answer outright.
+  - Performance tracking: records accuracy, attempt count, and completion time per chapter (manuscript: `HINT_BOT_SESSION`, `CHAPTER_PROGRESS` collections).
   - Non-punitive and self-paced by design — this is the same spirit as the existing "never punish exploration" rule below, just formalized with a name and a data model.
-  - **Not yet implemented** in this prototype.
+  - Implemented in the quiz (`ui/quiz.gd`) and the tower-placement puzzle (`ui/relayed.gd`); performance log is local-only (`user://hint_bot_log.json`) until Firebase is wired up.
+  - Audience: beginners, curious players, and junior/senior high school students — introductory telecom content, so hints stay plain-language.
 
 ## Core TelCom Concepts the Game Teaches
 These must be reflected in puzzle mechanics, not just flavor text:
@@ -116,11 +117,13 @@ func adjust_difficulty(player_score: int, current_level: int) -> void:
 - `AuthState` — in-memory login/username stub, standing in for Firebase Authentication
 - `GameProgress` — the Player Profile stack (Infrastructure Fund, XP, City Reputation, Badges, Rank, chapter unlocks/stars, Districts), persisted to `user://save_data.json`
 - `BuildingInfoPanel` — the building detail overlay
+- `HintBot` — rule-based hint trigger + local chapter performance log
+- `QuestTracker` — main objective / side quest / Field Notes progress for hub chapters (chapter 1 so far), `user://quest_data.json`
 
 ## Current Goal
 Terminology and progression stack now align with the manuscript (this
 session). Next candidates, not yet decided: more chapters with distinct
-gameplay types, the ALP adaptive-hint system, or starting the Firebase
+gameplay types, extending the Hint Bot to more chapters, or starting the Firebase
 backend — ask before assuming which.
 
 ## Important

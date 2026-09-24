@@ -29,7 +29,13 @@ func _ready() -> void:
 
 	welcome_label.text = "Welcome to Chapter %d" % GameProgress.selected_chapter
 	var is_quiz := GameProgress.selected_chapter == QUIZ_CHAPTER
-	if is_quiz:
+	if ChapterContent.uses_hub(GameProgress.selected_chapter):
+		var chapter_data := ChapterContent.get_chapter(GameProgress.selected_chapter)
+		welcome_label.text = "Chapter %d: %s\n%s" % [GameProgress.selected_chapter, String(chapter_data["title"]), String(chapter_data["topic"])]
+		objective_line_1.text = "• Main: reconnect the clinic, follow a message, bring the block online"
+		objective_line_2.text = "• Optional side quests earn extra stars. No timer, no penalties."
+		objective_line_2.visible = true
+	elif is_quiz:
 		objective_line_1.text = "• Answer every TelCom question correctly"
 		objective_line_2.visible = false
 	else:
@@ -42,7 +48,9 @@ func _show_objectives() -> void:
 	objectives_view.visible = true
 
 func _on_begin_pressed() -> void:
-	if GameProgress.selected_chapter == QUIZ_CHAPTER:
+	if ChapterContent.uses_hub(GameProgress.selected_chapter):
+		UIKit.go_to_scene("res://scenes/chapter_hub.tscn")
+	elif GameProgress.selected_chapter == QUIZ_CHAPTER:
 		UIKit.go_to_scene("res://scenes/quiz.tscn")
 	else:
 		UIKit.go_to_scene("res://scenes/relayed.tscn")

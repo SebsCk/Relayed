@@ -25,6 +25,8 @@ func _unhandled_input(event):
 		print(building_name, " | Mouse: ", local_pos, " | Hitbox: ", rect, " | Hit: ", rect.has_point(local_pos))
 		if rect.has_point(local_pos):
 			BuildingInfoPanel.show_building(self)
+			if get_tree().current_scene.has_method("on_building_inspected"):
+				get_tree().current_scene.on_building_inspected(self)
 
 func get_rect_global() -> Rect2:
 	var camera = get_viewport().get_camera_2d()

@@ -9,6 +9,8 @@ extends Control
 # UI is authored directly in scenes/quiz.tscn; this script wires up
 # references/signals and drives the fixed 4-option-button layout per question.
 
+# Each "hint" stands in for a row of the manuscript's HINTS collection
+# until the Firebase-backed hint table exists.
 const QUESTIONS := [
 	{
 		"question": "What does QoS stand for?",
@@ -86,6 +88,7 @@ func _ready() -> void:
 	hint_timer.timeout.connect(_on_hint_timer_timeout)
 
 	chapter_start_msec = Time.get_ticks_msec()
+	HintBot.begin_session()
 	_show_question()
 
 func _show_question() -> void:

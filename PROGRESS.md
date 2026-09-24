@@ -1,5 +1,47 @@
 # Progress
 
+## 2026-09-24 (Chapter 1 story: hub, quests, Field Notes)
+
+- **Chapter 1 (Network fundamentals) is now a story chapter.** Flow: chapter
+  select → `story_event` (intro card) → `scenes/chapter_hub.tscn` → activities
+  / the puzzle → back to the hub → "Finish chapter". Other chapters are
+  unchanged (`ChapterContent.HUB_CHAPTERS = [1]` gates the new flow).
+- **Main objectives** (sequential): First call (pick a medium), Follow the
+  message (label sender / medium / receiver), Bring the block online (the
+  existing 3-round `relayed.tscn` puzzle, unchanged mechanically).
+- **Side quests** (optional): Ask around (tap all 4 buildings, hear residents),
+  Wired or wireless? (3 questions), Lean network (finish with
+  `ChapterContent.BUDGET_MAX_SITES` = 4 towers or fewer, untuned), History corner.
+- **Anti-speedrun**: stars come from exploration, never time. 1 star = mains,
+  2 = + 2 side quests, 3 = all side quests. Objectives unlock in order, intro/
+  outro dialogue is skippable only on replays, Field Notes counter (x/7),
+  badges `field_researcher` and `solo_signal` (no hints for the whole chapter).
+- New files: `ui/chapter_content.gd` (all story text/quest data),
+  `ui/quest_tracker.gd` (autoload `QuestTracker`, saves `user://quest_data.json`),
+  `ui/dialogue_box.gd` (dialogue + toast), `ui/chapter_hub.gd`,
+  `ui/chapter_activity.gd`, plus `scenes/chapter_hub.tscn` and
+  `scenes/chapter_activity.tscn`. Both screens are baked into real editor
+  nodes (hub: 3 main cards, 4 side cards, Field Notes card, 7 note rows,
+  Field Notes and result overlays; activity: link row, option/role buttons,
+  labels, complete box, all hidden until an activity shows them); the scripts
+  only fill text and toggle visibility. `DialogueBox` (dialogue + toast) is
+  still built in code as a reusable overlay. The .tscn files were generated
+  by a script, so open them in Godot once and re-save to normalize.
+- Hooks: `Building._unhandled_input` calls `scene.on_building_inspected()` if
+  present; `relayed.gd` has a `hub_mode` (skips stars/unlock, returns to hub);
+  `HintBot` gained `hints_used()`, `last_hint_reason()` and optional totals
+  arguments so multi-scene chapters log one entry.
+- Gotcha: `GameProgress.unlock_next_chapter()` advances unconditionally, so the
+  hub only calls it when the chapter is the furthest one reached. The quiz and
+  puzzle chapters still call it on every completion (replaying unlocks more).
+- Gotcha: new `class_name` scripts added outside the editor aren't in
+  `.godot/global_script_class_cache.cfg` until the editor rescans, so scripts
+  using them fail to compile ("Identifier not declared") and their buttons do
+  nothing. `ChapterContent` and `DialogueBox` are therefore autoloads (no
+  `class_name`); `DialogueBox` keeps its overlay as an inner class.
+- Not verified: no Godot executable was available, so none of this was run.
+  Needs an in-editor playthrough of chapter 1.
+
 ## 2026-09-23 (Settings baked; District 1 → Zones chapter select)
 
 - **Settings baked into `scenes/settings.tscn`**: in the editor the scene
@@ -18,6 +60,13 @@
   are gold, the next chapter has a blue outline and pulses, everything else
   is dim. No legend label; the user removed it. Added
   `GameProgress.zone_for_chapter()` and `is_completed()` (stars > 0).
+- **Completion panel is a real node**: the "Round N Complete" / "Network
+  Complete" panel moved from `build_hud()` code into `scenes/relayed.tscn`
+  as `CompletionLayer` (CanvasLayer, layer 6), then `CompletionPanel`
+  (hidden, same 390,220 / 430×220 placement as before), then
+  `Margin/Box/{Title, Body, NextButton}`. `build_hud()` only grabs
+  references and connects NextButton. It looks identical at runtime, and
+  Next Round still advances.
 - Gotcha: after editing .tscn files on disk, Godot keeps its open copy. If
   it isn't reloaded, saving from the editor writes the stale version back.
   Always Reload (or close without saving) after external edits.

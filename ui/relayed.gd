@@ -50,6 +50,7 @@ var round_demand_count := 0
 var placement_preview: Node2D
 var building_drag_active := false
 var wire_layer: WireLayer
+var hub_mode := false
 var chapter_start_msec := 0
 var chapter_wrong_attempts := 0
 var last_congested_count := 0
@@ -70,6 +71,7 @@ var next_button: Button
 var overlay: PanelContainer
 
 func _ready() -> void:
+	hub_mode = ChapterContent.uses_hub(GameProgress.selected_chapter)
 	wire_layer = WireLayer.new()
 	wire_layer.name = "WireLayer"
 	wire_layer.z_index = 5
@@ -78,6 +80,7 @@ func _ready() -> void:
 	register_existing_buildings()
 	build_hud()
 	chapter_start_msec = Time.get_ticks_msec()
+	HintBot.begin_session()
 	hint_timer = Timer.new()
 	hint_timer.wait_time = 1.0
 	hint_timer.autostart = true
@@ -501,7 +504,12 @@ func show_round_result() -> void:
 	overlay.visible = true
 	var title := overlay.get_node("Margin/Box/Title") as Label
 	var body := overlay.get_node("Margin/Box/Body") as Label
-	if current_round >= MAX_ROUNDS:
+	if current_round >= MAX_ROUNDS and hub_mode:
+		title.text = "Block Online!"
+		body.text = "Every building on the block is connected. Head back to the chapter hub."
+		_complete_hub_puzzle()
+		next_button.text = "Back to Chapter Hub"
+	elif current_round >= MAX_ROUNDS:
 		title.text = "Network Complete"
 		body.text = "All districts are online. Final score: %d" % score
 		var time_seconds := (Time.get_ticks_msec() - chapter_start_msec) / 1000.0
@@ -521,7 +529,32 @@ func show_round_result() -> void:
 		body.text = "Every building has compatible coverage. Prepare for the next district."
 		next_button.text = "Next Round"
 
+func _complete_hub_puzzle() -> void:
+	var chapter := GameProgress.selected_chapter
+	QuestTracker.complete(chapter, "bring_online")
+	if deployed_towers.size() <= ChapterContent.BUDGET_MAX_SITES and QuestTracker.complete(chapter, "budget"):
+		DialogueBox.toast(self, "Side quest complete: %s" % ChapterContent.quest_title(chapter, "budget"))
+	var seconds := (Time.get_ticks_msec() - chapter_start_msec) / 1000.0
+	QuestTracker.add_stats(chapter, chapter_wrong_attempts, seconds, HintBot.hints_used(), placement_history.size(), HintBot.last_hint_reason())
+
+func on_building_inspected(building: Building) -> void:
+	if not hub_mode:
+		return
+	var chapter := GameProgress.selected_chapter
+	var result := QuestTracker.inspect_building(chapter, String(building.name))
+	if result.is_empty():
+		return
+	var note: Dictionary = result["note"]
+	var box := DialogueBox.play(self, [{"speaker": String(note["speaker"]), "text": String(note["line"])}])
+	await box.finished
+	DialogueBox.toast(self, "Field note added: %s" % String(note["title"]))
+	if result["quest_done"]:
+		DialogueBox.toast(self, "Side quest complete: %s" % ChapterContent.quest_title(chapter, "ask_around"))
+
 func advance_round() -> void:
+	if current_round >= MAX_ROUNDS and hub_mode:
+		UIKit.go_to_scene("res://scenes/chapter_hub.tscn")
+		return
 	if current_round >= MAX_ROUNDS:
 		if GameProgress.selected_chapter < GameProgress.TOTAL_CHAPTERS:
 			GameProgress.selected_chapter += 1
@@ -555,6 +588,8 @@ func _show_hint() -> void:
 	hint_label.text = "Hint: " + _current_hint_text()
 	hint_label.visible = true
 
+# Built from live puzzle state; stands in for the manuscript's HINTS
+# collection until the Firebase-backed hint table exists.
 func _current_hint_text() -> String:
 	if deployed_towers.is_empty():
 		return "Place a coverage site (5G or Fiber) near your buildings to get started."
@@ -668,37 +703,12 @@ func build_hud() -> void:
 	status_label.add_theme_font_size_override("font_size", 16)
 	layer.add_child(status_label)
 
-	overlay = PanelContainer.new()
-	overlay.position = Vector2(390, 220)
-	overlay.size = Vector2(430, 220)
-	overlay.visible = false
-	layer.add_child(overlay)
-	var result_margin := MarginContainer.new()
-	result_margin.name = "Margin"
-	result_margin.add_theme_constant_override("margin_left", 24)
-	result_margin.add_theme_constant_override("margin_right", 24)
-	result_margin.add_theme_constant_override("margin_top", 20)
-	result_margin.add_theme_constant_override("margin_bottom", 20)
-	overlay.add_child(result_margin)
-	var result_box := VBoxContainer.new()
-	result_box.name = "Box"
-	result_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	result_box.add_theme_constant_override("separation", 14)
-	result_margin.add_child(result_box)
-	var result_title := Label.new()
-	result_title.name = "Title"
-	result_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	result_title.add_theme_font_size_override("font_size", 24)
-	result_box.add_child(result_title)
-	var result_body := Label.new()
-	result_body.name = "Body"
-	result_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	result_body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	result_box.add_child(result_body)
-	next_button = Button.new()
-	next_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	# The round/chapter completion panel is a real node in
+	# scenes/relayed.tscn (CompletionLayer/CompletionPanel) so it can be
+	# edited in the editor; show_round_result() only fills in its text.
+	overlay = $CompletionLayer/CompletionPanel
+	next_button = $CompletionLayer/CompletionPanel/Margin/Box/NextButton
 	next_button.pressed.connect(advance_round)
-	result_box.add_child(next_button)
 
 func _open_in_game_settings() -> void:
 	# An overlay rather than navigating to scenes/settings.tscn: this

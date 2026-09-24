@@ -92,6 +92,46 @@ offset_bottom = 62.0
 text = "Back to Districts"
 script = ExtResource("3_smj7p")
 
+[node name="CompletionLayer" type="CanvasLayer" parent="." unique_id=1576168497]
+layer = 6
+
+[node name="CompletionPanel" type="PanelContainer" parent="CompletionLayer" unique_id=1280007980]
+visible = false
+offset_left = 390.0
+offset_top = 220.0
+offset_right = 820.0
+offset_bottom = 440.0
+
+[node name="Margin" type="MarginContainer" parent="CompletionLayer/CompletionPanel" unique_id=701828001]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="Box" type="VBoxContainer" parent="CompletionLayer/CompletionPanel/Margin" unique_id=1579048792]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="CompletionLayer/CompletionPanel/Margin/Box" unique_id=1792626702]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Round 1 Complete"
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="CompletionLayer/CompletionPanel/Margin/Box" unique_id=1723991906]
+custom_minimum_size = Vector2(382, 0)
+layout_mode = 2
+text = "Every building has compatible coverage. Prepare for the next district."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="NextButton" type="Button" parent="CompletionLayer/CompletionPanel/Margin/Box" unique_id=1892657585]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Next Round"
+
 [editable path="Buildings/Building2"]
 [editable path="Buildings/Apartments2"]
 [editable path="Buildings/Apartments3"]
