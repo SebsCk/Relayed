@@ -1,8 +1,10 @@
 extends Control
 
 # Screens matching Figures "Register" and "Create Account" — a two-step
-# account creation form. Account creation is stubbed via AuthState until
-# Firebase Authentication is wired up.
+# account creation form. Creates a real Firebase account through AuthState
+# when a Firebase project is configured (see ui/firebase_config.gd);
+# otherwise AuthState's local-only fallback keeps this screen working
+# without one.
 # UI is authored directly in scenes/register.tscn; this script only wires
 # up references and behavior.
 
@@ -15,6 +17,7 @@ const MIN_PASSWORD_LENGTH := 6
 @onready var status_label: Label = $Center/RootBox/StatusLabel
 @onready var step_one: Control = $Center/RootBox/RegisterPanel/PanelBox/StepOne
 @onready var step_two: Control = $Center/RootBox/RegisterPanel/PanelBox/StepTwo
+@onready var create_button: Button = $Center/RootBox/RegisterPanel/PanelBox/StepTwo/Row/CreateButton
 
 func _ready() -> void:
 	$Center/RootBox/RegisterPanel/PanelBox/StepOne/NextRow/NextButton.pressed.connect(_on_next_pressed)
@@ -48,5 +51,13 @@ func _on_create_pressed() -> void:
 	if password != confirm:
 		status_label.text = "Passwords do not match."
 		return
-	AuthState.login(username_field.text.strip_edges())
+	status_label.remove_theme_color_override("font_color")
+	status_label.text = "Creating your account..."
+	create_button.disabled = true
+	var error := await AuthState.register(username_field.text.strip_edges(), email_field.text.strip_edges(), password)
+	create_button.disabled = false
+	if not error.is_empty():
+		status_label.add_theme_color_override("font_color", Color(1.0, 0.6, 0.4))
+		status_label.text = error
+		return
 	UIKit.go_to_scene("res://scenes/choose_game.tscn")

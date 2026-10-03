@@ -548,3 +548,15 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_0hhxk")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_vw30n")
 theme_override_styles/hover = SubResource("StyleBoxFlat_xuq0g")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_ckv7o")
+
+[node name="SandboxButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -46.0
+offset_top = 8.0
+offset_right = 46.0
+offset_bottom = 48.0
+grow_horizontal = 2
+text = "Sandbox"

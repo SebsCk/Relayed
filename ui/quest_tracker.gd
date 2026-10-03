@@ -82,7 +82,9 @@ func add_note(chapter: int, note_id: String) -> bool:
 	return true
 
 # Called when the player taps a building. Returns {} for buildings with no
-# note (or already-read ones), else {"note": Dictionary, "quest_done": bool}.
+# note (or already-read ones), else {"note": Dictionary, "quest_done": bool,
+# "quest_id": String}. The quest completed by reading every note comes from
+# the chapter's "puzzle" -> "notes_quest" content key.
 func inspect_building(chapter: int, node_name: String) -> Dictionary:
 	var chapter_notes := ChapterContent.notes(chapter)
 	if not chapter_notes.has(node_name):
@@ -93,8 +95,9 @@ func inspect_building(chapter: int, node_name: String) -> Dictionary:
 	for key in chapter_notes.keys():
 		if not notes(chapter).has("note_" + String(key)):
 			all_read = false
-	var quest_done := all_read and complete(chapter, "ask_around")
-	return {"note": chapter_notes[node_name], "quest_done": quest_done}
+	var quest_id := String(ChapterContent.get_chapter(chapter).get("puzzle", {}).get("notes_quest", ""))
+	var quest_done := all_read and not quest_id.is_empty() and complete(chapter, quest_id)
+	return {"note": chapter_notes[node_name], "quest_done": quest_done, "quest_id": quest_id}
 
 func seen(chapter: int, key: String) -> bool:
 	var seen_flags: Dictionary = _entry(chapter)["seen"]

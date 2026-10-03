@@ -35,7 +35,12 @@ func unlinkProvider(providers : Array):
 	return await processRequest("update", {'idToken':FirebaseLite.authToken,'deleteProvider':providers,'returnSecureToken':true})
 
 func processRequest(event, datats):
-	if event == "signUp" or event == "signInWithPassword":
+	# Vendored fix: signInWithIdp (Google/federated sign-in) is a sign-IN
+	# event like signUp/signInWithPassword, not an update to an already
+	# logged-in user — it was missing from this list, so the "else" branch
+	# below required authToken != null and every Google sign-in attempt
+	# failed immediately with "User not logged in", before any request went out.
+	if event == "signUp" or event == "signInWithPassword" or event == "signInWithIdp":
 		if FirebaseLite.authToken != null: 
 			printerr("User already logged in")
 			return ERR_CANT_CONNECT
@@ -51,8 +56,18 @@ func processRequest(event, datats):
 	authHttp.queue_free()
 	if data[1] == 400: #Response code: 400 | There was an error
 		printerr("Firebase (Authentication): There was an error, received data: %s" % decodedData)
-		return ERR_CANT_CONNECT
+		# Vendored fix: return the decoded error body (has an "error" key with
+		# a real message like EMAIL_EXISTS/INVALID_PASSWORD) instead of a bare
+		# int, so callers can show the player something more useful than
+		# "something went wrong".
+		return decodedData
 	elif data[1] == 200: #Response code: 200 | Request was succesful and data was received
-		if decodedData["kind"] == "identitytoolkit#SignupNewUserResponse":
+		# Vendored fix: the original check only matched signUp's response
+		# "kind", so a successful signInWithPassword or signInWithIdp never
+		# stored the token — every later authenticated call (Firestore
+		# writes, updateDisplayName, ...) silently went out unauthenticated.
+		# signUp/signInWithPassword/signInWithIdp all return "idToken" on
+		# success, so key off that instead of one specific response kind.
+		if typeof(decodedData) == TYPE_DICTIONARY and decodedData.has("idToken"):
 			FirebaseLite.authToken = decodedData["idToken"]
 		return decodedData

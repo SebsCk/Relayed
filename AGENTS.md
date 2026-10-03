@@ -43,10 +43,11 @@ Think Mini Metro meets city builder — not the other way around.
 - **Stars** (0–3 per chapter) — per-chapter performance rating.
 
 ## Architecture
-- Backend: Firebase (Authentication + Cloud Firestore) — **not yet implemented**; everything is local-only stubs (`AuthState`, `GameProgress`) for now.
+- Backend: Firebase (Authentication + Cloud Firestore), via the vendored `addons/godot_firebase_lite` REST wrapper (moved there from the project root — it hardcodes `res://addons/godot_firebase_lite/...` internally, so it only works from that path). Needs a real Firebase project's `apiKey`/`projectId` filled into `ui/firebase_config.gd` before it does anything; until then `AuthState`/`GameProgress` fall back to the old local-only stub automatically.
 - Frontend: Godot 4.7 + GDScript (mobile-first, Android export)
-- Local save: Godot built-in `user://` save files (`GameProgress` autoload)
-- Cloud sync: Firebase Firestore, real-time — only needed for auth/sync; core gameplay must work fully offline after login
+- Local save: Godot built-in `user://` save files (`GameProgress` autoload) — always the source of truth for offline play
+- Cloud sync: Firebase Firestore, one `save_data/{uid}` document mirroring the local save fields (not the manuscript's full multi-collection schema yet); fire-and-forget both ways, never blocks gameplay
+- Auth: email/password + Google Sign-In (OAuth loopback flow — opens the system browser, listens briefly on `127.0.0.1`) both wired through `AuthState`; Google Sign-In additionally needs a Desktop OAuth client from Google Cloud Console (see `ui/firebase_config.gd`)
 - Platform tooling: Android Studio / Kotlin / Java for the export pipeline (not game logic)
 
 ## AI Systems
@@ -101,9 +102,9 @@ func adjust_difficulty(player_score: int, current_level: int) -> void:
 
 ## Save System
 - Local save: `user://save_data.json` via Godot's FileAccess (`GameProgress` autoload — implemented)
-- Cloud save: Firebase Firestore (`SAVE_DATA` collection: current chapter + serialized city state) — **not yet implemented**
-- On launch: load local first, then sync from cloud if online
-- Never block gameplay waiting for cloud sync
+- Cloud save: Firebase Firestore, one document at `save_data/{uid}` mirroring the same fields as the local save (implemented as a simplified single-doc version of the manuscript's `SAVE_DATA` collection — not per-chapter `CHAPTER_PROGRESS`/`HINT_BOT_SESSION` docs yet)
+- On launch: load local first, then sync from cloud if online (implemented: `GameProgress._pull_from_cloud()`, fire-and-forget)
+- Never block gameplay waiting for cloud sync (implemented this way — nothing awaits the cloud calls)
 
 ## Coding
 - Prefer small, reusable scripts
@@ -124,7 +125,9 @@ func adjust_difficulty(player_score: int, current_level: int) -> void:
 Terminology and progression stack now align with the manuscript (this
 session). Next candidates, not yet decided: more chapters with distinct
 gameplay types, extending the Hint Bot to more chapters, or starting the Firebase
-backend — ask before assuming which.
+backend — ask before assuming which. All 10 chapters/topics are now authored
+in `ChapterContent` and playable through the hub (see PROGRESS.md 2026-09-27);
+none of it has been run in Godot yet.
 
 ## Important
 - The project uses Godot 4.7

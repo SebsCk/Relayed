@@ -32,8 +32,9 @@ func _ready() -> void:
 	if ChapterContent.uses_hub(GameProgress.selected_chapter):
 		var chapter_data := ChapterContent.get_chapter(GameProgress.selected_chapter)
 		welcome_label.text = "Chapter %d: %s\n%s" % [GameProgress.selected_chapter, String(chapter_data["title"]), String(chapter_data["topic"])]
-		objective_line_1.text = "• Main: reconnect the clinic, follow a message, bring the block online"
-		objective_line_2.text = "• Optional side quests earn extra stars. No timer, no penalties."
+		var summary: Array = chapter_data["summary"]
+		objective_line_1.text = String(summary[0])
+		objective_line_2.text = String(summary[1])
 		objective_line_2.visible = true
 	elif is_quiz:
 		objective_line_1.text = "• Answer every TelCom question correctly"

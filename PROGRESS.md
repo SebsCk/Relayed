@@ -1,5 +1,182 @@
 # Progress
 
+## 2026-10-03 (Pushing with the Firebase keys kept out of git)
+
+- The GitHub repo (`SebsCk/Relayed`) is **public**, so the real Firebase API key,
+  project ID, and Google OAuth client ID/secret in `ui/firebase_config.gd` must
+  never be committed (Firestore is still in test mode, so a leaked key + project
+  ID would let anyone read or wipe the database). The committed copy of that file
+  has `YOUR_...` placeholders; the real values live only in the local working
+  file, which is hidden from git with
+  `git update-index --skip-worktree ui/firebase_config.gd`. A backup of the real
+  values is NOT in the repo — if you re-clone, copy them in again from the Firebase
+  console. To edit the committed placeholder file later, run
+  `git update-index --no-skip-worktree ui/firebase_config.gd` first. Real fix when
+  convenient: load these from a gitignored config file instead.
+
+## 2026-09-27 (Firebase Authentication + Firestore cloud save)
+
+- **Moved `godot_firebase_lite` from the project root into `addons/`.** The
+  addon's own code (`firebase.gd`, `plugin.gd`, every `.tscn`) hardcodes
+  `res://addons/godot_firebase_lite/...` internally, so as originally placed
+  at the project root it could never actually load — this wasn't a working
+  integration yet, just vendored code sitting there. Enabled it in
+  `project.godot`'s `[editor_plugins]` and added `FirebaseConfig` +
+  `FirebaseLite` autoloads (in that order, before `AuthState`, since
+  `AuthState._ready()` calls `FirebaseLite.initialize(...)`).
+- **Two real bugs fixed in the vendored addon**
+  (`addons/godot_firebase_lite/Authentication/Authentication.gd`), both
+  found while wiring real sign-in against it, both clearly commented in
+  place as "Vendored fix":
+  1. `processRequest()`'s 200-OK branch only stored `authToken` when the
+     response `kind` was `SignupNewUserResponse` — a successful
+     **sign-in** (as opposed to sign-up) never stored the token, so every
+     authenticated call after logging in (Firestore writes, display name
+     updates, ...) silently went out unauthenticated. Now keys off the
+     response having an `idToken` instead, which sign-up, sign-in, and
+     Google sign-in all return.
+  2. The "already logged in?" guard didn't list `signInWithIdp` as a
+     sign-in event, so it took the `else` branch requiring
+     `authToken != null` — every Google sign-in attempt failed immediately
+     with "User not logged in" before any HTTP request went out.
+  3. (Minor) The 400-error branch discarded the decoded error body and
+     returned a bare int, so callers couldn't tell EMAIL_EXISTS from
+     INVALID_PASSWORD from anything else. Now returns the decoded body.
+- **`ui/firebase_config.gd`** (new, autoload `FirebaseConfig`): holds
+  `API_KEY`/`PROJECT_ID`/`GOOGLE_OAUTH_CLIENT_ID`/`GOOGLE_OAUTH_CLIENT_SECRET`
+  as placeholders, with a comment block covering exactly where to get each
+  one (Firebase console web app config; a separate Desktop OAuth client
+  from Google Cloud Console for Google Sign-In specifically, since a Web
+  client's redirect URIs don't allow the loopback flow this needs).
+  `is_configured()` / `google_sign_in_configured()` gate everything else.
+- **`ui/auth_state.gd` rewritten**: real email/password sign-in and
+  sign-up, and Google Sign-In via an OAuth 2.0 "installed app" loopback
+  flow (`login_with_google()` — opens the system browser with
+  `OS.shell_open()`, then a `TCPServer` briefly listens on `127.0.0.1` for
+  the redirect carrying the authorization code, exchanges it for a Google
+  ID token, then calls Firebase's `accounts:signInWithIdp`). Falls back to
+  the old local-only stub whenever `FirebaseConfig.is_configured()` is
+  false, so the game still runs with no Firebase project set up. Firebase
+  error codes (`EMAIL_EXISTS`, `INVALID_PASSWORD`, ...) are translated to
+  short player-facing messages in `_friendly_auth_error()`.
+- **`ui/login.gd` / `ui/register.gd` / `scenes/login.tscn`**: the login
+  field is now semantically an email address (Firebase auth is keyed by
+  email, not an arbitrary username) — placeholder text changed from
+  "Username" to "Email", node name left as `UsernameField` to avoid a
+  wider scene rename. Both screens now `await` real results and show
+  Firebase's error messages instead of always succeeding. Forgot Password
+  fires a real `sendOobCode` reset request but keeps the same neutral
+  "if an account exists..." message regardless of outcome on purpose —
+  showing a different message for unknown emails would leak which emails
+  are registered.
+- **`ui/game_progress.gd`**: `save_progress()` now also fire-and-forgets
+  the same local-save dictionary to Firestore at `save_data/{uid}`;
+  `load_progress()` follows its local load with a fire-and-forget
+  `_pull_from_cloud()` that overwrites fields (then re-saves locally) if a
+  cloud copy exists — including when there's no local save file at all
+  (e.g. a fresh install signing into an existing account). This mirrors the
+  existing local-save shape into one Firestore document; it is **not** the
+  manuscript's full multi-collection schema (`CHAPTER_PROGRESS`,
+  `HINT_BOT_SESSION`, etc. stay local-only via `HintBot`/`QuestTracker` for
+  now) — a reasonable next step, not attempted here.
+- **`ui/player_profile.gd`**: the rename field now calls
+  `AuthState.update_display_name()` instead of writing `AuthState.username`
+  directly, so a rename while signed in also pushes to Firebase Auth and
+  the `users/{uid}` Firestore doc.
+- **Not done, needs a real Firebase project to test at all**: none of this
+  has run — no Godot editor connection this session, and it fundamentally
+  can't be exercised without real `apiKey`/`projectId` values (and a
+  Desktop OAuth client for Google Sign-In) in `ui/firebase_config.gd`,
+  which only the project owner can create. Firestore was also not given
+  security rules here — starting a database "in test mode" during setup
+  leaves it world-readable/writable, which is fine for development but
+  must be locked down (e.g. rules keyed on `request.auth.uid`) before
+  shipping.
+
+## 2026-09-27 (Chapters 3-10 authored; all 10 topics playable through the hub)
+
+- **All ten topics now have a chapter** in `ChapterContent` (`HUB_CHAPTERS` is
+  `[1..10]`), continuing one storyline: chapter 2's "strange route" hook opens
+  chapter 3, chapter 4's bandwidth fix sets up chapter 5's lag, chapter 6's dead
+  zone leads into chapter 7's security scare, chapter 8's bad layout leads into
+  chapter 9's priority problem, and chapter 10 is a citywide-outage finale that
+  recaps all nine earlier lessons (a 4-question "Graduation quiz" side quest).
+- **Gameplay reuses the existing systems rather than inventing five new engines**:
+  - Chapters 1, 3, 4, 6, 10 have a `kind: "puzzle"` main quest that reuses
+    `scenes/relayed.tscn` (already generalized for chapter 1) because its
+    mechanics already map onto those topics: AStarGrid2D routing = data
+    pathways (ch3), tower capacity/congestion = bandwidth (ch4), coverage
+    radius = wireless (ch6), the same puzzle as a "restore everything" finale
+    = troubleshooting (ch10). No engine changes were needed for this reuse.
+  - Chapters 2, 5, 7, 8, 9 (and the non-puzzle mains of 1/3/4/6/10) are
+    multiple-choice quiz sets through `scenes/chapter_activity.tscn`, same as
+    chapter 2's devices content — matching and ordering are still asked as
+    questions, not true drag-and-drop.
+- Every chapter fits the hub's fixed layout: exactly 3 main cards, 4 side
+  cards, and at most 7 Field Note rows (puzzle chapters use 4 building notes +
+  3 terms = 7; quiz-only chapters use 3 terms only, no building notes since
+  there's no puzzle scene to tap buildings in).
+- Verified with a script (parses the dict, checks): every chapter has exactly
+  3 mains / 4 sides; every non-puzzle, non-`needs_puzzle` quest has a
+  `quiz_sets` entry; every `unlock_after` points at a real quest id in that
+  chapter; every `puzzle.*_quest` points at a real quest id; every term key is
+  one of that chapter's main quest ids; every question has ≤ 4 options and a
+  valid `correct` index. All ten chapters pass. GDScript brace/bracket counts
+  balance (474/474, 289/289) and the file's `CHAPTERS` dict still closes right
+  before its `static func`s.
+- Not run in Godot (no editor connection this session) — needs an in-editor
+  playthrough of chapters 3-10, especially the reused puzzle scene across five
+  different chapters and the graduation quiz's 4-option layout.
+- Not touched: `ui/sandbox_catalog.gd`'s `unlock_chapter` values still only go
+  up to 7 — chapters 8-10 don't unlock any *new* sandbox structures. Worth
+  adding a couple of chapter 8-10 rewards later if that matters.
+
+## 2026-09-25 (Sandbox mode)
+
+- **Sandbox city builder** (`scenes/sandbox.tscn`, `ui/sandbox.gd`), entered from a
+  "Sandbox" button on the chapter select top bar. TheoTown-style: a **Build** button
+  bottom-left expands / collapses the build menu only when clicked (tabs Telecom /
+  Homes / Services / Work + Bulldoze, scrolling item row); pick a structure, tap a
+  free tile to place it, drag to pan, wheel or +/- to zoom, Undo (or Ctrl+Z), Esc
+  deselects. The city autosaves to `user://sandbox_city.json`.
+- **Rewards drive it**: `ui/sandbox_catalog.gd` lists 23 structures, each with an
+  `unlock_chapter`; an item unlocks when `GameProgress.is_completed(chapter)`.
+  Locked items show "Chapter N" and toast what to finish. Placement is free (no
+  Infrastructure Fund cost), matching the manuscript scope line about no resource
+  constraints. Art is placeholder starter-pack buildings; change `texture` / `width`
+  in the catalog to swap.
+- **Roads tab** (asphalt Road ch1, Dirt Road ch2, Crosswalk ch3, Concrete ch4, Parking
+  Lot ch5, Dirt ch6, Pond ch7): road tiles sit on a `Roads` layer under buildings and
+  auto-connect to neighbouring roads of the same family (`Catalog.ROAD_PIECES`, read
+  from the art by sampling which tile edges have no sidewalk). Roads, ground tiles and
+  Bulldoze paint while the mouse is held; buildings still place on tap so dragging pans
+  (right/middle-drag also pans). Bulldoze moved out of the menu to sit beside Build.
+- The map is a drawn 24x24 isometric grid (128x64 tiles), not the tileset, so the
+  sandbox doesn't depend on `relayed.tscn`. `sandbox_item.tscn` is the baked item card.
+- The scenes were generated by script (`.tscn` text); open once in Godot and re-save.
+- Not run: the godot-mcp-toolkit editor plugin wasn't reachable, so nothing here was
+  compile-checked or played. Structure (node paths, styles, texture files) was
+  checked with a script.
+
+## 2026-09-25 (Chapter 2 content; hub generalized)
+
+- **Chapter 2 (Network devices) is authored** in `ChapterContent` as a hub chapter
+  that continues chapter 1: Mang Tonio's shop, Aling Rosa's undelivered message.
+  Mains: Meet the devices, Right device right job, Wire the block. Sides: Hear the
+  residents (4 Field Notes), Read the lights, Wrong device, History corner (side
+  quests unlock after specific mains). Every activity is a multiple-choice quiz set:
+  matching and ordering are asked as questions, not drag-and-drop, so a real
+  matching/ordering template is still a later upgrade.
+- **Hub is no longer chapter-1-specific.** Content keys drive it: `kind: puzzle`,
+  `unlock_after`, `needs_puzzle`, `show_budget`/`show_notes_progress`, chapter-level
+  `scenario` (omit to hide the clinic/hospital strip), `puzzle` (quest ids used by
+  `relayed.gd` / `QuestTracker.inspect_building`), `summary`, `outro_speaker`. Quiz
+  sets can have an `intro` dialogue, and questions a `note` (Field Note on a correct answer).
+- Chapter 2 no longer opens the old TelCom trivia `quiz.tscn` (hub chapters skip
+  that special case in `story_event.gd`); that scene and `ui/quiz.gd` are unreachable for now.
+- Not run in Godot. Content structure was checked with a script (counts fit the hub's
+  3 main / 4 side / 7 note slots; every quest has an activity).
+
 ## 2026-09-24 (Chapter 1 story: hub, quests, Field Notes)
 
 - **Chapter 1 (Network fundamentals) is now a story chapter.** Flow: chapter

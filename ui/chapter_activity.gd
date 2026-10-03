@@ -245,6 +245,8 @@ func _run_quiz() -> void:
 	options_box.visible = true
 	_quiz_index = 0
 	_show_quiz_question()
+	if spec.has("intro"):
+		_play_dialogue(spec["intro"], activity + "_intro")
 
 func _show_quiz_question() -> void:
 	var questions: Array = spec["questions"]
@@ -274,6 +276,9 @@ func _on_quiz_choice(index: int) -> void:
 		other.disabled = true
 	button.modulate = CORRECT_COLOR
 	_right_answer("Correct! " + String(data["explanation"]))
+	if data.has("note") and QuestTracker.add_note(chapter, "note_" + String(data["note"])):
+		var note: Dictionary = ChapterContent.notes(chapter)[String(data["note"])]
+		DialogueBox.toast(self, "Field note added: %s" % String(note["title"]))
 	next_button.text = "Finish" if _quiz_index == questions.size() - 1 else "Next"
 	next_button.visible = true
 

@@ -64,11 +64,11 @@ func _ready() -> void:
 	var mains: Array = ChapterContent.main_quests(chapter)
 	for i in range(main_cards.size()):
 		if i < mains.size():
-			_card_button(main_cards[i]).pressed.connect(_launch_main.bind(String(mains[i]["id"])))
+			_card_button(main_cards[i]).pressed.connect(_launch.bind(String(mains[i]["id"]), String(mains[i].get("kind", "activity")) == "puzzle"))
 	var sides: Array = ChapterContent.side_quests(chapter)
 	for i in range(side_cards.size()):
 		if i < sides.size():
-			_card_button(side_cards[i]).pressed.connect(_launch_side.bind(String(sides[i]["id"]), bool(sides[i]["needs_puzzle"])))
+			_card_button(side_cards[i]).pressed.connect(_launch.bind(String(sides[i]["id"]), bool(sides[i]["needs_puzzle"])))
 	_card_button(notes_card).pressed.connect(_show_field_notes)
 
 	_refresh()
@@ -94,10 +94,15 @@ func _set_card(card: Node, title: String, desc: String, status: String, done: bo
 	button.disabled = not enabled
 
 func _refresh() -> void:
-	# 0 = blackout, 1 = link built, 2 = block online (ScenarioView.State).
-	if QuestTracker.is_done(chapter, "bring_online"):
+	# Optional clinic/hospital strip: 0 = blackout, 1 = link built, 2 = online
+	# (ScenarioView.State), driven by the chapter's "scenario" content key.
+	var scenario_rules: Dictionary = content.get("scenario", {})
+	scenario.visible = not scenario_rules.is_empty()
+	if scenario_rules.is_empty():
+		pass
+	elif QuestTracker.is_done(chapter, String(scenario_rules["online_after"])):
 		scenario.set_state(2)
-	elif QuestTracker.is_done(chapter, "first_call"):
+	elif QuestTracker.is_done(chapter, String(scenario_rules["linked_after"])):
 		scenario.set_state(1)
 	else:
 		scenario.set_state(0)
@@ -119,7 +124,6 @@ func _refresh() -> void:
 		_set_card(main_cards[i], "%d. %s" % [i + 1, String(quest["title"])], String(quest["desc"]), status, done, "Replay" if done else "Start", unlocked)
 		previous_done = done
 
-	var puzzle_unlocked := QuestTracker.is_done(chapter, "follow_message")
 	var sides: Array = ChapterContent.side_quests(chapter)
 	for i in range(side_cards.size()):
 		side_cards[i].visible = i < sides.size()
@@ -130,18 +134,20 @@ func _refresh() -> void:
 		var done := QuestTracker.is_done(chapter, quest_id)
 		var needs_puzzle: bool = side_quest["needs_puzzle"]
 		var desc := String(side_quest["desc"])
-		if quest_id == "budget":
+		if side_quest.get("show_budget", false):
 			desc += " Target: %d towers or fewer." % ChapterContent.BUDGET_MAX_SITES
-		if quest_id == "ask_around":
+		if side_quest.get("show_notes_progress", false):
 			desc += " (%d / %d read)" % [_building_notes_read(), ChapterContent.notes(chapter).size()]
+		var unlock_after := String(side_quest.get("unlock_after", ""))
+		var unlocked := unlock_after.is_empty() or QuestTracker.is_done(chapter, unlock_after)
 		var status := "Done" if done else "Optional"
 		var button_text := "Replay" if done else "Play"
 		if needs_puzzle:
 			button_text = "Go to the block"
-			if not puzzle_unlocked:
-				status = "Locked"
-				desc += " Unlocks after Follow the message."
-		_set_card(side_cards[i], String(side_quest["title"]), desc, status, done, button_text, puzzle_unlocked or not needs_puzzle)
+		if not unlocked:
+			status = "Locked"
+			desc += " Unlocks after %s." % ChapterContent.quest_title(chapter, unlock_after)
+		_set_card(side_cards[i], String(side_quest["title"]), desc, status, done, button_text, unlocked)
 
 	var note_count := QuestTracker.notes(chapter).size()
 	var total_notes := ChapterContent.total_notes(chapter)
@@ -157,15 +163,8 @@ func _building_notes_read() -> int:
 			count += 1
 	return count
 
-func _launch_main(quest_id: String) -> void:
-	if quest_id == "bring_online":
-		UIKit.go_to_scene(PUZZLE_SCENE)
-	else:
-		QuestTracker.active_activity = quest_id
-		UIKit.go_to_scene(ACTIVITY_SCENE)
-
-func _launch_side(quest_id: String, needs_puzzle: bool) -> void:
-	if needs_puzzle:
+func _launch(quest_id: String, is_puzzle: bool) -> void:
+	if is_puzzle:
 		UIKit.go_to_scene(PUZZLE_SCENE)
 	else:
 		QuestTracker.active_activity = quest_id
@@ -201,7 +200,7 @@ func _finish_chapter() -> void:
 	var stars := QuestTracker.stars_earned(chapter)
 	var lines: Array = (content["outro"] as Array).duplicate()
 	var by_stars: Dictionary = content["outro_by_stars"]
-	lines.append({"speaker": "Mayor Santos", "text": String(by_stars[stars])})
+	lines.append({"speaker": String(content.get("outro_speaker", "")), "text": String(by_stars[stars])})
 	var box := DialogueBox.play(self, lines, QuestTracker.seen(chapter, "outro"))
 	await box.finished
 	QuestTracker.mark_seen(chapter, "outro")

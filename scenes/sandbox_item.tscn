@@ -1,0 +1,74 @@
+[gd_scene format=3]
+
+[sub_resource type="StyleBoxFlat" id="item_n"]
+bg_color = Color(0.3, 0.3, 0.34, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="item_h"]
+bg_color = Color(0.384, 0.384, 0.4192, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="item_p"]
+bg_color = Color(0.264, 0.264, 0.2992, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="item_d"]
+bg_color = Color(0.21, 0.21, 0.238, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="SandboxItem" type="Button"]
+custom_minimum_size = Vector2(88, 112)
+layout_mode = 2
+theme_override_styles/normal = SubResource("item_n")
+theme_override_styles/hover = SubResource("item_h")
+theme_override_styles/pressed = SubResource("item_p")
+theme_override_styles/disabled = SubResource("item_d")
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Icon" type="TextureRect" parent="Box"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 12
+text = "Name"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="LockLabel" type="Label" parent="Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1

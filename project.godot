@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 BuildingInfoPanel="*uid://meqpeed67h37"
 GameSettings="*res://ui/game_settings.gd"
+FirebaseConfig="*res://ui/firebase_config.gd"
+FirebaseLite="*res://addons/godot_firebase_lite/firebase.tscn"
 AuthState="*res://ui/auth_state.gd"
 GameProgress="*res://ui/game_progress.gd"
 HintBot="*res://ui/hint_bot.gd"
@@ -30,7 +32,7 @@ _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_ai/plugin.cfg", "res://addons/godot_mcp_toolkit/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot_ai/plugin.cfg", "res://addons/godot_mcp_toolkit/plugin.cfg", "res://addons/godot_firebase_lite/plugin.cfg")
 
 [input]
 

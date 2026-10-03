@@ -531,9 +531,11 @@ func show_round_result() -> void:
 
 func _complete_hub_puzzle() -> void:
 	var chapter := GameProgress.selected_chapter
-	QuestTracker.complete(chapter, "bring_online")
-	if deployed_towers.size() <= ChapterContent.BUDGET_MAX_SITES and QuestTracker.complete(chapter, "budget"):
-		DialogueBox.toast(self, "Side quest complete: %s" % ChapterContent.quest_title(chapter, "budget"))
+	var puzzle: Dictionary = ChapterContent.get_chapter(chapter).get("puzzle", {})
+	QuestTracker.complete(chapter, String(puzzle.get("main_quest", "")))
+	var budget_quest := String(puzzle.get("budget_quest", ""))
+	if not budget_quest.is_empty() and deployed_towers.size() <= ChapterContent.BUDGET_MAX_SITES and QuestTracker.complete(chapter, budget_quest):
+		DialogueBox.toast(self, "Side quest complete: %s" % ChapterContent.quest_title(chapter, budget_quest))
 	var seconds := (Time.get_ticks_msec() - chapter_start_msec) / 1000.0
 	QuestTracker.add_stats(chapter, chapter_wrong_attempts, seconds, HintBot.hints_used(), placement_history.size(), HintBot.last_hint_reason())
 
@@ -549,7 +551,7 @@ func on_building_inspected(building: Building) -> void:
 	await box.finished
 	DialogueBox.toast(self, "Field note added: %s" % String(note["title"]))
 	if result["quest_done"]:
-		DialogueBox.toast(self, "Side quest complete: %s" % ChapterContent.quest_title(chapter, "ask_around"))
+		DialogueBox.toast(self, "Side quest complete: %s" % ChapterContent.quest_title(chapter, String(result["quest_id"])))
 
 func advance_round() -> void:
 	if current_round >= MAX_ROUNDS and hub_mode:

@@ -33,7 +33,7 @@ func _show_edit_account() -> void:
 func _on_save_account() -> void:
 	var new_name := edit_field.text.strip_edges()
 	if not new_name.is_empty():
-		AuthState.username = new_name
+		AuthState.update_display_name(new_name)
 		name_label.text = new_name
 	edit_panel.visible = false
 

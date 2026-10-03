@@ -39,6 +39,7 @@ const MAP_SIDE_GUTTER := 16.0
 func _ready() -> void:
 	$BackButton.pressed.connect(func(): UIKit.go_to_scene("res://scenes/choose_game.tscn"))
 	$ProfileButton.pressed.connect(func(): UIKit.go_to_scene("res://scenes/player_profile.tscn"))
+	$SandboxButton.pressed.connect(func(): UIKit.go_to_scene("res://scenes/sandbox.tscn"))
 	$SettingsButton.pressed.connect(func():
 		GameProgress.settings_return_path = "res://scenes/chapter_select.tscn"
 		UIKit.go_to_scene("res://scenes/settings.tscn")

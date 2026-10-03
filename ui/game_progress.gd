@@ -1,9 +1,15 @@
 extends Node
 
-# Local save for campaign progress. Local-only — matches AGENTS.md's Save
-# System section (user://save_data.json via FileAccess), no Firebase yet
-# (see the capstone manuscript's Player Profile / Save Data collections for
-# the eventual cloud schema this is standing in for).
+# Local save for campaign progress: user://save_data.json via FileAccess,
+# always the source of truth for offline play. When a Firebase project is
+# configured and the player is signed in (AuthState), save_progress() also
+# fire-and-forgets a mirror of this same data to a single Firestore
+# document at save_data/{uid}, and load_progress() follows its local load
+# with a fire-and-forget pull that overwrites these fields if a cloud copy
+# exists — "load local first, then sync from cloud if online" per AGENTS.md,
+# never blocking on the network either way. This is a simplified single-doc
+# mirror, not the manuscript's full multi-collection schema (chapter_progress
+# per chapter, etc.) — a reasonable next step, not implemented here.
 
 const SAVE_PATH := "user://save_data.json"
 const TOTAL_CHAPTERS := 10
@@ -65,12 +71,14 @@ func start_new_game() -> void:
 
 func load_progress() -> void:
 	if not has_save():
+		_pull_from_cloud()
 		return
 	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
 	var text := file.get_as_text()
 	file.close()
 	var parsed = JSON.parse_string(text)
 	if typeof(parsed) != TYPE_DICTIONARY:
+		_pull_from_cloud()
 		return
 	unlocked_chapters = int(parsed.get("unlocked_chapters", 1))
 	stars.clear()
@@ -86,6 +94,7 @@ func load_progress() -> void:
 	if typeof(raw_badges) == TYPE_ARRAY:
 		for b in raw_badges:
 			badges.append(String(b))
+	_pull_from_cloud()
 
 func save_progress() -> void:
 	var data := {
@@ -99,6 +108,40 @@ func save_progress() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	file.store_string(JSON.stringify(data))
 	file.close()
+	_push_to_cloud(data)
+
+func _cloud_ready() -> bool:
+	return AuthState.is_firebase_ready() and AuthState.is_logged_in and not AuthState.uid.is_empty()
+
+func _push_to_cloud(data: Dictionary) -> void:
+	if not _cloud_ready():
+		return
+	FirebaseLite.Firestore.update("save_data/%s" % AuthState.uid, data)
+
+# Fire-and-forget: overwrites local fields (and re-saves locally) if a cloud
+# save exists, so "Continue" reflects progress made on another device. Never
+# blocks gameplay — callers don't await this.
+func _pull_from_cloud() -> void:
+	if not _cloud_ready():
+		return
+	var doc = await FirebaseLite.Firestore.read("save_data/%s" % AuthState.uid)
+	if typeof(doc) != TYPE_DICTIONARY:
+		return
+	unlocked_chapters = int(doc.get("unlocked_chapters", unlocked_chapters))
+	var raw_stars = doc.get("stars", null)
+	if typeof(raw_stars) == TYPE_DICTIONARY:
+		stars.clear()
+		for key in raw_stars.keys():
+			stars[int(key)] = int(raw_stars[key])
+	infrastructure_fund = int(doc.get("infrastructure_fund", infrastructure_fund))
+	xp = int(doc.get("xp", xp))
+	city_reputation = int(doc.get("city_reputation", city_reputation))
+	var raw_badges = doc.get("badges", null)
+	if typeof(raw_badges) == TYPE_ARRAY:
+		badges.clear()
+		for b in raw_badges:
+			badges.append(String(b))
+	save_progress()
 
 func unlock_next_chapter() -> void:
 	if unlocked_chapters < TOTAL_CHAPTERS:

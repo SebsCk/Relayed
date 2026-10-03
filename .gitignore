@@ -3,4 +3,5 @@
 export.cfg
 export_presets.cfg
 .codex/
-addons/
+addons/*
+!addons/godot_firebase_lite/

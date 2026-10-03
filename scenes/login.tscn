@@ -199,7 +199,7 @@ theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
 theme_override_colors/font_placeholder_color = Color(0.35, 0.35, 0.35, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_nw41r")
 theme_override_styles/focus = SubResource("StyleBoxFlat_nw41r")
-placeholder_text = "Username"
+placeholder_text = "Email"
 
 [node name="PasswordField" type="LineEdit" parent="Center/RootBox/LoginPanel/LoginBox" unique_id=1814955922]
 custom_minimum_size = Vector2(0, 42)
